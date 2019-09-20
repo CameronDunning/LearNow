@@ -1,5 +1,6 @@
 // load .env data into process.env
 require("dotenv").config();
+
 //importing requirements
 const express = require("express");
 const app = express();
