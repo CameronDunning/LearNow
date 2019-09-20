@@ -5,9 +5,12 @@ const cookieSession = require("cookie-session");
 const express = require("express");
 const app = express();
 
+const homeurls = require("./routes/home/homeurls");
+
 const PORT = process.env.PORT || 8080;
 
 //routes
+app.use("/", homeurls);
 
 //middleware
 app.set("view engine", "ejs");
