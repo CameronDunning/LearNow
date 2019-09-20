@@ -1,28 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>LearNow - Register</title>
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>LearNow - Register</title>
-  <link rel="stylesheet" href="../styles/layout.css" />
-</head>
-
-<body>
-  <% include ./partials/header %>
-  <div class="login-form">
-    <div class="mdc-class">
+  <body>
+    <% include ./partials/header %>
+    <div class="login-form">
       <form method="POST" action="/register">
-        <label for="name">Name <input type="text" name="name" placeholder="Name"></label>
-        <label for="email">Email address <input type="email" name="email" placeholder="Email"></label>
-        <label for="password">Password <input type="password" name="password" placeholder="Password"></label>
+        <label for="name"
+          >Name <input type="text" name="name" placeholder="Name"
+        /></label>
+        <label for="email"
+          >Email address <input type="email" name="email" placeholder="Email"
+        /></label>
+        <label for="password"
+          >Password
+          <input type="password" name="password" placeholder="Password"
+        /></label>
         <button type="submit">Register</button>
         <p>Already have an account? <a href="">Click here to login</a></p>
       </form>
     </div>
-  </div>
-
-</body>
-
+  </body>
 </html>

@@ -43,7 +43,7 @@ app.use(methodOverride("_method"));
 app.use(
   "/styles",
   sass({
-    src: __dirname + "/styles",
+    src: __dirname + "/public/",
     dest: __dirname + "/public/styles",
     debug: true,
     outputStyle: "expanded"
