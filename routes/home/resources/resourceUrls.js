@@ -6,9 +6,10 @@ module.exports = db => {
     const category = req.params.category;
     //make query to show resources based on category
     let queryString = `
-  SELECT * FROM resource
-  WHERE tag LIKE '$1'
-  `;
+      SELECT * FROM resource
+      WHERE tag LIKE '$1'
+      LIMIT 10;
+      `;
     let values = [`%${category}%`];
 
     //returns the rows of the query
