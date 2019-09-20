@@ -17,6 +17,7 @@ const morgan = require("morgan");
 const homeUrls = require("./routes/home/homeUrls");
 const userUrls = require("./routes/home/users/userUrls");
 const resourceUrls = require("./routes/home/resources/resourceUrls");
+const resourceApis = require("./routes/home/api/apiresources");
 
 // PG database client/connection setup
 const { Pool } = require("pg");
@@ -28,6 +29,7 @@ db.connect();
 app.use("/", homeUrls(db));
 app.use("/u/", userUrls(db));
 app.use("/r/", resourceUrls(db));
+app.use("/api/", resourceApis(db));
 
 //middleware
 app.set("view engine", "ejs");

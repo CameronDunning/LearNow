@@ -1,24 +1,21 @@
-$(() => {
-  $.ajax({
-    method: "GET",
-    url: "/api/users"
-  }).done(users => {
-    for (user of users) {
-      $("<div>")
-        .text(user.name)
-        .appendTo($("body"));
-    }
-  });
-});
-
 $(document).ready(() => {
   loadResources();
 });
 
+//Renderresources function renders ALL resources and appends it to the container
+function renderResources(resources) {
+  let resourcesArr = [];
+  resources.forEach(resource =>
+    resourcesArr.append(createResourceElement(resource))
+  );
+  $("#resourcescontainer").append;
+}
+
+//loadResources makes get request to our API that queries the DB and returns a json object
 async function loadResources() {
   try {
     await $.ajax({
-      url: "http://localhost:8080/:category",
+      url: "http://localhost:8080/api/:category",
       dataType: "JSON",
       success: data => {
         renderResource(data);
@@ -32,12 +29,13 @@ async function loadResources() {
 }
 
 //! THIS NEEDS TO BE STYLED AND FORMATTED ACCORDING TO UI FRAMEWORK
+//helper function that creates individual resource element
 function createResourceElement(resourceData) {
   console.log(resourceData);
   const resource = `
   <section class="resources">
     <div class="resourceImg">
-      <img href="${escape(resourceData.___)}"></img>
+      <img href="${escape(resourceData.title)}"></img>
     </div>
     <div class='textbody'>
       <p>Title</p>
