@@ -9,6 +9,7 @@
 </head>
 
 <body>
+  <% include ./partials/header %>
   <div class="login-form">
     <form method="POST" action="#">
       <label for="name">Name <input type="text" name="first-name" placeholder="First Name"><input type="text"
@@ -16,7 +17,7 @@
       <label for="email">Email address <input type="email" name="email" placeholder="Email"></label>
       <label for="password">Password <input type="password" name="password" placeholder="Password"></label>
       <button type="submit">Register</button>
-      <p>Already have an account? Click here to login</p>
+      <p>Already have an account? <a href ="">Click here to login</a></p>
     </form>
   </div>
 

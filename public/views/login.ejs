@@ -9,12 +9,13 @@
 </head>
 
 <body>
+  <% include ./partials/header %>
   <div class="login-form">
     <form method="POST" action="#">
       <label for="email">Email address <input type="email" name="email" placeholder="Email"></label>
       <label for="password">Password <input type="password" name="password" placeholder="Password"></label>
       <button type="submit">Login</button>
-      <p>New to LearNow? Click here to login</p>
+      <p>New to LearNow? <a href="#">Click here to login</a></p>
     </form>
   </div>
 
