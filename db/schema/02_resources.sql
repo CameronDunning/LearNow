@@ -19,3 +19,5 @@ CREATE TABLE resources
   total_upvotes INTEGER NOT NULL DEFAULT 0,
   total_downvotes INTEGER NOT NULL DEFAULT 0
 );
+
+GRANT ALL PRIVILEGES ON TABLE resources TO labber;

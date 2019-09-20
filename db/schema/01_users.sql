@@ -11,3 +11,5 @@ CREATE TABLE users
   password VARCHAR(255) NOT NULL,
   first_letter VARCHAR(1)
 );
+
+GRANT ALL PRIVILEGES ON TABLE users TO labber;

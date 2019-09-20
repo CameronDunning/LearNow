@@ -14,3 +14,5 @@ CREATE TABLE comments
   downvote BOOLEAN NOT NULL DEFAULT false,
   date_created TIMESTAMP NOT NULL
 );
+
+GRANT ALL PRIVILEGES ON TABLE comments TO labber;
