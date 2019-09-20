@@ -15,7 +15,7 @@ const router = express.Router();
 module.exports = db => {
   //Get and post requests for the login page
   router.get("/login", (req, res) => {
-    res.render("login", templateVars);
+    res.render("login");
   });
   router.post("/login", (req, res) => {
     //login authentification *maybe fake first for mvp*
@@ -23,7 +23,7 @@ module.exports = db => {
 
   //Get and post requests for the register page
   router.get("/register", (req, res) => {
-    res.render("register", templateVars);
+    res.render("register");
   });
   router.post("register", (req, res) => {
     //register req.body.___
