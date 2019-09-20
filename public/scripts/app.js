@@ -1,31 +1,30 @@
 $(document).ready(() => {
   loadResources();
+  console.log("done loading");
 });
-
-//Renderresources function renders ALL resources and appends it to the container
-function renderResources(resources) {
-  let resourcesArr = [];
-  resources.forEach(resource =>
-    resourcesArr.append(createResourceElement(resource))
-  );
-  $("#resourcescontainer").append;
-}
 
 //loadResources makes get request to our API that queries the DB and returns a json object
 async function loadResources() {
   try {
     await $.ajax({
-      url: "http://localhost:8080/api/:category",
+      url: "http://localhost:8080/api/",
       dataType: "JSON",
       success: data => {
-        renderResource(data);
+        console.log("hello success");
+        renderResources(data);
       }
     });
-
-    // .then(data => renderTweets(data));
   } catch (err) {
     console.log(err);
   }
+}
+
+//Renderresources function renders ALL resources and appends it to the container
+function renderResources(resources) {
+  console.log("Hello inside resources", resources);
+  resources.forEach(resource =>
+    $("#resourcescontainer").append(createResourceElement(resource))
+  );
 }
 
 //! THIS NEEDS TO BE STYLED AND FORMATTED ACCORDING TO UI FRAMEWORK
@@ -35,10 +34,11 @@ function createResourceElement(resourceData) {
   const resource = `
   <section class="resources">
     <div class="resourceImg">
-      <img href="${escape(resourceData.title)}"></img>
+      <img src="${escape(resourceData.cover_photo_url)}"></img>
     </div>
     <div class='textbody'>
-      <p>Title</p>
+      <p>${escape(resourceData.title)}</p>
+      <p>${escape(resourceData.description)}</p>
       <form>
           <button class="favorite styled" value="upvote" type="button">
             UPVOTE

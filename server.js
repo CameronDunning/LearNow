@@ -23,6 +23,7 @@ const resourceApis = require("./routes/home/api/apiresources");
 const { Pool } = require("pg");
 const dbParams = require("./lib/db.js");
 const db = new Pool(dbParams);
+console.log(dbParams);
 db.connect();
 
 //routes
