@@ -6,17 +6,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>LearNow - Register</title>
+
+  <link rel=”stylesheet” type="text/css" href="public/styles/material-components-web.css"/>
+  <link rel="stylesheet" type="text/css" href="/styles/layout.css" />
 </head>
 
 <body>
   <% include ./partials/header %>
-  <div class="login-form">
-    <form method="POST" action="/login">
-      <label for="email">Email address <input type="email" name="email" placeholder="Email"></label>
-      <label for="password">Password <input type="password" name="password" placeholder="Password"></label>
-      <button type="submit">Login</button>
-      <p>New to LearNow? <a href="#">Click here to login</a></p>
-    </form>
+  <div class="login-form mdc-card">
+      <form method="POST" action="/login">
+        <label for="email">Email address <input type="email" name="email" placeholder="Email"></label>
+        <label for="password">Password <input type="password" name="password" placeholder="Password"></label>
+        <button type="submit">Login</button>
+        <p>New to LearNow? <a href="#">Click here to login</a></p>
+      </form>
   </div>
 
 </body>
