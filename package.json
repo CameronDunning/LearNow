@@ -1,0 +1,30 @@
+{
+  "name": "LearNow",
+  "version": "1.0.0",
+  "description": "Resource wall for learning material",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CameronDunning/LearNow.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CameronDunning/LearNow/issues"
+  },
+  "homepage": "https://github.com/CameronDunning/LearNow#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cookie-session": "^1.3.3",
+    "ejs": "^2.7.1",
+    "express": "^4.17.1",
+    "method-override": "^3.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.2"
+  }
+}
