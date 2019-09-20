@@ -31,7 +31,7 @@ module.exports = db => {
 
   //get request for the home page
   router.get("/", (req, res) => {
-    res.send("hello");
+    res.render("home");
     //res.render("showresources", templateVars);
   });
 
