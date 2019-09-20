@@ -1,15 +1,15 @@
 // load .env data into process.env
 require("dotenv").config();
 //importing requirements
+const express = require("express");
+const app = express();
 const methodOverride = require("method-override");
 const bodyParser = require("body-parser");
 const cookieSession = require("cookie-session");
 
-const express = require("express");
-const app = express();
-
 const PORT = process.env.PORT || 8080;
 const ENV = process.env.ENV || "development";
+
 const sass = require("node-sass-middleware");
 const morgan = require("morgan");
 
@@ -48,6 +48,7 @@ app.use(
     outputStyle: "expanded"
   })
 );
+
 app.use(express.static("public"));
 
 app.listen(PORT, () => {
