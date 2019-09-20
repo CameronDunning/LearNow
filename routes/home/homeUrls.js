@@ -22,7 +22,7 @@ router.get("login", (req, res) => {
   res.render("login", templateVars);
 });
 router.post("login", (req, res) => {
-  res.render("login", templateVars);
+  //login authentification *maybe fake first for mvp*
 });
 
 //Get and post requests for the register page
@@ -30,7 +30,8 @@ router.get("register", (req, res) => {
   res.render("register", templateVars);
 });
 router.post("register", (req, res) => {
-  res.render("register", templateVars);
+  //register
+  //req.body.___
 });
 
 //get request for the home page
