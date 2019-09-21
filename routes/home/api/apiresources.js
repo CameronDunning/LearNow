@@ -13,6 +13,7 @@ module.exports = db => {
 
     values = Object.values(req.body);
     console.log(values);
+
     //returns the rows of the query
     //send data into templatevars then render
     // db.query(queryString, values)
