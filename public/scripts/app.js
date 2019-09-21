@@ -31,21 +31,20 @@ function renderResources(resources) {
 //helper function that creates individual resource element
 function createResourceElement(resourceData) {
   console.log(resourceData);
+
   const resource = `
-  <section class="resources">
+  <section class="resources card">
     <div class="resourceImg">
-      <img src="${escape(resourceData.cover_photo_url)}"></img>
+      <img src="${escape(resourceData.cover_photo_url)}" class = "card-img-top resource-img"></img>
     </div>
-    <div class='textbody'>
+    <div class='textbody card-body'>
       <p>${escape(resourceData.title)}</p>
-      <p>${escape(resourceData.description)}</p>
+      <p>${escape(resourceData.description)}</p
       <form>
-          <button class="favorite styled" value="upvote" type="button">
-            UPVOTE
-          </button>
-          <button class="favorite styled" value="downvote" type="button">
-            DOWNVOTE
-          </button>
+
+          <i class="fas fa-arrow-up" id="up-vote"></i>
+          <i class="fas fa-arrow-down" id="down-vote"></i>
+
       </form>
     </div>
   </section>
@@ -54,7 +53,7 @@ function createResourceElement(resourceData) {
 }
 
 //escape function makes text safe and prevents injection
-const escape = function(str) {
+const escape = function (str) {
   let div = document.createElement("div");
   div.appendChild(document.createTextNode(str));
   return div.innerHTML;

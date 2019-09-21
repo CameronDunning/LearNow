@@ -1,0 +1,14 @@
+#resourcescontainer {
+  display: flex;
+  /* justify-content: space-between; */
+  flex-wrap: wrap;
+  align-content: flex-start;
+}
+.resources {
+  width: 20%;
+  margin: 20px;
+}
+
+.resource-img {
+  max-height: 30%;
+}
