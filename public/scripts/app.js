@@ -1,6 +1,5 @@
 $(document).ready(() => {
   loadResources();
-  console.log("done loading");
 });
 
 //Initial loading of resources
@@ -18,9 +17,28 @@ async function loadResources() {
     console.log(err);
   }
 }
+
+$("resourceform").on("submit", async function(event) {
+  event.preventDefault();
+  var formData = await JSON.stringify($(this).serializeArray());
+  let queryString = await $(this).serialize();
+  try {
+    $.ajax({
+      type: "POST",
+      url: "/api/input",
+      data: formData,
+      success: function(data) {
+        console.log(data);
+        //$("#resourcescontainer").append(createResourceElement(data));
+      }
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
 //Helper function for loadResources that renders the resources passed into it and appends it to the container
 function renderResources(resources) {
-  console.log("Hello inside resources", resources);
   resources.forEach(resource =>
     $("#resourcescontainer").append(createResourceElement(resource))
   );
