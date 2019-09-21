@@ -68,7 +68,7 @@ function createResourceElement(resourceData) {
   <section class="resources card " id= "resources">
     <div class="resourceImg">
       <img src="${escape(
-        resourceData.cover_photo_url
+        resourceData.cover_photo_url ? resourceData.cover_photo_url : ""
       )}" class = "card-img-top resource-img"></img>
     </div>
     <div class='textbody card-body'>
