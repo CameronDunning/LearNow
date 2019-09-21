@@ -18,6 +18,7 @@ module.exports = db => {
     res.render("login");
   });
   router.post("/login", (req, res) => {
+
     //login authentification *maybe fake first for mvp*
   });
 
@@ -27,10 +28,6 @@ module.exports = db => {
   });
   router.post("register", (req, res) => {
     //register req.body.___
-  });
-
-  router.get("/formsubmit", (req, res) => {
-    res.render("new_resource");
   });
 
   //get request for the home page

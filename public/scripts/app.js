@@ -1,5 +1,9 @@
 $(document).ready(() => {
   loadResources();
+
+  $('#resources').on(click, () => {
+    console.log($('.resourceImg').html());
+  })
 });
 
 //Initial loading of resources
@@ -53,7 +57,7 @@ function renderResources(resources) {
 //helper function that creates individual resource element
 function createResourceElement(resourceData) {
   const resource = `
-  <section class="resources card " id= "resources">
+  <section class="resources card " id= "resources"  data-toggle="modal" data-target="#modal-clicked-resource">
     <div class="resourceImg">
       <img src="${escape(
         resourceData.cover_photo_url
