@@ -4,7 +4,7 @@
   flex-wrap: wrap;
   align-items: baseline;
   align-content: stretch; */
-
+  /* column-count: 5; */
   padding: 1em 3em;
 }
 #resources {
@@ -35,7 +35,6 @@
 }
 
 .resources:hover {
-  cursor: pointer;
   transform: scale(1.05);
 }
 
