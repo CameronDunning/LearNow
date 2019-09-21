@@ -6,6 +6,14 @@ $(document).ready(() => {
   })
 });
 
+$.fn.serializeObject = function() {
+  var o = {};
+  this.find("[name]").each(function() {
+    o[this.name] = this.value;
+  });
+  return o;
+};
+
 //Initial loading of resources
 //loadResources makes get request to our API that queries the DB and returns a json object
 async function loadResources() {
@@ -23,30 +31,15 @@ async function loadResources() {
 }
 
 $("form").on("submit", async function(event) {
-  event.preventDefault();
-
   //var formData = await JSON.stringify($(this).serializeArray());
-  let queryString = await $(this).serialize();
-  console.log(queryString);
-
-  try {
-    console.log("trying to ajax");
-    $.ajax({
-      type: "POST",
-      url: "/api/input",
-      data: queryString,
-      success: function(data) {
-        console.log(data);
-        console.log("ajax success");
-        $("#resourcescontainer").append(createResourceElement(data));
-      }
-    });
-  } catch (err) {
-    console.log(err);
-  }
+  let formObject = await $(this).serializeObject();
+  console.log("inside jquery");
+  console.log(formObject);
+  $("#resourcescontainer").append(createResourceElement(formObject));
+  // $("#resourcescontainer").append(createResourceElement(data));
 });
 
-//Helper function for loadResources that renders the resources passed into it and appends it to the container
+//Helper function for loadResources that renders the array of resources passed into it and appends it to the container
 function renderResources(resources) {
   resources.forEach(resource =>
     $("#resourcescontainer").append(createResourceElement(resource))
@@ -60,7 +53,7 @@ function createResourceElement(resourceData) {
   <section class="resources card " id= "resources"  data-toggle="modal" data-target="#modal-clicked-resource">
     <div class="resourceImg">
       <img src="${escape(
-        resourceData.cover_photo_url
+        resourceData.cover_photo_url ? resourceData.cover_photo_url : ""
       )}" class = "card-img-top resource-img"></img>
     </div>
     <div class='textbody card-body'>

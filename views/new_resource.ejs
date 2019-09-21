@@ -12,12 +12,12 @@
             <form action="/api/input" method="POST" class='form-group'>
 
               <label for="title"> Title
-                <input type="text" class="form-control" id="resource-title" placeholder="Title" />
+                <input name='title' type="text" class="form-control" id="resource-title" placeholder="Title" />
               </label>
               <br>
 
               <label for="link"> Link
-                <input type="text" class="form-control" placeholder="Link" />
+                <input name='link' type="text" class="form-control" placeholder="Link" />
               </label>
               <br>
               <label for="description"> Description
@@ -28,7 +28,7 @@
               <div class="new-resource-footer">
                 <div class="resource-category">
                   <label for="category"> Category
-                    <input type="text" class="form-control" placeholder="Category" />
+                    <input name='category' type="text" class="form-control" placeholder="Category" />
                   </label>
                 </div>
                 <button type="submit" class="btn btn-primary submit-resource" data-dismiss="modal">Create new resource</button>
