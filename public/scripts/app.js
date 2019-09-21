@@ -27,31 +27,12 @@ async function loadResources() {
 }
 
 $("form").on("submit", async function(event) {
-  event.preventDefault();
-
   //var formData = await JSON.stringify($(this).serializeArray());
   let formObject = await $(this).serializeObject();
   console.log("inside jquery");
   console.log(formObject);
   $("#resourcescontainer").append(createResourceElement(formObject));
   // $("#resourcescontainer").append(createResourceElement(data));
-  //ON SUBMIT THIS PORTION WILL APPEND THE RESULT FROM THE INSERT
-
-  // try {
-  //   console.log("trying to ajax");
-  //   $.ajax({
-  //     type: "POST",
-  //     url: "/api/input",
-  //     data: queryString,
-  //     success: function(data) {
-  //       console.log(data);
-  //       console.log("ajax success");
-  //       $("#resourcescontainer").append(createResourceElement(data));
-  //     }
-  //   });
-  // } catch (err) {
-  //   console.log(err);
-  // }
 });
 
 //Helper function for loadResources that renders the array of resources passed into it and appends it to the container
@@ -68,7 +49,7 @@ function createResourceElement(resourceData) {
   <section class="resources card " id= "resources">
     <div class="resourceImg">
       <img src="${escape(
-        resourceData.cover_photo_url
+        resourceData.cover_photo_url ? resourceData.cover_photo_url : ""
       )}" class = "card-img-top resource-img"></img>
     </div>
     <div class='textbody card-body'>
