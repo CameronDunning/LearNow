@@ -1,58 +1,103 @@
 <!-- Button trigger modal -->
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+      integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Black+Han+Sans&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  </head>
 
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
-    integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-  <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Black+Han+Sans&display=swap" rel="stylesheet">
+  <body>
+    <form action="/api/input" method="POST">
+      <div class="form-group">
+        <label for="title">
+          Title
+          <input
+            name="title"
+            type="text"
+            class="form-control"
+            placeholder="Title"
+            value=""
+          />
+        </label>
+      </div>
 
-</head>
+      <div class="form-group">
+        <label for="link">
+          Link
+          <input
+            name="link"
+            type="text"
+            class="form-control"
+            placeholder="Link"
+          />
+        </label>
+      </div>
 
-<body>
+      <div class="form-group">
+        <label for="description">
+          Description
+          <textarea
+            name="description"
+            class="form-control"
+            id=""
+            cols="30"
+            rows="10"
+          ></textarea>
+        </label>
+      </div>
 
-  <form>
-    <div class="form-group">
-      <label for="title"> Title
-        <input type="text" class="form-control" placeholder="Title" />
-      </label>
-    </div>
+      <div class="form-group">
+        <label for="category">
+          Category
+          <input
+            name="category"
+            type="text"
+            class="form-control"
+            placeholder="Category"
+          />
+        </label>
+      </div>
 
-    <div class="form-group">
-      <label for="link"> Link
-        <input type="text" class="form-control" placeholder="Link" />
-      </label>
-    </div>
+      <button type="submit" class="btn btn-primary">Create new resource</button>
+    </form>
 
-    <div class="form-group">
-      <label for="description"> Description
-        <textarea name="description" class="form-control" id="" cols="30" rows="10"></textarea>
-      </label>
-    </div>
+    <script type="text/javascript" src="/scripts/app.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+      crossorigin="anonymous"
+    ></script>
 
-    <div class="form-group">
-      <label for="category"> Category
-        <input type="text" class="form-control" placeholder="Category" />
-      </label>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Create new resource</button>
-
-  </form>
+    <script type="text/javascript" src="/scripts/app.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+      crossorigin="anonymous"
+    ></script>
+  </body>
 
   <script type="text/javascript" src="/scripts/app.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-    crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-    crossorigin="anonymous"></script>
-</body>
-
 </html>

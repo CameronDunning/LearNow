@@ -29,6 +29,10 @@ module.exports = db => {
     //register req.body.___
   });
 
+  router.get("/formsubmit", (req, res) => {
+    res.render("new_resource");
+  });
+
   //get request for the home page
   router.get("/", (req, res) => {
     res.render("home");

@@ -1,15 +1,18 @@
 const express = require("express");
 const router = express.Router();
-
+const bodyParser = require("body-parser");
+router.use(bodyParser.urlencoded({ extended: true }));
 module.exports = db => {
   router.post("/input", (req, res) => {
     //make query to show resources based on category
     let queryString = `
-      INSERT INTO resources (id, user_id, link, bitly_link, cover_photo_url, description, tag, date_created, total_upvotes, total_downvotes)
+      INSERT INTO resources (id, user_id, title, link, bitly_link, cover_photo_url, description, date_created, total_upvotes, total_downvotes)
       VALUES ($1, $2, $3, ...)
       RETURNING *;
       `;
-    values = JSON.parse(req.body);
+
+    values = Object.values(req.body);
+    console.log(values);
     //returns the rows of the query
     //send data into templatevars then render
     db.query(queryString, values)

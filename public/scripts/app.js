@@ -18,18 +18,23 @@ async function loadResources() {
   }
 }
 
-$("resourceform").on("submit", async function(event) {
+$("form").on("submit", async function(event) {
   event.preventDefault();
-  var formData = await JSON.stringify($(this).serializeArray());
+
+  //var formData = await JSON.stringify($(this).serializeArray());
   let queryString = await $(this).serialize();
+  console.log(queryString);
+
   try {
+    console.log("trying to ajax");
     $.ajax({
       type: "POST",
       url: "/api/input",
-      data: formData,
+      data: queryString,
       success: function(data) {
         console.log(data);
-        //$("#resourcescontainer").append(createResourceElement(data));
+        console.log("ajax success");
+        $("#resourcescontainer").append(createResourceElement(data));
       }
     });
   } catch (err) {
