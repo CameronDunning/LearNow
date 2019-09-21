@@ -5,17 +5,55 @@ router.use(bodyParser.urlencoded({ extended: true }));
 module.exports = db => {
   router.post("/input", (req, res) => {
     //make query to show resources based on category
-    let queryString = `
-      INSERT INTO resources (id, user_id, title, link, bitly_link, cover_photo_url, description, date_created, total_upvotes, total_downvotes)
-      VALUES ($1, $2, $3, ...)
-      RETURNING *;
+    let queryString1 = `
+      SELECT id
+      FROM categories
+      WHERE name = $1
       `;
+    let values1 = [req.body.category];
+    // returns an OBJECT of all the categories that already exist
+    // To be used later
+    console.log(req.body);
+    console.log(queryString1, values1);
+    db.query(queryString1, values1)
+      .then(data => {
+        console.log(data);
+        console.log("categories that don't exist:", data.rows.id);
+        if (data.id == undefined) {
+          // create new category
+          console.log("creating new category");
+          let queryString2 = `
+          INSERT INTO categories
+            (name)
+          VALUES
+            ($1)
+          RETURNING id;
+          `;
+          let values2 = [req.body.category];
+          console.log(queryString2, values2);
+          db.query(queryString2, values2);
+        }
 
-    values = Object.values(req.body);
-    console.log(values);
-    //returns the rows of the query
-    //send data into templatevars then render
-    db.query(queryString, values)
+        // Create new resource
+        let queryString3 = `
+        INSERT INTO resources
+          (user_id, title, link, description, date_created)
+        VALUES
+          ($1, $2, $3, $4, Now())
+        RETURNING
+          id;
+        `;
+        let values3 = [
+          req.body.user_id,
+          req.body.title,
+          req.body.link,
+          req.body.description
+        ];
+        db.query(queryString3, values3).then(data => {
+          console.log("resource created");
+          console.log("resourceid: ", data.rows.id);
+        });
+      })
       .then(data => res.json(data.rows))
       .catch(err => console.log(err));
   });
