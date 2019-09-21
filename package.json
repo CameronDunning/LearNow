@@ -4,6 +4,7 @@
   "description": "Resource wall for learning material",
   "main": "index.js",
   "scripts": {
+    "local": "nodemon server.js",
     "start:dev": "nodemon server.js",
     "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
