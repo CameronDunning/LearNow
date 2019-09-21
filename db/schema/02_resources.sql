@@ -13,7 +13,6 @@ CREATE TABLE resources
   bitly_link VARCHAR(255),
   cover_photo_url VARCHAR(255),
   description TEXT,
-  tag VARCHAR(32),
   date_created TIMESTAMP NOT NULL,
 
   total_upvotes INTEGER NOT NULL DEFAULT 0,
