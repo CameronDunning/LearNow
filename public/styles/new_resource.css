@@ -1,0 +1,23 @@
+#modal-create-new {
+  width: 80%;
+  padding: 2em;
+  margin-left: 3em;
+}
+.close-button:active {
+  outline: none;
+}
+
+#modal-content {
+  padding: 1em;
+}
+
+.new-resource-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.submit-resource {
+  height: 100%;
+}
+

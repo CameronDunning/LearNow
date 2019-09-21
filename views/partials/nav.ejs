@@ -9,7 +9,13 @@
   -->
 <nav>
 <ul>
-    <li>New Resource</li>
+
+
+    <li data-toggle="modal" data-target="#modal-create-new">New Resource</li>
+
+
+    <% include ../new_resource %>
+
     <li>My Resources</li>
     <li><form class="form-inline md-form form-sm active-cyan-2 mt-2">
         <input class="form-control form-control-sm mr-3 w-75" type="text" placeholder="Search"
@@ -19,6 +25,8 @@
   </li>
   <li>Categories</li>
 </ul>
+
+
 
 
 </nav>
