@@ -33,20 +33,23 @@ function createResourceElement(resourceData) {
   console.log(resourceData);
 
   const resource = `
-  <section class="resources card">
+  <section class="resources card " id= "resources">
     <div class="resourceImg">
       <img src="${escape(resourceData.cover_photo_url)}" class = "card-img-top resource-img"></img>
     </div>
     <div class='textbody card-body'>
-      <p>${escape(resourceData.title)}</p>
+      <h5 class = 'card-title'>${escape(resourceData.title)}</h5>
       <p>${escape(resourceData.description)}</p
-      <form>
-
-          <i class="fas fa-arrow-up" id="up-vote"></i>
-          <i class="fas fa-arrow-down" id="down-vote"></i>
-
-      </form>
     </div>
+    <div class="resource-stats">
+      <p class="resource-timestamp">Date here </p>
+      <form>
+        <div class="arrows">
+          <i class="fas fa-arrow-up " id="up-vote"></i>
+          <i class="fas fa-arrow-down " id="down-vote"></i>
+        </div>
+    </form>
+  </div>
   </section>
   `;
   return $(resource);
