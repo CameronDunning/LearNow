@@ -3,6 +3,7 @@ $(document).ready(() => {
   console.log("done loading");
 });
 
+//Initial loading of resources
 //loadResources makes get request to our API that queries the DB and returns a json object
 async function loadResources() {
   try {
@@ -10,7 +11,6 @@ async function loadResources() {
       url: "http://localhost:8080/api/",
       dataType: "JSON",
       success: data => {
-        console.log("hello success");
         renderResources(data);
       }
     });
@@ -18,8 +18,7 @@ async function loadResources() {
     console.log(err);
   }
 }
-
-//Renderresources function renders ALL resources and appends it to the container
+//Helper function for loadResources that renders the resources passed into it and appends it to the container
 function renderResources(resources) {
   console.log("Hello inside resources", resources);
   resources.forEach(resource =>
@@ -30,12 +29,12 @@ function renderResources(resources) {
 //! THIS NEEDS TO BE STYLED AND FORMATTED ACCORDING TO UI FRAMEWORK
 //helper function that creates individual resource element
 function createResourceElement(resourceData) {
-  console.log(resourceData);
-
   const resource = `
   <section class="resources card " id= "resources">
     <div class="resourceImg">
-      <img src="${escape(resourceData.cover_photo_url)}" class = "card-img-top resource-img"></img>
+      <img src="${escape(
+        resourceData.cover_photo_url
+      )}" class = "card-img-top resource-img"></img>
     </div>
     <div class='textbody card-body'>
       <h5 class = 'card-title'>${escape(resourceData.title)}</h5>
@@ -56,8 +55,8 @@ function createResourceElement(resourceData) {
 }
 
 //escape function makes text safe and prevents injection
-const escape = function (str) {
+function escape(str) {
   let div = document.createElement("div");
   div.appendChild(document.createTextNode(str));
   return div.innerHTML;
-};
+}
