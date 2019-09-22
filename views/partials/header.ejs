@@ -13,12 +13,20 @@
             aria-haspopup="true"
             aria-expanded="false"
           >
-            User Name
+            <% if (user_id != undefined) { %> <%=user_name %>
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
             <a class="dropdown-item" href="#">Profile</a>
             <a class="dropdown-item" href="#">Log out</a>
           </div>
+          <% } else { %>
+            Action
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a class="dropdown-item" href="#">Login</a>
+            <a class="dropdown-item" href="#">Register</a>
+          </div>
+          <% } %>
         </li>
       </ul>
     </div>
