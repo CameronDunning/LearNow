@@ -3,102 +3,86 @@ const router = express.Router();
 const bodyParser = require("body-parser");
 router.use(bodyParser.urlencoded({ extended: true }));
 
+// Functions
+// New Resource Functions
+
+const categoriesThatAlreadyExist = category => {
+  const queryString = `
+    SELECT id
+    FROM categories
+    WHERE name = $1
+    `;
+  return [queryString, [category]];
+};
+
+const createNewCategory = category => {
+  const queryString = `
+    INSERT INTO categories
+      (name)
+    VALUES
+      ($1)
+    RETURNING id;
+    `;
+  return [queryString, [category]];
+};
+
+const createNewResource = values => {
+  const queryString = `
+    INSERT INTO resources
+      (user_id, title, link, description, date_created)
+    VALUES
+      ($1, $2, $3, $4, Now())
+    RETURNING id;
+    `;
+  const returnValues = [1, values.title, values.link, values.description];
+  console.log(returnValues);
+  return [queryString, returnValues];
+};
+
+const joinResourceCategory = (resourceID, categoryID) => {
+  const queryString = `
+    INSERT INTO category_resource
+      (resource_id, category_id)
+    VALUES
+      ($1, $2);
+    `;
+  const values = [resourceID, categoryID];
+  return [queryString, values];
+};
+
+const createNewResourceJoinCategory = (body, categoryID, db) => {
+  // returns new resource ID
+  const queryString3 = createNewResource(body);
+  db.query(queryString3[0], queryString3[1]).then(data => {
+    // join the category to the resource in the category_resource table
+    const queryString4 = joinResourceCategory(data.rows[0].id, categoryID);
+    db.query(queryString4[0], queryString4[1]);
+  });
+};
+
 module.exports = db => {
   router.post("/input", (req, res) => {
-    //make query to show resources based on category
-    let queryString1 = `
-      SELECT id
-      FROM categories
-      WHERE name = $1
-      `;
-    let values1 = [req.body.category];
+    // make query to show resources based on category
     // returns an OBJECT of all the categories that already exist
-    // To be used later
-    console.log(queryString1, values1);
-    db.query(queryString1, values1).then(data => {
-      console.log("just before if");
-      console.log(data.rows[0]);
-      // console.log("categories that don't exist:", data.rows[0].id);
+    const queryString1 = categoriesThatAlreadyExist(req.body.category);
+    db.query(queryString1[0], queryString1[1]).then(data => {
+      // create a new category if it doesn't exist
+      // add new resource to the database and link it to the category
       if (data.rows[0] == undefined) {
-        // create new category
-        console.log("creating new category");
-        let queryString2 = `
-          INSERT INTO categories
-            (name)
-          VALUES
-            ($1)
-          RETURNING id;
-          `;
-        let values2 = [req.body.category];
-        console.log(queryString2, values2);
-        db.query(queryString2, values2).then(data => {
-          console.log(data.rows);
+        // return new category ID
+        const queryString2 = createNewCategory(req.body.category);
 
-          console.log("category doesn't exist");
+        db.query(queryString2[0], queryString2[1]).then(data => {
+          // Save the new category ID for joining with resource
           const categoryID = data.rows[0].id;
-          console.log("CategoryID: ", categoryID);
-          // Create new resource
-          let queryString3 = `
-            INSERT INTO resources
-              (user_id, title, link, description, date_created)
-            VALUES
-              ($1, $2, $3, $4, Now())
-            RETURNING id;
-            `;
-          let values3 = [
-            req.body.user_id,
-            req.body.title,
-            req.body.link,
-            req.body.description
-          ];
-          db.query(queryString3, values3).then(data => {
-            console.log("resource created");
-            console.log("resourceid: ", data.rows[0].id);
-            let queryString4 = `
-              INSERT INTO category_resource
-                (resource_id, category_id)
-              VALUES
-                ($1, $2);
-              `;
-            let values4 = [data.rows[0].id, categoryID];
-            console.log("resourceID:", values4[0]);
-            console.log("categoryID:", values4[1]);
-            console.log(queryString4, values4);
-            db.query(queryString4, values4);
-          });
+
+          createNewResourceJoinCategory(req.body, categoryID, db);
         });
       } else {
+        // Save the new category ID for joining with resource
         const categoryID = data.rows[0].id;
-        console.log("category exists");
-        // Create new resource
-        let queryString3 = `
-            INSERT INTO resources
-              (user_id, title, link, description, date_created)
-            VALUES
-              ($1, $2, $3, $4, Now())
-            RETURNING id;
-            `;
-        let values3 = [
-          req.body.user_id,
-          req.body.title,
-          req.body.link,
-          req.body.description
-        ];
-        db.query(queryString3, values3).then(data => {
-          console.log("resource created");
-          console.log("resourceid: ", data.rows[0].id);
-          let queryString4 = `
-              INSERT INTO category_resource
-                (resource_id, category_id)
-              VALUES
-                ($1, $2);
-              `;
-          let values4 = [data.rows[0].id, categoryID];
-          console.log("resourceID:", values4[0]);
-          console.log("categoryID:", values4[1]);
-          console.log(queryString4, values4);
-          db.query(queryString4, values4);
-        });
+
+        createNewResourceJoinCategory(req.body, categoryID, db);
       }
     });
   });
