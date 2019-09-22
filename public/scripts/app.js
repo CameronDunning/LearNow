@@ -1,14 +1,29 @@
 $(document).ready(() => {
   loadResources();
 
-  $('#resources').on(click, () => {
-    console.log($('.resourceImg').html());
-  })
+
+
+  // $('.resourcescontainer').click( (event) => {
+  //   console.log(event);
+
+
+
+  $('#resourcescontainer').on('click', () => {
+    let $title = event.path;
+    console.log($title)
+
+
+    // console.log($(`${$title} img`).text());
+    $('#modal-clicked-resource').on('show.bs.modal', (event) => {
+      console.log($(this));
+    });
+  });
+
 });
 
-$.fn.serializeObject = function() {
+$.fn.serializeObject = function () {
   var o = {};
-  this.find("[name]").each(function() {
+  this.find("[name]").each(function () {
     o[this.name] = this.value;
   });
   return o;
@@ -30,7 +45,7 @@ async function loadResources() {
   }
 }
 
-$("form").on("submit", async function(event) {
+$("form").on("submit", async function (event) {
   //var formData = await JSON.stringify($(this).serializeArray());
   let formObject = await $(this).serializeObject();
   console.log("inside jquery");
@@ -50,11 +65,11 @@ function renderResources(resources) {
 //helper function that creates individual resource element
 function createResourceElement(resourceData) {
   const resource = `
-  <section class="resources card " id= "resources"  data-toggle="modal" data-target="#modal-clicked-resource">
+  <section class="resources card" id= "resources">
     <div class="resourceImg">
       <img src="${escape(
-        resourceData.cover_photo_url ? resourceData.cover_photo_url : ""
-      )}" class = "card-img-top resource-img"></img>
+    resourceData.cover_photo_url ? resourceData.cover_photo_url : ""
+  )}" class = "card-img-top resource-img"></img>
     </div>
     <div class='textbody card-body'>
       <h5 class = 'card-title'>${escape(resourceData.title)}</h5>
