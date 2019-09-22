@@ -1,24 +1,26 @@
   <div class="modal" id="modal-create-new">
       <div class="modal-dialog-scrolled" role="document">
         <div class="modal-content" id="modal-content">
-          <div class="modal-header" id="new-resource-header">
+
+          <div class="modal-header new-resource-header" >
             <h5 class="modal-title">Create new resource</h5>
-            <button type="button" class="close close-button" aria-label="Close" data-dismiss="modal">
-              <span aria-hidden="true">&times;</span>
+            <button type="button" class="close close-button">
+              <button class="close close-button">&times;</button>
             </button>
           </div>
 
           <div class="modal-body">
-            <form action="/api/input" method="POST" class='form-group'>
+            <form action="/api/input" method="POST" >
+              <div class="new-resource-container">
+              <label for="link"> Link
+                <input name='link' type="text" class="form-control" placeholder="Link" width="100%"/>
+              </label>
 
+              <br>
               <label for="title"> Title
                 <input name='title' type="text" class="form-control" id="resource-title" placeholder="Title" />
               </label>
-              <br>
 
-              <label for="link"> Link
-                <input name='link' type="text" class="form-control" placeholder="Link" />
-              </label>
               <br>
               <label for="description"> Description
                 <textarea name="description" class="form-control" id="" cols="100" rows="10"></textarea>
@@ -33,6 +35,8 @@
                 </div>
                 <button type="submit" class="btn btn-primary submit-resource" data-dismiss="modal">Create new resource</button>
               </div>
+
+            </div>
           </div>
           </form>
         </div>
