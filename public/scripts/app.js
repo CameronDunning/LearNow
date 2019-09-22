@@ -49,7 +49,7 @@ function renderResources(resources) {
 let counter = 0;
 function createResourceElement(resourceData) {
   const resource = `
-  <section class="resources card" id="${counter}">
+  <section class="resources card" id="${counter++}">
     <div class="resourceImg">
       <img src="${escape(
         resourceData.cover_photo_url ? resourceData.cover_photo_url : ""
@@ -70,7 +70,6 @@ function createResourceElement(resourceData) {
   </div>
   </section>
   `;
-  counter++;
   return $(resource);
 }
 //escape function makes text safe and prevents injection
