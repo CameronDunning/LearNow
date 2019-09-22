@@ -43,31 +43,30 @@
 #modal-clicked-resource .resource-modal-title {
   font-weight: bold;
 }
+
 #modal-clicked-resource .modal-content {
-  text-align: center;
   max-width: 80%;
   max-height: 40%;
   left: 100px;
 }
 
 #modal-clicked-resource .resource-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1em 2em;
+  text-align: center;
+  padding: 1em 0;
+  margin-bottom: 1em;
 }
 
-#modal-clicked-resource .modal-description {
-  margin: 20px 0;
-  border: 1px solid red;
+#modal-clicked-resource .resource-description-container {
+  border-top: 1px solid #ebebeb;
+  border-bottom: 1px solid #ebebeb;
 }
 
 #modal-clicked-resource .resource-comment-container {
   color: #696564;
-  text-align: left;
 }
 
-#modal-clicked-resource .comments-title {
+#modal-clicked-resource .title {
+  color: #696564;
   font-weight: bold;
   padding: 1em 0;
 }
@@ -78,7 +77,7 @@
 
 #modal-clicked-resource .comment {
   border: 1px solid #ebebeb;
-  box-shadow: 2px 5px 10px 2px rgba(220, 220, 222, 0.5);
+  box-shadow: 2px 2px 5px 2px rgba(220, 220, 222, 0.5);
   padding: 1em;
   margin: 1.5em 0;
   border-radius: 5px;
