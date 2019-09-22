@@ -45,7 +45,7 @@ function renderResources(resources) {
 
 //! THIS NEEDS TO BE STYLED AND FORMATTED ACCORDING TO UI FRAMEWORK
 //helper function that creates individual resource element
-// id= "resources"
+// id= "resources" <-- kept in case this was used somewhere else
 let counter = 0;
 function createResourceElement(resourceData) {
   const resource = `
@@ -98,7 +98,7 @@ function loadModal() {
       .text();
 
     $("#modal-clicked-resource").on("show.bs.modal", function() {
-      $(".modal-title").text(title);
+      $(".resource-modal-title").text(title);
 
       $(".modal-body").children($(".clicked-resource-img").attr("src", image));
       $(".modal-description").text(description);
