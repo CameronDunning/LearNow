@@ -1,29 +1,10 @@
 $(document).ready(() => {
   loadResources();
-
-
-
-  // $('.resourcescontainer').click( (event) => {
-  //   console.log(event);
-
-
-
-  $('#resourcescontainer').on('click', () => {
-    let $title = event.path;
-    console.log($title)
-
-
-    // console.log($(`${$title} img`).text());
-    $('#modal-clicked-resource').on('show.bs.modal', (event) => {
-      console.log($(this));
-    });
-  });
-
 });
 
-$.fn.serializeObject = function () {
+$.fn.serializeObject = function() {
   var o = {};
-  this.find("[name]").each(function () {
+  this.find("[name]").each(function() {
     o[this.name] = this.value;
   });
   return o;
@@ -45,7 +26,7 @@ async function loadResources() {
   }
 }
 
-$("form").on("submit", async function (event) {
+$("form").on("submit", async function(event) {
   //var formData = await JSON.stringify($(this).serializeArray());
   let formObject = await $(this).serializeObject();
   console.log("inside jquery");
@@ -59,21 +40,24 @@ function renderResources(resources) {
   resources.forEach(resource =>
     $("#resourcescontainer").append(createResourceElement(resource))
   );
+  loadModal();
 }
 
 //! THIS NEEDS TO BE STYLED AND FORMATTED ACCORDING TO UI FRAMEWORK
 //helper function that creates individual resource element
+// id= "resources"
+let counter = 0;
 function createResourceElement(resourceData) {
   const resource = `
-  <section class="resources card" id= "resources">
+  <section class="resources card" id="${counter}">
     <div class="resourceImg">
       <img src="${escape(
-    resourceData.cover_photo_url ? resourceData.cover_photo_url : ""
-  )}" class = "card-img-top resource-img"></img>
+        resourceData.cover_photo_url ? resourceData.cover_photo_url : ""
+      )}" class = "card-img-top resource-img"></img>
     </div>
     <div class='textbody card-body'>
       <h5 class = 'card-title'>${escape(resourceData.title)}</h5>
-      <p>${escape(resourceData.description)}</p
+      <p class = 'description'>${escape(resourceData.description)}</p>
     </div>
     <div class="resource-stats">
       <p class="resource-timestamp">Date here </p>
@@ -86,12 +70,43 @@ function createResourceElement(resourceData) {
   </div>
   </section>
   `;
+  counter++;
   return $(resource);
 }
-
 //escape function makes text safe and prevents injection
 function escape(str) {
   let div = document.createElement("div");
   div.appendChild(document.createTextNode(str));
   return div.innerHTML;
+}
+
+function loadModal() {
+  $(".resources").on("click", function() {
+    let title = $(this)
+      .children(".card-body")
+      .children(".card-title")
+      .text();
+
+    let image = $(this)
+      .children(".resourceImg")
+      .children(".resource-img")
+      .attr("src");
+
+    let description = $(this)
+      .children(".card-body")
+      .children(".description")
+      .text();
+
+    $("#modal-clicked-resource").on("show.bs.modal", function() {
+      $(".modal-title").text(title);
+
+      $(".modal-body").children($(".clicked-resource-img").attr("src", image));
+      $(".modal-description").text(description);
+
+      $(".close-button").on("click", () => {
+        $("#modal-clicked-resource").modal("hide");
+      });
+    });
+    $("#modal-clicked-resource").modal();
+  });
 }

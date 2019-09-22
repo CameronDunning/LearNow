@@ -13,12 +13,11 @@ module.exports = db => {
 
     values = Object.values(req.body);
     console.log(values);
-
     //returns the rows of the query
     //send data into templatevars then render
-    // db.query(queryString, values)
-    //   .then(data => res.json(data.rows))
-    //   .catch(err => console.log(err));
+    db.query(queryString, values)
+      .then(data => res.json(data.rows))
+      .catch(err => console.log(err));
   });
 
   router.get("/:category", (req, res) => {

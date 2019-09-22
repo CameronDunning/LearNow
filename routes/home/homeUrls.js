@@ -18,7 +18,6 @@ module.exports = db => {
     res.render("login");
   });
   router.post("/login", (req, res) => {
-
     //login authentification *maybe fake first for mvp*
   });
 
