@@ -1,4 +1,4 @@
-  <!--
+<!--
 - Search bar
 - My Resources
 - Categories
@@ -8,20 +8,23 @@
 
   -->
 <nav>
-<ul>
-
+  <ul>
     <li data-toggle="modal" data-target="#modal-create-new">New Resource</li>
 
     <% include ../new_resource %>
 
-    <li>My Resources</li>
-    <li><form class="form-inline md-form form-sm active-cyan-2 mt-2">
-        <input class="form-control form-control-sm mr-3 w-75" type="text" placeholder="Search"
-          aria-label="Search">
+    <li><a href="/my_resources">My Resources</a></li>
+    <li>
+      <form class="form-inline md-form form-sm active-cyan-2 mt-2">
+        <input
+          class="form-control form-control-sm mr-3 w-75"
+          type="text"
+          placeholder="Search"
+          aria-label="Search"
+        />
         <i class="fas fa-search" aria-hidden="true"></i>
-    </form>
-  </li>
-  <li>Categories</li>
-</ul>
-
+      </form>
+    </li>
+    <li>Categories</li>
+  </ul>
 </nav>

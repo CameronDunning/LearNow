@@ -110,12 +110,29 @@ module.exports = db => {
     });
   });
 
+  router.get("/my_resources", (req, res) => {
+    const userID = req.session.user_id;
+    // get resources that the user has uploaded
+    const queryString1 = getUserResources(userID);
+    db.query(queryString1[0], queryString1[1]).then(data =>
+      res.json(data.rows)
+    );
+  });
+
+  router.get("/my_liked_resources", (req, res) => {
+    const userID = req.session.user_id;
+    // get resources that the user has added to their resources
+
+    const queryString1 = getUserAddedResources(userID);
+    db.query(queryString1[0], queryString1[0]);
+  });
+
   router.get("/:category", (req, res) => {
     const category = req.params.category.toLowerCase();
     //make query to show resources based on category
     let queryString = `
       SELECT * FROM resources
-      WHERE tag LIKE $1
+      WHERE category LIKE $1
       LIMIT 10;
       `;
     let values = [`%${category}%`];
@@ -140,20 +157,6 @@ module.exports = db => {
     db.query(queryString)
       .then(data => res.json(data.rows))
       .catch(err => console.log(err));
-  });
-  router.get("/my_resources", (req, res) => {
-    const userID = req.session.user_id;
-    // get resources that the user has uploaded
-    const queryString1 = getUserResources(userID);
-    db.query(queryString1[0], queryString1[1]);
-  });
-
-  router.get("/my_liked_resources", (req, res) => {
-    const userID = req.session.user_id;
-    // get resources that the user has added to their resources
-
-    const queryString1 = getUserAddedResources(userID);
-    db.query(queryString1[0], queryString1[0]);
   });
   return router;
 };
