@@ -2,6 +2,7 @@ $(document).ready(() => {
   loadResources();
 });
 
+//serialize object is a helper function for jquery to convert .serialize to a useable object
 $.fn.serializeObject = function() {
   var o = {};
   this.find("[name]").each(function() {
@@ -27,12 +28,10 @@ async function loadResources() {
 }
 
 $("form").on("submit", async function(event) {
-  //var formData = await JSON.stringify($(this).serializeArray());
   let formObject = await $(this).serializeObject();
-  console.log("inside jquery");
-  console.log(formObject);
   $("#resourcescontainer").append(createResourceElement(formObject));
-  // $("#resourcescontainer").append(createResourceElement(data));
+
+  loadModal();
 });
 
 //Helper function for loadResources that renders the array of resources passed into it and appends it to the container
@@ -45,11 +44,11 @@ function renderResources(resources) {
 
 //! THIS NEEDS TO BE STYLED AND FORMATTED ACCORDING TO UI FRAMEWORK
 //helper function that creates individual resource element
-// id= "resources"
+// id= "resources" <-- kept in case this was used somewhere else
 let counter = 0;
 function createResourceElement(resourceData) {
   const resource = `
-  <section class="resources card" id="${counter}">
+  <section class="resources card" id="${counter++}">
     <div class="resourceImg">
       <img src="${escape(
         resourceData.cover_photo_url ? resourceData.cover_photo_url : ""
@@ -63,6 +62,7 @@ function createResourceElement(resourceData) {
       <p class="resource-timestamp">Date here </p>
       <form>
         <div class="arrows">
+          <i class="fas fa-plus" id="add-to-my-resources"></i>
           <i class="fas fa-arrow-up " id="up-vote"></i>
           <i class="fas fa-arrow-down " id="down-vote"></i>
         </div>
@@ -70,7 +70,6 @@ function createResourceElement(resourceData) {
   </div>
   </section>
   `;
-  counter++;
   return $(resource);
 }
 //escape function makes text safe and prevents injection
@@ -98,7 +97,7 @@ function loadModal() {
       .text();
 
     $("#modal-clicked-resource").on("show.bs.modal", function() {
-      $(".modal-title").text(title);
+      $(".resource-modal-title").text(title);
 
       $(".modal-body").children($(".clicked-resource-img").attr("src", image));
       $(".modal-description").text(description);
