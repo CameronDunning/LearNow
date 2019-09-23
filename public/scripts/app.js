@@ -63,6 +63,7 @@ function createResourceElement(resourceData) {
       <p class="resource-timestamp">Date here </p>
       <form>
         <div class="arrows">
+          <i class="fas fa-plus" id="add-to-my-resources"></i>
           <i class="fas fa-arrow-up " id="up-vote"></i>
           <i class="fas fa-arrow-down " id="down-vote"></i>
         </div>

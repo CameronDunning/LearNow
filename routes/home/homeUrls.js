@@ -82,6 +82,11 @@ module.exports = db => {
   router.get("/my_resources", (req, res) => {
     res.render("my_resources");
   });
+  //Get and post requests for the update profile page
+
+  router.post("update", (req, res) => {
+    //register req.body.___
+  });
 
   //get request for the home page
   router.get("/", (req, res) => {
