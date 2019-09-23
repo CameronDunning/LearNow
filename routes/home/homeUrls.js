@@ -13,15 +13,6 @@ router.use(
 );
 //import EJS files here login/register/home
 
-/**
- * Get/post: login page
- * get/post: register
- * Get/Post: Create new resource
- * Get/Post: update profile
- * Get/post: comment on resource
- * Get     : my resources
- *  */
-
 module.exports = db => {
   //Get and post requests for the login page
   router.get("/login", (req, res) => {
@@ -78,7 +69,13 @@ module.exports = db => {
     `;
     values = [name, email, hashedPassword];
     db.query(queryString, values)
-      .then(res.redirect("/"))
+      .then(data => {
+        if (data.error) {
+          return res.redirect("/register");
+        } else {
+          res.redirect("/");
+        }
+      })
       .catch(err => console.log(err));
   });
 
