@@ -71,6 +71,8 @@ module.exports = db => {
       if (data.rows[0] == undefined) {
         // return new category ID
         const queryString2 = createNewCategory(req.body.category);
+      }
+    })
   });
 
   router.get("/:category", (req, res) => {
