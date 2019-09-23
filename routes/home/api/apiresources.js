@@ -73,12 +73,9 @@ const upvoteQuery = (userID, resourceID) => {
 const upvoteResource = (db, userID, resourceID) => {
   const queryString1 = upvoteQuery(userID, resourceID);
   return db.query(queryString1[0], queryString1[1]).then(data => {
-    console.log(data.rows[0]);
     if (data.rows[0] !== undefined) {
-      console.log("vote already exists, can't vote");
       return false;
     } else {
-      console.log("vote doesn't already exist, vote away!");
       const queryString = `
         INSERT INTO comments
           (user_id, resource_id, upvote, date_created)
@@ -123,14 +120,14 @@ module.exports = db => {
     });
   });
 
-  router.post("/upvote/:id", (req, res) => {
+  router.post("/upvote/:id", async (req, res) => {
     const resourceID = req.params.id;
     const userID = req.session.user_id;
-
-    if (upvoteResource(db, userID, resourceID) === false) {
-      res.sendStatus(404);
-    } else {
+    const isValidVote = await upvoteResource(db, userID, resourceID);
+    if (isValidVote) {
       res.sendStatus(201);
+    } else {
+      res.sendStatus(404);
     }
   });
 
