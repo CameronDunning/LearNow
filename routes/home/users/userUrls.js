@@ -7,7 +7,8 @@ module.exports = db => {
   router.get("/:user/", (req, res) => {
     let user = req.params.user;
     templateVars = {
-      userid: user
+      userid: user,
+      user_id: req.session.user_id
     };
     res.render("update_profile", templateVars);
   });

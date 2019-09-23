@@ -12,7 +12,6 @@ $.fn.serializeObject = function() {
 };
 
 const upvote = id => {
-  console.log("upvote id:", id);
   $.ajax({
     url: "http://localhost:8080/api/upvote/" + id,
     type: "POST",
@@ -21,11 +20,18 @@ const upvote = id => {
 };
 
 const downvote = id => {
-  console.log("downvote id:", id);
   $.ajax({
     url: "http://localhost:8080/api/downvote/" + id,
     type: "POST",
     dataType: "JSON"
+  });
+};
+
+const addResource = id => {
+  $.ajax({
+    url: `http://localhost:8080/api/my_liked_resources/` + id,
+    dataType: "JSON",
+    type: "POST"
   });
 };
 
@@ -56,6 +62,18 @@ const loadResources = async () => {
           if (downvoted === "false") {
             console.log("downvoted:", resourceID);
             downvote(resourceID);
+          }
+        });
+        $("#resourcescontainer").on("click", ".add-to-my-resources", e => {
+          const classListArray = e.currentTarget.classList;
+          const resourceID = classListArray[3];
+          const addedToResource = $(e.currentTarget).attr("data-activity");
+          if (addedToResource === "false") {
+            addResource(resourceID);
+            $(`.add-to-my-resources.${resourceID}`).attr(
+              "data-activity",
+              "true"
+            );
           }
         });
       }
@@ -127,11 +145,15 @@ const createResourceElement = resourceData => {
       <p class="resource-timestamp">${resourceData.date_created} </p>
       <form>
         <div class="arrows">
-          <i class="fas fa-plus" id="add-to-my-resources"></i>
-          <i class="fas fa-arrow-up ${resourceData.id}
-          ${resourceData.upvote}" id="up-vote"></i>
+          <i class="fas fa-plus add-to-my-resources ${
+            resourceData.id
+          }" data-activity = ${resourceData["add_to_my_resources"]}
+  ></i>
+          <i class="fas fa-arrow-up ${resourceData.id} ${
+    resourceData.upvote
+  }" id="up-vote"></i>
           <i class="fas fa-arrow-down ${resourceData.id}
-          ${resourceData.downvote}" id="down-vote"></i>
+          ${resourceData.downvote} " id="down-vote"></i>
         </div>
     </form>
   </div>
@@ -166,6 +188,7 @@ function loadModal() {
 
     $("#modal-clicked-resource").on("show.bs.modal", function() {
       let resourceID = e.currentTarget.children[1].id;
+      console.log(resourceID);
       $(".resource-modal-title").text(title);
 
       $(".modal-body").children($(".clicked-resource-img").attr("src", image));

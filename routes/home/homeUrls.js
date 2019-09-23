@@ -16,7 +16,9 @@ router.use(
 module.exports = db => {
   //Get and post requests for the login page
   router.get("/login", (req, res) => {
-    res.render("login");
+    let templateVars = {};
+    templateVars.user_id = req.session.user_id ? req.session.user_id : "";
+    res.render("login", templateVars);
   });
 
   //Info from login gets sent here,
@@ -33,6 +35,7 @@ module.exports = db => {
         console.log(req.body.password, user.password);
         if (bcrypt.compareSync(req.body.password, user.password)) {
           console.log("user found and password correct");
+          console.log(user.id, user.email);
           req.session.user_id = user.id;
           req.session.user_email = user.email;
           req.session.user_name = user.name;
@@ -48,7 +51,9 @@ module.exports = db => {
 
   //Get and post requests for the register page
   router.get("/register", (req, res) => {
-    res.render("register");
+    let templateVars = {};
+    templateVars.user_id = "";
+    res.render("register", templateVars);
   });
   //registration post
   router.post("/register", (req, res) => {
@@ -81,6 +86,11 @@ module.exports = db => {
       .catch(err => console.log(err));
   });
 
+  router.get("/my_resources", (req, res) => {
+    templateVars = { user_id: req.session.user_id };
+    res.render("my_resources", templateVars);
+  });
+
   //logout
   router.get("/logout", (req, res) => {
     req.session = null;
@@ -89,14 +99,17 @@ module.exports = db => {
 
   //Get and post requests for the update profile page
   router.get("/update", (req, res) => {
-    res.render("update_profile");
+    let templateVars = {};
+    templateVars.user_id = req.session.user_id;
+    res.render("update_profile"), templateVars;
   });
+  //Get and post requests for the update profile page
 
   //get request for the home page
   router.get("/", (req, res) => {
     const templateVars = {
-      user_id: req.session.user_id,
-      user_name: req.session.user_name
+      user_id: req.session.user_id ? req.session.user_id : "",
+      user_name: req.session.user_name ? req.session.user_name : ""
     };
     res.render("home", templateVars);
   });
