@@ -33,6 +33,7 @@ $("form").on("submit", async function(event) {
   console.log(formObject);
   $("#resourcescontainer").append(createResourceElement(formObject));
   // $("#resourcescontainer").append(createResourceElement(data));
+  loadModal();
 });
 
 //Helper function for loadResources that renders the array of resources passed into it and appends it to the container
@@ -80,6 +81,7 @@ function escape(str) {
 }
 
 function loadModal() {
+  console.log("hello");
   $(".resources").on("click", function() {
     let title = $(this)
       .children(".card-body")
