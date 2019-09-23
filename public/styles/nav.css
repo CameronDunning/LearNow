@@ -1,0 +1,26 @@
+.sidebar {
+  grid-area: 1/1/3/2;
+  width: 60px;
+  height: auto;
+}
+
+.sidebar ul {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.sidebar i {
+  margin: 1em 0;
+}
+
+.hover-show {
+  display: none;
+}
+
+.sidebar:hover {
+  width: 200px;
+}
+.sidebar:hover .hover-show {
+  display: block;
+}
