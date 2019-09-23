@@ -26,7 +26,7 @@ const createNewCategory = category => {
   return [queryString, [category]];
 };
 
-const createNewResource = values => {
+const createNewResource = (values, userID) => {
   const queryString = `
     INSERT INTO resources
       (user_id, title, link, description, date_created)
@@ -34,7 +34,7 @@ const createNewResource = values => {
       ($1, $2, $3, $4, Now())
     RETURNING id;
     `;
-  const returnValues = [1, values.title, values.link, values.description];
+  const returnValues = [userID, values.title, values.link, values.description];
   console.log(returnValues);
   return [queryString, returnValues];
 };
@@ -50,9 +50,9 @@ const joinResourceCategory = (resourceID, categoryID) => {
   return [queryString, values];
 };
 
-const createNewResourceJoinCategory = (body, categoryID, db) => {
+const createNewResourceJoinCategory = (body, userID, categoryID, db) => {
   // returns new resource ID
-  const queryString3 = createNewResource(body);
+  const queryString3 = createNewResource(body, userID);
   db.query(queryString3[0], queryString3[1]).then(data => {
     // join the category to the resource in the category_resource table
     const queryString4 = joinResourceCategory(data.rows[0].id, categoryID);
@@ -69,7 +69,7 @@ const getUserResources = userID => {
   return [queryString, values];
 };
 
-const getUserLikedResources = userID => {
+const getUserAddedResources = userID => {
   const queryString = `
     SELECT * FROM resources
     JOIN comments ON resources.id=resource_id
@@ -84,6 +84,7 @@ module.exports = db => {
   router.post("/input", (req, res) => {
     console.log(req.body);
     console.log(req.session.user_id);
+    const userID = req.session.user_id;
     // make query to show resources based on category
     // returns an OBJECT of all the categories that already exist
     const queryString1 = categoriesThatAlreadyExist(req.body.category);
@@ -98,13 +99,13 @@ module.exports = db => {
           // Save the new category ID for joining with resource
           const categoryID = data.rows[0].id;
 
-          createNewResourceJoinCategory(req.body, categoryID, db);
+          createNewResourceJoinCategory(req.body, userID, categoryID, db);
         });
       } else {
         // Save the new category ID for joining with resource
         const categoryID = data.rows[0].id;
 
-        createNewResourceJoinCategory(req.body, categoryID, db);
+        createNewResourceJoinCategory(req.body, userID, categoryID, db);
       }
     });
   });
@@ -149,9 +150,9 @@ module.exports = db => {
 
   router.get("/my_liked_resources", (req, res) => {
     const userID = req.session.user_id;
-    // get resources that the user has liked
+    // get resources that the user has added to their resources
 
-    const queryString1 = getUserLikedResources(userID);
+    const queryString1 = getUserAddedResources(userID);
     db.query(queryString1[0], queryString1[0]);
   });
   return router;
