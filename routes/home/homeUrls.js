@@ -79,6 +79,15 @@ module.exports = db => {
       .catch(err => console.log(err));
   });
 
+  //Get and post requests for the update profile page
+  router.get("/update", (req, res) => {
+    res.render("update_profile");
+  });
+
+  router.post("update", (req, res) => {
+    //register req.body.___
+  });
+
   //get request for the home page
   router.get("/", (req, res) => {
     res.render("home");
