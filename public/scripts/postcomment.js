@@ -1,37 +1,31 @@
-// $(document).ready(() => {
-//   loadResources();
-//   console.log("loading comments");
-// });
-let loadcomments = () => {
-  loadResources();
-  async function loadResources() {
-    try {
-      await $.ajax({
-        url: `http://localhost:8080/api/c/${resourceid}`,
-        dataType: "JSON",
-        success: data => {
-          renderResources(data);
-        }
-      });
-    } catch (err) {
-      console.log(err);
-    }
-  }
+loadComments();
 
-  function renderResources(resources) {
-    resources.forEach(resource =>
-      $("resourcecommentcontainer").append(createResourceElement(resource))
-    );
+async function loadComments() {
+  try {
+    await $.ajax({
+      url: `http://localhost:8080/api/c/${resourceid}`,
+      dataType: "JSON",
+      success: data => {
+        renderComments(data);
+      }
+    });
+  } catch (err) {
+    console.log(err);
   }
+}
 
-  function createResourceElement(resourceData) {
-    const resource = `
+function renderComments(comments) {
+  resources.forEach(comment =>
+    $("resource-comment-container").append(createCommentElement(comment))
+  );
+}
+
+function createCommentElement(commentData) {
+  const resource = `
     <section class="comment">
-      <p class="commenter">${escape(resourceData.user_id)}</p>
-      <p>${escape(resourceData.text)}</p>
+      <p class="commenter">${escape(commentData.user_id)}</p>
+      <p>${escape(commentData.text)}</p>
     </section>
   `;
-    return $(resource);
-  }
-};
-module.exports = loadcomments;
+  return $(comment);
+}

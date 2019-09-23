@@ -1,4 +1,4 @@
-let loadcomments = require("./postcomment");
+//let loadcomments = require("./postcomment");
 $(document).ready(() => {
   loadResources();
 });
@@ -48,7 +48,7 @@ function renderResources(resources) {
 let counter = 0;
 function createResourceElement(resourceData) {
   const resource = `
-  <section class="resources card" id="${counter++}">
+  <section class="resources card" id="${resourceData.id}">
     <div class="resourceImg">
       <img src="${escape(
         resourceData.cover_photo_url ? resourceData.cover_photo_url : ""
@@ -80,7 +80,7 @@ function escape(str) {
 }
 
 function loadModal() {
-  $(".resources").on("click", function() {
+  $(".resources").on("click", function(e) {
     let title = $(this)
       .children(".card-body")
       .children(".card-title")
@@ -107,7 +107,39 @@ function loadModal() {
       });
     });
     $("#modal-clicked-resource").modal();
+    $(".resource-comment-container").empty();
+    let resourceID = e.currentTarget.id;
+    loadComments(resourceID);
   });
 }
 
-module.exports = { escape };
+async function loadComments(resourceid) {
+  try {
+    await $.ajax({
+      url: `http://localhost:8080/api/c/${resourceid}`,
+      dataType: "JSON",
+      success: data => {
+        //console.log(data);
+        renderComments(data);
+      }
+    });
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+function renderComments(comments) {
+  comments.forEach(comment => {
+    $(".resource-comment-container").append(createCommentElement(comment));
+  });
+}
+
+function createCommentElement(commentData) {
+  const comment = `
+    <section class="comment">
+      <p class="commenter">${escape(commentData.user_id)}</p>
+      <p>${escape(commentData.comment)}</p>
+    </section>
+  `;
+  return $(comment);
+}
