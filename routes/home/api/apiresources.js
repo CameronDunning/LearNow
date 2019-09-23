@@ -60,6 +60,26 @@ const createNewResourceJoinCategory = (body, categoryID, db) => {
   });
 };
 
+const getUserResources = userID => {
+  const queryString = `
+    SELECT * FROM resources
+    WHERE user_id = $1
+    `;
+  const values = [userID];
+  return [queryString, values];
+};
+
+const getUserLikedResources = userID => {
+  const queryString = `
+    SELECT * FROM resources
+    JOIN comments ON resources.id=resource_id
+    WHERE upvote=TRUE
+    AND comments.user_id=$1
+  `;
+  const values = [userID];
+  return [queryString, values];
+};
+
 module.exports = db => {
   router.post("/input", (req, res) => {
     console.log(req.body);
@@ -74,7 +94,7 @@ module.exports = db => {
         // return new category ID
         const queryString2 = createNewCategory(req.body.category);
       }
-    })
+    });
   });
 
   router.get("/:category", (req, res) => {
@@ -108,6 +128,19 @@ module.exports = db => {
       .then(data => res.json(data.rows))
       .catch(err => console.log(err));
   });
+  router.get("/my_resources", (req, res) => {
+    const userID = req.session.user_id;
+    // get resources that the user has uploaded
+    const queryString1 = getUserResources(userID);
+    db.query(queryString1[0], queryString1[1]);
+  });
 
+  router.get("/my_liked_resources", (req, res) => {
+    const userID = req.session.user_id;
+    // get resources that the user has liked
+
+    const queryString1 = getUserLikedResources(userID);
+    db.query(queryString1[0], queryString1[0]);
+  });
   return router;
 };

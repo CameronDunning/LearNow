@@ -18,6 +18,7 @@ async function loadResources() {
       url: "http://localhost:8080/api/",
       dataType: "JSON",
       success: data => {
+        console.log(data);
         renderResources(data);
       }
     });
