@@ -38,13 +38,14 @@ const loadResources = async () => {
       dataType: "JSON",
       success: data => {
         renderResources(data);
-        console.log(data);
         $(".fa-arrow-up").on("click", e => {
           // upvote function
           const classListArray = e.currentTarget.classList;
           const resourceID = classListArray[2];
           const upvoted = classListArray[3];
-          if (!upvoted) {
+          console.log(upvoted);
+          if (upvoted === "false") {
+            console.log("upvoted:", resourceID);
             upvote(resourceID);
           }
         });
@@ -53,8 +54,9 @@ const loadResources = async () => {
           const classListArray = e.currentTarget.classList;
           const resourceID = classListArray[2];
           const downvoted = classListArray[3];
-          if (!downvoted) {
-            upvote(resourceID);
+          if (downvoted === "false") {
+            console.log("downvoted:", resourceID);
+            downvote(resourceID);
           }
         });
       }
@@ -84,7 +86,6 @@ function renderResources(resources) {
 // id= "resources" <-- kept in case this was used somewhere else
 let counter = 0;
 const createResourceElement = resourceData => {
-  console.log(resourceData);
   const resource = `
   <section class="resources card" id="${counter++}">
     <div id="${resourceData.name}"></div>
