@@ -29,8 +29,6 @@ async function loadResources() {
 $("form").on("submit", async function(event) {
   //var formData = await JSON.stringify($(this).serializeArray());
   let formObject = await $(this).serializeObject();
-  console.log("inside jquery");
-  console.log(formObject);
   $("#resourcescontainer").append(createResourceElement(formObject));
   // $("#resourcescontainer").append(createResourceElement(data));
   loadModal();
@@ -81,7 +79,6 @@ function escape(str) {
 }
 
 function loadModal() {
-  console.log("hello");
   $(".resources").on("click", function() {
     let title = $(this)
       .children(".card-body")
