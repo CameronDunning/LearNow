@@ -34,10 +34,10 @@
 
   <body>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <% include ./partials/header %>
+    <% include ./partials/header %> <% include ./partials/nav %>
     <section class="my-resources-buttons">
       <button
-        class="my-resources-selection btn btn-primary"
+        class="my-resources-button btn btn-primary"
         data-toggle="button"
         aria-pressed="false"
         autocomplete="off"
@@ -46,7 +46,7 @@
       </button>
 
       <button
-        class="liked-resources-selection btn btn-primary"
+        class="liked-resources-button btn btn-primary"
         data-toggle="button"
         aria-pressed="false"
         autocomplete="off"
@@ -55,9 +55,9 @@
       </button>
     </section>
     <div class="card-columns" id="my-resources-container"></div>
+    <% include ./partials/resourceModal %>
 
     <!-- <script type="text/javascript" src="/vendor/jquery-2.2.3.min.js"></script> -->
-    <script type="text/javascript" src="/scripts/app.js"></script>
     <script type="text/javascript" src="/scripts/my_resources.js"></script>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"

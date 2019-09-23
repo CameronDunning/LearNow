@@ -1,6 +1,14 @@
-$(".my-resources-selection").on("click", function() {
+$(".my-resources-button").on("click", function() {
   loadMyResources();
 });
+
+$.fn.serializeObject = function() {
+  var o = {};
+  this.find("[name]").each(function() {
+    o[this.name] = this.value;
+  });
+  return o;
+};
 
 async function loadMyResources() {
   try {
@@ -8,7 +16,7 @@ async function loadMyResources() {
       url: "http://localhost:8080/api/my_resources",
       dataType: "JSON",
       success: data => {
-        $("#my-resources-container").empty(); //clears the container before loading updated data
+        $("#my-resources-container").empty();
         renderMyResources(data);
       }
     });
@@ -17,16 +25,21 @@ async function loadMyResources() {
   }
 }
 
+$("form").on("submit", async function(event) {
+  let formObject = await $(this).serializeObject();
+  $("#resourcescontainer").prepend(createResourceElement(formObject));
+  loadMyModal();
+});
 function renderMyResources(resources) {
   resources.forEach(resource => {
     $("#my-resources-container").prepend(createMyResourceElement(resource));
   });
-  loadModal();
+  loadMyModal();
 }
-
-let myResourceIdCounter = 0;
 function createMyResourceElement(resourceData) {
-  const resource = `<section class="resources card" id="mr${myResourceIdCounter++}">
+  const resource = `<section class="resources card" id="${escape(
+    resourceData.id
+  )}">
   <div class="resourceImg">
     <img src="${escape(
       resourceData.cover_photo_url ? resourceData.cover_photo_url : ""
@@ -50,6 +63,42 @@ function createMyResourceElement(resourceData) {
 `;
   return $(resource);
 }
+
+function loadMyModal() {
+  $(".resources").on("click", function() {
+    let title = $(this)
+      .children(".card-body")
+      .children(".card-title")
+      .text();
+
+    let image = $(this)
+      .children(".resourceImg")
+      .children(".resource-img")
+      .attr("src");
+
+    let description = $(this)
+      .children(".card-body")
+      .children(".description")
+      .text();
+
+    console.log("meeep", $("#modal-clicked-resource"));
+
+    $("#modal-clicked-resource").on("show.bs.modal", function() {
+      $(".resource-modal-title").text(title);
+
+      $(".modal-body").children($(".clicked-resource-img").attr("src", image));
+      $(".modal-description").text(description);
+
+      $(".close-button").on("click", () => {
+        $("#modal-clicked-resource").modal("hide");
+      });
+    });
+
+    $("#modal-clicked-resource").modal();
+  });
+}
+
+//deactivate button
 
 //button on click
 //ajax call depending on the button
