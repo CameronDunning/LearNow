@@ -108,3 +108,10 @@ function loadModal() {
     $("#modal-clicked-resource").modal();
   });
 }
+
+// module.exports = {
+//   loadResources,
+//   renderResources,
+//   createResourceElement,
+//   loadModal
+// };

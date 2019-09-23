@@ -35,35 +35,31 @@
   <body>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <% include ./partials/header %>
-    <main>
-      <div id="my-resources-container">
-        <button
-          class="my-resource-selection btn btn-primary"
-          data-toggle="button"
-          aria-pressed="false"
-          autocomplete="off"
-        >
-          My Resources
-        </button>
-        <div class="card-columns"></div>
-        <!-- this portion is pushed in using jquery and ajax for resources owned by user -->
-      </div>
+    <main class="my-resources-container">
+      <button
+        class="my-resources-selection btn btn-primary"
+        data-toggle="button"
+        aria-pressed="false"
+        autocomplete="off"
+      >
+        My Resources
+      </button>
+      <div class="card-columns"></div>
+      <!-- this portion is pushed in using jquery and ajax for resources owned by user -->
 
-      <div id="liked-resources-container">
-        <button
-          class="my-resource-selection btn btn-primary"
-          data-toggle="button"
-          aria-pressed="false"
-          autocomplete="off"
-        >
-          Liked Resources
-        </button>
-        <div class="card-columns"></div>
-        <!-- this portion is pushed in using jquery and ajax for resources liked by user -->
-      </div>
+      <button
+        class="liked-resources-selection btn btn-primary"
+        data-toggle="button"
+        aria-pressed="false"
+        autocomplete="off"
+      >
+        Liked Resources
+      </button>
+      <!-- this portion is pushed in using jquery and ajax for resources liked by user -->
     </main>
     <!-- <script type="text/javascript" src="/vendor/jquery-2.2.3.min.js"></script> -->
     <script type="text/javascript" src="/scripts/app.js"></script>
+    <script type="text/javascript" src="/scripts/my_resources.js"></script>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
       integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
