@@ -25,7 +25,7 @@ const dbParams = require("./lib/db.js");
 const db = new Pool(dbParams);
 
 db.connect();
-
+app.use(methodOverride("_method"));
 //routes
 app.use("/", homeUrls(db));
 app.use("/u/", userUrls(db));
@@ -43,7 +43,7 @@ app.use(
 
 app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(methodOverride("_method"));
+
 app.use(
   "/styles",
   sass({
