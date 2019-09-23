@@ -65,11 +65,36 @@ const loadResources = async () => {
   }
 };
 
-$("form").on("submit", async function(event) {
+$("#newresource").on("submit", async function(event) {
   let formObject = await $(this).serializeObject();
   $("#resourcescontainer").append(createResourceElement(formObject));
   $("#modal-create-new").modal("hide");
   loadModal();
+});
+
+$("#new-comment").on("submit", async function(event) {
+  event.preventDefault();
+  let classes = $("#resource-id")
+    .attr("class")
+    .split(" ");
+  let resourceid = classes[classes.length - 1];
+  let commentformObject = await $(this).serializeObject();
+  commentformObject.user_name = "You just posted";
+
+  $(".resource-comment-container").prepend(
+    createCommentElement(commentformObject)
+  );
+
+  try {
+    await $.ajax({
+      url: "http://localhost:8080/api/c/" + resourceid,
+      dataType: "JSON",
+      type: "POST",
+      data: commentformObject
+    });
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 //Helper function for loadResources that renders the array of resources passed into it and appends it to the container
@@ -99,7 +124,7 @@ const createResourceElement = resourceData => {
       <p class = 'description'>${escape(resourceData.description)}</p>
     </div>
     <div class="resource-stats">
-      <p class="resource-timestamp">Date here </p>
+      <p class="resource-timestamp">${resourceData.date_created} </p>
       <form>
         <div class="arrows">
           <i class="fas fa-plus" id="add-to-my-resources"></i>
@@ -140,9 +165,12 @@ function loadModal() {
       .text();
 
     $("#modal-clicked-resource").on("show.bs.modal", function() {
+      let resourceID = e.currentTarget.children[1].id;
       $(".resource-modal-title").text(title);
 
       $(".modal-body").children($(".clicked-resource-img").attr("src", image));
+      $("#resource-id").removeClass();
+      $("#resource-id").addClass(resourceID);
       $(".modal-description").text(description);
 
       $("#resource-owner").text(e.currentTarget.children[0].id);

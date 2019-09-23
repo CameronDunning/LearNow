@@ -35,6 +35,7 @@ module.exports = db => {
           console.log("user found and password correct");
           req.session.user_id = user.id;
           req.session.user_email = user.email;
+          req.session.user_name = user.name;
           // req.session.user_first_letter = user.first_letter;
           return res.redirect("/");
         } else {
@@ -68,6 +69,8 @@ module.exports = db => {
     db.query(queryString, values)
       .then(data => {
         console.log(data);
+        req.session.user_email = email;
+        req.session.user_name = name;
         req.session.user_id = data.rows[0].id;
         if (data.error) {
           return res.redirect("/register");

@@ -26,6 +26,7 @@ const db = new Pool(dbParams);
 
 db.connect();
 app.use(methodOverride("_method"));
+app.use(bodyParser.json());
 //routes
 app.use("/", homeUrls(db));
 app.use("/u/", userUrls(db));
