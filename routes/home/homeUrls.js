@@ -52,11 +52,7 @@ module.exports = db => {
   //registration post
   router.post("/register", (req, res) => {
     const { name, email, password } = req.body;
-    console.log(req.body);
     const hashedPassword = bcrypt.hashSync(password, 10);
-    console.log(hashedPassword);
-    req.session.user_id = name;
-    req.session.email = email;
 
     //if either parameter is empty, set cookie to equal blank so that .ejs file will present the text
     if (email === "" || password === "") {
@@ -66,10 +62,13 @@ module.exports = db => {
     let queryString = `
     INSERT INTO users (name, email, password)
     VALUES ($1, $2, $3)
+    RETURNING id
     `;
     values = [name, email, hashedPassword];
     db.query(queryString, values)
       .then(data => {
+        console.log(data);
+        req.session.user_id = data.rows[0].id;
         if (data.error) {
           return res.redirect("/register");
         } else {
