@@ -219,7 +219,7 @@ module.exports = db => {
               resource.add_to_my_resources = false;
               for (const comment of comments) {
                 if (resource.id === comment.resource_id) {
-                  resource["upvote"] = comment.upvote;
+                  resource.upvote = comment.upvote;
                   resource.downvote = comment.downvote;
                   resource.add_to_my_resources = comment.add_to_my_resources;
                 }
