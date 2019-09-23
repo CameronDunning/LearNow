@@ -2,6 +2,7 @@
   grid-area: 1/1/3/2;
   width: 60px;
   height: auto;
+  background-color: teal;
 }
 
 .sidebar ul {
@@ -10,8 +11,12 @@
   justify-content: center;
 }
 
+.sidebar li {
+  cursor: pointer;
+}
+
 .sidebar i {
-  margin: 1em 0;
+  margin: 1em 10px;
 }
 
 .hover-show {
@@ -19,8 +24,10 @@
 }
 
 .sidebar:hover {
+  font-size: 8px;
   width: 200px;
 }
+
 .sidebar:hover .hover-show {
-  display: block;
+  display: inline;
 }
