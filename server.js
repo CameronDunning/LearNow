@@ -36,10 +36,11 @@ app.use("/api/", resourceApis(db));
 app.set("view engine", "ejs");
 app.use(
   cookieSession({
-    name: "Session",
-    keys: [0]
+    name: "session",
+    keys: ["id"]
   })
 );
+
 app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));

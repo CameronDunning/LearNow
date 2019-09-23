@@ -3,6 +3,14 @@ const router = express.Router();
 const bcrypt = require("bcrypt");
 const bodyParser = require("body-parser");
 router.use(bodyParser.urlencoded({ extended: false }));
+const cookieSession = require("cookie-session");
+
+router.use(
+  cookieSession({
+    name: "userId",
+    keys: ["id"]
+  })
+);
 //import EJS files here login/register/home
 
 /**
@@ -25,25 +33,26 @@ module.exports = db => {
     //! needs testing
     let queryString = `
     SELECT * FROM users
-    WHERE name=$1; 
+    WHERE email=$1; 
     `;
     values = [req.body.email];
     db.query(queryString, values)
-      .then(data => data.rows)
+      .then(data => data.rows[0])
       .then(user => {
-        console.log(req.body.password);
+        console.log(user);
+        console.log(req.body.password, user.password);
         if (bcrypt.compareSync(req.body.password, user.password)) {
           console.log("user found and password correct");
           req.session.user_id = user.id;
           req.session.user_email = user.email;
-          req.session.user_first_letter = user.first_letter;
+          // req.session.user_first_letter = user.first_letter;
           return res.redirect("/");
         } else {
           req.session.wrongLogin = true;
           res.redirect("/login");
         }
       })
-      .catch(err => res.status(404).json(err));
+      .catch(err => console.log(err));
   });
 
   //Get and post requests for the register page
@@ -53,7 +62,9 @@ module.exports = db => {
   //registration post
   router.post("/register", (req, res) => {
     const { name, email, password } = req.body;
+    console.log(req.body);
     const hashedPassword = bcrypt.hashSync(password, 10);
+    console.log(hashedPassword);
     req.session.user_id = name;
     req.session.email = email;
 
@@ -62,13 +73,11 @@ module.exports = db => {
       req.session.emailExists = "blank";
       return res.redirect("/register");
     }
-
     let queryString = `
     INSERT INTO users (name, email, password)
     VALUES ($1, $2, $3)
     `;
     values = [name, email, hashedPassword];
-
     db.query(queryString, values)
       .then(res.redirect("/"))
       .catch(err => console.log(err));
@@ -77,7 +86,6 @@ module.exports = db => {
   //get request for the home page
   router.get("/", (req, res) => {
     res.render("home");
-    //res.render("showresources", templateVars);
   });
 
   return router;
