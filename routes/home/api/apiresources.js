@@ -60,6 +60,39 @@ const createNewResourceJoinCategory = (body, userID, categoryID, db) => {
   });
 };
 
+const upvoteQuery = (userID, resourceID) => {
+  const queryString = `
+    SELECT upvote FROM comments
+    WHERE user_id=$1
+    AND resource_id=$2
+  `;
+  const values = [userID, resourceID];
+  return [queryString, values];
+};
+
+const upvoteResource = (db, userID, resourceID) => {
+  const queryString1 = upvoteQuery(userID, resourceID);
+  return db.query(queryString1[0], queryString1[1]).then(data => {
+    console.log(data.rows[0]);
+    if (data.rows[0] !== undefined) {
+      console.log("vote already exists, can't vote");
+      return false;
+    } else {
+      console.log("vote doesn't already exist, vote away!");
+      const queryString = `
+        INSERT INTO comments
+          (user_id, resource_id, upvote, date_created)
+        VALUES
+          ($1, $2, true, NOW())
+        `;
+      const values = [userID, resourceID];
+      return db.query(queryString, values).then(() => {
+        return true;
+      });
+    }
+  });
+};
+
 module.exports = db => {
   router.post("/input", (req, res) => {
     console.log(req.body);
@@ -88,6 +121,17 @@ module.exports = db => {
         createNewResourceJoinCategory(req.body, userID, categoryID, db);
       }
     });
+  });
+
+  router.post("/upvote/:id", (req, res) => {
+    const resourceID = req.params.id;
+    const userID = req.session.user_id;
+
+    if (upvoteResource(db, userID, resourceID) === false) {
+      res.sendStatus(404);
+    } else {
+      res.sendStatus(201);
+    }
   });
 
   router.get("/:category", (req, res) => {
