@@ -1,6 +1,6 @@
 header {
-  position: fixed;
   height: 8vh;
+  position: fixed;
   background-color: lightgreen;
   width: 100%;
   display: flex;

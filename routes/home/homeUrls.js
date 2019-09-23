@@ -78,13 +78,15 @@ module.exports = db => {
       .catch(err => console.log(err));
   });
 
+  //logout
+  router.get("/logout", (req, res) => {
+    req.session = null;
+    res.redirect("/");
+  });
+
   //Get and post requests for the update profile page
   router.get("/update", (req, res) => {
     res.render("update_profile");
-  });
-
-  router.post("update", (req, res) => {
-    //register req.body.___
   });
 
   //get request for the home page

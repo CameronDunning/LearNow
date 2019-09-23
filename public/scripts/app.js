@@ -46,6 +46,7 @@ const loadResources = async () => {
 $("form").on("submit", async function(event) {
   let formObject = await $(this).serializeObject();
   $("#resourcescontainer").append(createResourceElement(formObject));
+  $("#modal-create-new").modal("hide");
   loadModal();
 });
 
@@ -64,6 +65,7 @@ let counter = 0;
 const createResourceElement = resourceData => {
   const resource = `
   <section class="resources card" id="${resourceData.id}">
+    <div id="${resourceData.name}"></div>
     <div class="resourceImg">
       <img src="${escape(
         resourceData.cover_photo_url ? resourceData.cover_photo_url : ""
@@ -118,6 +120,8 @@ function loadModal() {
       $(".modal-body").children($(".clicked-resource-img").attr("src", image));
       $(".modal-description").text(description);
 
+      $("#resource-owner").text(e.currentTarget.children[0].id);
+
       $(".close-button").on("click", () => {
         $("#modal-clicked-resource").modal("hide");
       });
@@ -152,7 +156,7 @@ function renderComments(comments) {
 function createCommentElement(commentData) {
   const comment = `
     <section class="comment">
-      <p class="commenter">${escape(commentData.user_id)}</p>
+      <p class="commenter">${escape(commentData.user_name)}</p>
       <p>${escape(commentData.comment)}</p>
     </section>
   `;

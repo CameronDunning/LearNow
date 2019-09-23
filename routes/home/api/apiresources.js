@@ -91,8 +91,8 @@ const upvoteResource = (db, userID, resourceID) => {
 
 const getResources = () => {
   const queryString = `
-  SELECT *
-  FROM resources
+  SELECT resources.*, users.* FROM resources JOIN users ON
+  resources.user_id=users.id
   LIMIT 10;
   `;
   return queryString;
@@ -149,8 +149,9 @@ module.exports = db => {
 
   router.get("/c/:resourceid", (req, res) => {
     let queryString = `
-      SELECT * FROM comments
-      WHERE id=$1
+      SELECT comments.comment as comment, users.name as user_name FROM comments JOIN users ON
+      users.id=user_id
+      WHERE resource_id=$1 and comment IS NOT NULL
       `;
     let values = [req.params.resourceid];
 
@@ -229,6 +230,18 @@ module.exports = db => {
         })
         .catch(err => console.log(err));
     }
+    //make query to show resources based on category
+    let queryString = `
+      SELECT resources.*, users.* FROM resources JOIN users ON
+      resources.user_id=users.id
+      LIMIT 10;
+      `;
+
+    //returns the rows of the query
+    //send data into templatevars then render
+    db.query(queryString)
+      .then(data => res.json(data.rows))
+      .catch(err => console.log(err));
   });
 
   return router;
