@@ -89,6 +89,17 @@ const upvoteResource = (db, userID, resourceID) => {
   });
 };
 
+const getResourcesWithVotes = userID => {
+  const queryString = `
+  SELECT *, upvote, downvote, add_to_my_resources
+  FROM resources JOIN comments ON resources.id=resource_id
+  WHERE comments.user_id=$1
+  LIMIT 10;
+  `;
+  const values = [userID];
+  return [queryString, values];
+};
+
 module.exports = db => {
   router.post("/input", (req, res) => {
     const userID = req.session.user_id;
@@ -162,17 +173,32 @@ module.exports = db => {
   });
 
   router.get("/", (req, res) => {
-    //make query to show resources based on category
-    let queryString = `
-      SELECT * FROM resources
-      LIMIT 10;
-      `;
+    // make query to show resources based on category
+    // if user is signed in, also send upvote, downvote and add_to_resources
+    console.log(req.session.user_id);
+    if (req.session.user_id === undefined) {
+      // select first ten resources
+      let queryString = `
+        SELECT * FROM resources
+        LIMIT 10;
+        `;
 
-    //returns the rows of the query
-    //send data into templatevars then render
-    db.query(queryString)
-      .then(data => res.json(data.rows))
-      .catch(err => console.log(err));
+      // returns the rows of the query
+      // send data into templatevars then render
+      db.query(queryString)
+        .then(data => res.json(data.rows))
+        .catch(err => console.log(err));
+    } else {
+      // select first ten resources and whether user has liked or not
+      const userID = req.session.user_id;
+      const queryString1 = getResourcesWithVotes(userID);
+
+      // returns the rows of the query
+      // send data into templatevars then render
+      db.query(queryString1[0], queryString1[0])
+        .then(data => res.json(data.rows))
+        .catch(err => console.log(err));
+    }
   });
 
   return router;
