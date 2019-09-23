@@ -30,8 +30,16 @@
   display: inline-flex;
 }
 
-.arrows .true {
+.arrows .add_to_my_resources-true {
   color: blue;
+}
+
+.arrows .upvote-true {
+  color: blue;
+}
+
+.arrows .downvote-true {
+  color: red;
 }
 
 .arrows i {

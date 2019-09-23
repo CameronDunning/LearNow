@@ -105,9 +105,9 @@ const createResourceElement = resourceData => {
         <div class="arrows">
           <i class="fas fa-plus" id="add-to-my-resources"></i>
           <i class="fas fa-arrow-up ${resourceData.id}
-          ${resourceData.upvote}" id="up-vote"></i>
+          upvote-${resourceData.upvote}" id="up-vote"></i>
           <i class="fas fa-arrow-down ${resourceData.id}
-          ${resourceData.downvote}" id="down-vote"></i>
+          downvote-${resourceData.downvote}" id="down-vote"></i>
         </div>
     </form>
   </div>
