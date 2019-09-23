@@ -62,6 +62,8 @@ const createNewResourceJoinCategory = (body, categoryID, db) => {
 
 module.exports = db => {
   router.post("/input", (req, res) => {
+    console.log(req.body);
+    console.log(req.session.user_id);
     // make query to show resources based on category
     // returns an OBJECT of all the categories that already exist
     const queryString1 = categoriesThatAlreadyExist(req.body.category);

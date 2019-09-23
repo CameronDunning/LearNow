@@ -1,9 +1,9 @@
 $(document).ready(() => {
   loadResources();
 
-  $('#resources').on(click, () => {
-    console.log($('.resourceImg').html());
-  })
+  $("#resources").on(click, () => {
+    console.log($(".resourceImg").html());
+  });
 });
 
 $.fn.serializeObject = function() {
@@ -36,7 +36,6 @@ $("form").on("submit", async function(event) {
   console.log("inside jquery");
   console.log(formObject);
   $("#resourcescontainer").append(createResourceElement(formObject));
-  // $("#resourcescontainer").append(createResourceElement(data));
 });
 
 //Helper function for loadResources that renders the array of resources passed into it and appends it to the container

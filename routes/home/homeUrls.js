@@ -30,7 +30,6 @@ module.exports = db => {
 
   //Info from login gets sent here,
   router.post("/login", (req, res) => {
-    //! needs testing
     let queryString = `
     SELECT * FROM users
     WHERE email=$1; 
