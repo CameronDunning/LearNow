@@ -1,5 +1,9 @@
 $(document).ready(() => {
-  loadResources();
+  loadResources().then(() => {
+    $(".fa-arrow-up").on("click", () => {
+      console.log("clicked!");
+    });
+  });
 });
 
 $.fn.serializeObject = function() {
@@ -20,6 +24,10 @@ async function loadResources() {
       success: data => {
         renderResources(data);
       }
+    }).then(() => {
+      $("#up-vote").on("click", () => {
+        console.log("clicked!");
+      });
     });
   } catch (err) {
     console.log(err);
@@ -63,7 +71,7 @@ function createResourceElement(resourceData) {
       <form>
         <div class="arrows">
           <i class="fas fa-plus" id="add-to-my-resources"></i>
-          <i class="fas fa-arrow-up " id="up-vote"></i>
+          <i class="fas fa-arrow-up" id="up-vote"></i>
           <i class="fas fa-arrow-down " id="down-vote"></i>
         </div>
     </form>
