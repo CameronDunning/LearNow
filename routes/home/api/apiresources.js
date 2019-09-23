@@ -197,7 +197,7 @@ module.exports = db => {
             resource.downvote = false;
             resource.add_to_my_resources = false;
           }
-          res.json(data.rows);
+          return res.json(data.rows);
         })
         .catch(err => console.log(err));
     } else {
@@ -225,23 +225,11 @@ module.exports = db => {
                 }
               }
             }
-            res.json(resources);
+            return res.json(resources);
           });
         })
         .catch(err => console.log(err));
     }
-    //make query to show resources based on category
-    let queryString = `
-      SELECT resources.*, users.* FROM resources JOIN users ON
-      resources.user_id=users.id
-      LIMIT 10;
-      `;
-
-    //returns the rows of the query
-    //send data into templatevars then render
-    db.query(queryString)
-      .then(data => res.json(data.rows))
-      .catch(err => console.log(err));
   });
 
   return router;
