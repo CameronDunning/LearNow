@@ -1,28 +1,28 @@
 <div class="modal" id="modal-clicked-resource">
   <div class="modal-dialog-scrolled" role="document">
-    <div class="modal-content" id="modal-content">
-      <div class="modal-header" id="new-resource-header">
-        <h5 class="modal-title">Resource Title</h5>
-        <button
-          type="button"
-          class="close close-button"
-          aria-label="Close"
-          data-dismiss="modal"
-        >
-          <span aria-hidden="true">&times;</span>
-        </button>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="resource-modal-title"><!--Resource Title--></h5>
+        <button class="close close-button">&times;</button>
       </div>
 
       <div class="modal-body">
-        <img src="" class="card-img-top resource-img" />
-        <span>
-          <p></p>
-          <p>URL</p>
-        </span>
-        <span class="resource-comment-container">
-          <div></div>
-          <!--Comments go here-->
-        </span>
+        <section class="resource-content">
+          <img src="" class="card-img-top clicked-resource-img" />
+          <!--resource preview-->
+        </section>
+        <section class="resource-description-container">
+          <h6 class="title">Posted by: User_name</h6>
+          <p class="modal-description"></p>
+        </section>
+        <section class="resource-comment-container">
+          <h6 class="title">Comments</h6>
+          <!--Comments template-->
+          <section class="comment">
+            <p class="commenter">User_Name</p>
+            <p>comment test</p>
+          </section>
+        </section>
       </div>
     </div>
   </div>

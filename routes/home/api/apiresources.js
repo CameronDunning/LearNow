@@ -26,7 +26,7 @@ const createNewCategory = category => {
   return [queryString, [category]];
 };
 
-const createNewResource = values => {
+const createNewResource = (values, userID) => {
   const queryString = `
     INSERT INTO resources
       (user_id, title, link, description, date_created)
@@ -34,8 +34,7 @@ const createNewResource = values => {
       ($1, $2, $3, $4, Now())
     RETURNING id;
     `;
-  const returnValues = [1, values.title, values.link, values.description];
-  console.log(returnValues);
+  const returnValues = [userID, values.title, values.link, values.description];
   return [queryString, returnValues];
 };
 
@@ -50,9 +49,9 @@ const joinResourceCategory = (resourceID, categoryID) => {
   return [queryString, values];
 };
 
-const createNewResourceJoinCategory = (body, categoryID, db) => {
+const createNewResourceJoinCategory = (body, userID, categoryID, db) => {
   // returns new resource ID
-  const queryString3 = createNewResource(body);
+  const queryString3 = createNewResource(body, userID);
   db.query(queryString3[0], queryString3[1]).then(data => {
     // join the category to the resource in the category_resource table
     const queryString4 = joinResourceCategory(data.rows[0].id, categoryID);
@@ -60,8 +59,39 @@ const createNewResourceJoinCategory = (body, categoryID, db) => {
   });
 };
 
+const upvoteQuery = (userID, resourceID) => {
+  const queryString = `
+    SELECT upvote FROM comments
+    WHERE user_id=$1
+    AND resource_id=$2
+  `;
+  const values = [userID, resourceID];
+  return [queryString, values];
+};
+
+const upvoteResource = (db, userID, resourceID) => {
+  const queryString1 = upvoteQuery(userID, resourceID);
+  return db.query(queryString1[0], queryString1[1]).then(data => {
+    if (data.rows[0] !== undefined) {
+      return false;
+    } else {
+      const queryString = `
+        INSERT INTO comments
+          (user_id, resource_id, upvote, date_created)
+        VALUES
+          ($1, $2, true, NOW())
+        `;
+      const values = [userID, resourceID];
+      return db.query(queryString, values).then(() => {
+        return true;
+      });
+    }
+  });
+};
+
 module.exports = db => {
   router.post("/input", (req, res) => {
+    const userID = req.session.user_id;
     // make query to show resources based on category
     // returns an OBJECT of all the categories that already exist
     const queryString1 = categoriesThatAlreadyExist(req.body.category);
@@ -76,15 +106,41 @@ module.exports = db => {
           // Save the new category ID for joining with resource
           const categoryID = data.rows[0].id;
 
-          createNewResourceJoinCategory(req.body, categoryID, db);
+          createNewResourceJoinCategory(req.body, userID, categoryID, db);
         });
       } else {
         // Save the new category ID for joining with resource
         const categoryID = data.rows[0].id;
 
-        createNewResourceJoinCategory(req.body, categoryID, db);
+        createNewResourceJoinCategory(req.body, userID, categoryID, db);
       }
     });
+  });
+
+  router.post("/upvote/:id", async (req, res) => {
+    const resourceID = req.params.id;
+    const userID = req.session.user_id;
+    const isValidVote = await upvoteResource(db, userID, resourceID);
+    if (isValidVote) {
+      res.sendStatus(201);
+    } else {
+      res.sendStatus(404);
+    }
+  });
+
+  router.get("/c/:resourceid", (req, res) => {
+    let queryString = `
+      SELECT * FROM comments
+      WHERE id=$1
+      `;
+    let values = [req.params.resourceid];
+
+    //returns the rows of the query
+    //send data into templatevars then render
+
+    db.query(queryString, values)
+      .then(data => res.json(data.rows))
+      .catch(err => console.log(err));
   });
 
   router.get("/:category", (req, res) => {
