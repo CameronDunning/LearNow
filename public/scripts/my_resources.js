@@ -1,5 +1,5 @@
 $(".my-resources-selection").on("click", function() {
-  console.log("toggled");
+  console.log("toggled my resources");
 
   $.fn.serializeObject = function() {
     var o = {};
@@ -30,3 +30,30 @@ $(".my-resources-selection").on("click", function() {
 //fetch data from db (apiresources)
 //append cards corresponding to it
 //loadModal
+
+$(".liked-resources-selection").on("click", function() {
+  console.log("toggled liked resources");
+
+  $.fn.serializeObject = function() {
+    var o = {};
+    this.find("[name]").each(function() {
+      o[this.name] = this.value;
+    });
+    return o;
+  };
+
+  async function loadMyResources() {
+    try {
+      await $.ajax({
+        url: "http://localhost:8080/my_resources",
+        dataType: "JSON",
+        success: data => {
+          console.log(data);
+          //renderResources here
+        }
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  }
+});
