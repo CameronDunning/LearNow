@@ -91,8 +91,9 @@ const upvoteResource = (db, userID, resourceID) => {
 
 const getResources = () => {
   const queryString = `
-  SELECT resources.*, users.* FROM resources JOIN users ON
+  SELECT resources.*, users.name FROM resources JOIN users ON
   resources.user_id=users.id
+  ORDER BY resources.id
   LIMIT 10;
   `;
   return queryString;
