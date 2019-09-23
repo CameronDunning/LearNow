@@ -1,0 +1,21 @@
+.resource-container {
+  display: grid;
+  height: 100vh;
+  grid-template-columns: 60px auto;
+  grid-template-rows: repeat(2, 10vh) auto;
+}
+
+.resource-container .sidebar {
+  grid-area: 1/1/4/2;
+}
+.my-resources-buttons {
+  /* display: inline-flex; */
+  grid-area: 2/2/3/3;
+}
+.resource-container .my-resource-container {
+  grid-area: 3/2/4/3;
+}
+
+#my-resources-container {
+  margin: 5em;
+}

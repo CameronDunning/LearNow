@@ -12,7 +12,6 @@ $.fn.serializeObject = function() {
 };
 
 const upvote = id => {
-  console.log("upvote id:", id);
   $.ajax({
     url: "http://localhost:8080/api/upvote/" + id,
     type: "POST",
@@ -21,11 +20,18 @@ const upvote = id => {
 };
 
 const downvote = id => {
-  console.log("downvote id:", id);
   $.ajax({
     url: "http://localhost:8080/api/downvote/" + id,
     type: "POST",
     dataType: "JSON"
+  });
+};
+
+const addResource = id => {
+  $.ajax({
+    url: `http://localhost:8080/api/my_liked_resources/` + id,
+    dataType: "JSON",
+    type: "POST"
   });
 };
 
@@ -39,24 +45,39 @@ const loadResources = async () => {
       success: data => {
         renderResources(data);
         $(".fa-arrow-up").on("click", e => {
-          // upvote function
           const classListArray = e.currentTarget.classList;
-          const resourceID = classListArray[2];
-          const upvoted = classListArray[3];
-          console.log(upvoted);
+          const resourceID = classListArray[3];
+          const upvoted = $(e.currentTarget).attr("data-upvote");
           if (upvoted === "false") {
             console.log("upvoted:", resourceID);
             upvote(resourceID);
+            $(`.upvote.${resourceID}`).attr("data-upvote", "true");
+            $(`.downvote.${resourceID}`).attr("data-downvote", "false");
           }
         });
         $(".fa-arrow-down").on("click", e => {
-          // upvote function
           const classListArray = e.currentTarget.classList;
-          const resourceID = classListArray[2];
-          const downvoted = classListArray[3];
+          const resourceID = classListArray[3];
+          const downvoted = $(e.currentTarget).attr("data-downvote");
           if (downvoted === "false") {
             console.log("downvoted:", resourceID);
             downvote(resourceID);
+            $(`.downvote.${resourceID}`).attr("data-downvote", "true");
+            $(`.upvote.${resourceID}`).attr("data-upvote", "false");
+          }
+        });
+        $(".fa-plus").on("click", e => {
+          const classListArray = e.currentTarget.classList;
+          const resourceID = classListArray[3];
+          console.log(resourceID);
+          const addedToResource = $(e.currentTarget).attr("data-activity");
+          if (addedToResource === "false") {
+            console.log("added to resources: ", resourceID);
+            addResource(resourceID);
+            $(`.add-to-my-resources.${resourceID}`).attr(
+              "data-activity",
+              "true"
+            );
           }
         });
       }
@@ -66,11 +87,36 @@ const loadResources = async () => {
   }
 };
 
-$("form").on("submit", async function(event) {
+$("#newresource").on("submit", async function(event) {
   let formObject = await $(this).serializeObject();
   $("#resourcescontainer").append(createResourceElement(formObject));
   $("#modal-create-new").modal("hide");
   loadModal();
+});
+
+$("#new-comment").on("submit", async function(event) {
+  event.preventDefault();
+  let classes = $("#resource-id")
+    .attr("class")
+    .split(" ");
+  let resourceid = classes[classes.length - 1];
+  let commentformObject = await $(this).serializeObject();
+  commentformObject.user_name = "You just posted";
+
+  $(".resource-comment-container").prepend(
+    createCommentElement(commentformObject)
+  );
+
+  try {
+    await $.ajax({
+      url: "http://localhost:8080/api/c/" + resourceid,
+      dataType: "JSON",
+      type: "POST",
+      data: commentformObject
+    });
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 //Helper function for loadResources that renders the array of resources passed into it and appends it to the container
@@ -100,14 +146,18 @@ const createResourceElement = resourceData => {
       <p class = 'description'>${escape(resourceData.description)}</p>
     </div>
     <div class="resource-stats">
-      <p class="resource-timestamp">Date here </p>
+      <p class="resource-timestamp">${resourceData.date_created} </p>
       <form>
         <div class="arrows">
-          <i class="fas fa-plus" id="add-to-my-resources"></i>
-          <i class="fas fa-arrow-up ${resourceData.id}
-          upvote-${resourceData.upvote}" id="up-vote"></i>
-          <i class="fas fa-arrow-down ${resourceData.id}
-          downvote-${resourceData.downvote}" id="down-vote"></i>
+          <i class="fas fa-plus add-to-my-resources ${resourceData.id}
+          add-to-my-resources-${resourceData.add_to_my_resources}"
+          data-activity = ${resourceData["add_to_my_resources"]}></i>
+          <i class="fas fa-arrow-up upvote ${resourceData.id}
+          upvote-${resourceData.upvote}"
+          data-upvote = ${resourceData.upvote} id="up-vote"></i>
+          <i class="fas fa-arrow-down downvote ${resourceData.id}
+          downvote-${resourceData.downvote}"
+          data-downvote = ${resourceData.downvote} id="down-vote"></i>
         </div>
     </form>
   </div>
@@ -141,9 +191,13 @@ function loadModal() {
       .text();
 
     $("#modal-clicked-resource").on("show.bs.modal", function() {
+      let resourceID = e.currentTarget.children[1].id;
+      console.log(resourceID);
       $(".resource-modal-title").text(title);
 
       $(".modal-body").children($(".clicked-resource-img").attr("src", image));
+      $("#resource-id").removeClass();
+      $("#resource-id").addClass(resourceID);
       $(".modal-description").text(description);
 
       $("#resource-owner").text(e.currentTarget.children[0].id);

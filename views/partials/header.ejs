@@ -14,11 +14,12 @@
             aria-expanded="false"
           >
           <!-- false should be user_id, but it's not loading properly -->
-            <% if (false) { %> <%=user_id %>
+            <% if (user_id) { %>
+              Action
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <a class="dropdown-item" href="#">Profile</a>
-            <a class="dropdown-item" href="#">Log out</a>
+            <a class="dropdown-item" href="/u/<%=user_id%>">Profile</a>
+            <a class="dropdown-item" href="/logout">Log out</a>
           </div>
           <% } else { %>
             Action

@@ -30,12 +30,12 @@
   display: inline-flex;
 }
 
-.arrows .add_to_my_resources-true {
-  color: blue;
+.arrows .add-to-my-resources-true {
+  color: green;
 }
 
 .arrows .upvote-true {
-  color: blue;
+  color: green;
 }
 
 .arrows .downvote-true {
