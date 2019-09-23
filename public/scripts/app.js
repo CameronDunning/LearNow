@@ -2,6 +2,7 @@ $(document).ready(() => {
   loadResources();
 });
 
+//serialize object is a helper function for jquery to convert .serialize to a useable object
 $.fn.serializeObject = function() {
   var o = {};
   this.find("[name]").each(function() {
@@ -27,10 +28,9 @@ async function loadResources() {
 }
 
 $("form").on("submit", async function(event) {
-  //var formData = await JSON.stringify($(this).serializeArray());
   let formObject = await $(this).serializeObject();
   $("#resourcescontainer").append(createResourceElement(formObject));
-  // $("#resourcescontainer").append(createResourceElement(data));
+
   loadModal();
 });
 
