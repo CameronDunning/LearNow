@@ -29,6 +29,7 @@ const loadResources = async () => {
       dataType: "JSON",
       success: data => {
         renderResources(data);
+        console.log(data);
         $(".fa-arrow-up").on("click", e => {
           // upvote function
           const classListArray = e.currentTarget.classList;

@@ -89,12 +89,20 @@ const upvoteResource = (db, userID, resourceID) => {
   });
 };
 
-const getResourcesWithVotes = userID => {
+const getResources = () => {
   const queryString = `
-  SELECT *, upvote, downvote, add_to_my_resources
-  FROM resources JOIN comments ON resources.id=resource_id
-  WHERE comments.user_id=$1
+  SELECT *
+  FROM resources
   LIMIT 10;
+  `;
+  return queryString;
+};
+
+const getCommentsByUser = userID => {
+  const queryString = `
+  SELECT *
+  FROM comments
+  WHERE user_id=$1
   `;
   const values = [userID];
   return [queryString, values];
@@ -178,25 +186,47 @@ module.exports = db => {
     console.log(req.session.user_id);
     if (req.session.user_id === undefined) {
       // select first ten resources
-      let queryString = `
-        SELECT * FROM resources
-        LIMIT 10;
-        `;
-
       // returns the rows of the query
       // send data into templatevars then render
-      db.query(queryString)
-        .then(data => res.json(data.rows))
+      const queryString1 = getResources();
+      db.query(queryString1)
+        .then(data => {
+          for (const resource of data.rows) {
+            resource.upvote = false;
+            resource.downvote = false;
+            resource.add_to_my_resources = false;
+          }
+          res.json(data.rows);
+        })
         .catch(err => console.log(err));
     } else {
       // select first ten resources and whether user has liked or not
       const userID = req.session.user_id;
-      const queryString1 = getResourcesWithVotes(userID);
+      const queryString1 = getResources();
 
       // returns the rows of the query
       // send data into templatevars then render
-      db.query(queryString1[0], queryString1[0])
-        .then(data => res.json(data.rows))
+      db.query(queryString1)
+        .then(data => {
+          const resources = data.rows;
+          const queryString2 = getCommentsByUser(userID);
+          db.query(queryString2[0], queryString2[1]).then(data => {
+            const comments = data.rows;
+            for (const resource of resources) {
+              resource.upvote = false;
+              resource.downvote = false;
+              resource.add_to_my_resources = false;
+              for (const comment of comments) {
+                if (resource.id === comment.resource_id) {
+                  resource["upvote"] = comment.upvote;
+                  resource.downvote = comment.downvote;
+                  resource.add_to_my_resources = comment.add_to_my_resources;
+                }
+              }
+            }
+            res.json(resources);
+          });
+        })
         .catch(err => console.log(err));
     }
   });
