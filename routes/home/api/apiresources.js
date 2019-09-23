@@ -35,7 +35,6 @@ const createNewResource = (values, userID) => {
     RETURNING id;
     `;
   const returnValues = [userID, values.title, values.link, values.description];
-  console.log(returnValues);
   return [queryString, returnValues];
 };
 
@@ -92,8 +91,6 @@ const upvoteResource = (db, userID, resourceID) => {
 
 module.exports = db => {
   router.post("/input", (req, res) => {
-    console.log(req.body);
-    console.log(req.session.user_id);
     const userID = req.session.user_id;
     // make query to show resources based on category
     // returns an OBJECT of all the categories that already exist
@@ -129,6 +126,21 @@ module.exports = db => {
     } else {
       res.sendStatus(404);
     }
+  });
+
+  router.get("/c/:resourceid", (req, res) => {
+    let queryString = `
+      SELECT * FROM comments
+      WHERE id=$1
+      `;
+    let values = [req.params.resourceid];
+
+    //returns the rows of the query
+    //send data into templatevars then render
+
+    db.query(queryString, values)
+      .then(data => res.json(data.rows))
+      .catch(err => console.log(err));
   });
 
   router.get("/:category", (req, res) => {
