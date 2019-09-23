@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
-
+const bodyParser = require("body-parser");
+router.use(bodyParser.urlencoded({ extended: false }));
 //import EJS files here login/register/home
 
 /**
@@ -48,6 +49,29 @@ module.exports = db => {
   //Get and post requests for the register page
   router.get("/register", (req, res) => {
     res.render("register");
+  });
+  //registration post
+  router.post("/register", (req, res) => {
+    const { name, email, password } = req.body;
+    const hashedPassword = bcrypt.hashSync(password, 10);
+    req.session.user_id = name;
+    req.session.email = email;
+
+    //if either parameter is empty, set cookie to equal blank so that .ejs file will present the text
+    if (email === "" || password === "") {
+      req.session.emailExists = "blank";
+      return res.redirect("/register");
+    }
+
+    let queryString = `
+    INSERT INTO users (name, email, password)
+    VALUES ($1, $2, $3)
+    `;
+    values = [name, email, hashedPassword];
+
+    db.query(queryString, values)
+      .then(res.redirect("/"))
+      .catch(err => console.log(err));
   });
 
   //get request for the home page
