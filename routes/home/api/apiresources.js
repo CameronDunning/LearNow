@@ -69,6 +69,16 @@ const upvoteQuery = (userID, resourceID) => {
   return [queryString, values];
 };
 
+const downvoteQuery = (userID, resourceID) => {
+  const queryString = `
+    SELECT downvote FROM comments
+    WHERE user_id=$1
+    AND resource_id=$2
+  `;
+  const values = [userID, resourceID];
+  return [queryString, values];
+};
+
 const upvoteResource = (db, userID, resourceID) => {
   const queryString1 = upvoteQuery(userID, resourceID);
   return db.query(queryString1[0], queryString1[1]).then(data => {
@@ -78,6 +88,26 @@ const upvoteResource = (db, userID, resourceID) => {
       const queryString = `
         INSERT INTO comments
           (user_id, resource_id, upvote, date_created)
+        VALUES
+          ($1, $2, true, NOW())
+        `;
+      const values = [userID, resourceID];
+      return db.query(queryString, values).then(() => {
+        return true;
+      });
+    }
+  });
+};
+
+const downvoteResource = (db, userID, resourceID) => {
+  const queryString1 = downvoteQuery(userID, resourceID);
+  return db.query(queryString1[0], queryString1[1]).then(data => {
+    if (data.rows[0] !== undefined) {
+      return false;
+    } else {
+      const queryString = `
+        INSERT INTO comments
+          (user_id, resource_id, downvote, date_created)
         VALUES
           ($1, $2, true, NOW())
         `;
@@ -107,6 +137,55 @@ const getCommentsByUser = userID => {
   `;
   const values = [userID];
   return [queryString, values];
+};
+
+const returnResourcesWithVotes = (db, userID) => {
+  if (!userID) {
+    // select first ten resources
+    // returns the rows of the query
+    // send data into templatevars then render
+    const queryString1 = getResources();
+    return db
+      .query(queryString1)
+      .then(data => {
+        for (const resource of data.rows) {
+          resource.upvote = false;
+          resource.downvote = false;
+          resource.add_to_my_resources = false;
+        }
+        return data.rows;
+      })
+      .catch(err => console.log(err));
+  } else {
+    // select first ten resources and whether user has liked or not
+    const queryString1 = getResources();
+
+    // returns the rows of the query
+    // send data into templatevars then render
+    return db
+      .query(queryString1)
+      .then(data => {
+        const resources = data.rows;
+        const queryString2 = getCommentsByUser(userID);
+        return db.query(queryString2[0], queryString2[1]).then(data => {
+          const comments = data.rows;
+          for (const resource of resources) {
+            resource.upvote = false;
+            resource.downvote = false;
+            resource.add_to_my_resources = false;
+            for (const comment of comments) {
+              if (resource.id === comment.resource_id) {
+                resource.upvote = comment.upvote;
+                resource.downvote = comment.downvote;
+                resource.add_to_my_resources = comment.add_to_my_resources;
+              }
+            }
+          }
+          return resources;
+        });
+      })
+      .catch(err => console.log(err));
+  }
 };
 
 module.exports = db => {
@@ -141,6 +220,18 @@ module.exports = db => {
     const resourceID = req.params.id;
     const userID = req.session.user_id;
     const isValidVote = await upvoteResource(db, userID, resourceID);
+    if (isValidVote) {
+      res.sendStatus(201);
+    } else {
+      res.sendStatus(404);
+    }
+  });
+
+  router.post("/downvote/:id", async (req, res) => {
+    const resourceID = req.params.id;
+    const userID = req.session.user_id;
+    const isValidVote = await downvoteResource(db, userID, resourceID);
+    console.log("isValidVote:", isValidVote);
     if (isValidVote) {
       res.sendStatus(201);
     } else {
@@ -198,55 +289,15 @@ module.exports = db => {
       .catch(err => console.log(err));
   });
 
-  router.get("/", (req, res) => {
+  router.get("/", async (req, res) => {
     // make query to show resources based on category
     // if user is signed in, also send upvote, downvote and add_to_resources
-    console.log(req.session.user_id);
-    if (req.session.user_id === undefined) {
-      // select first ten resources
-      // returns the rows of the query
-      // send data into templatevars then render
-      const queryString1 = getResources();
-      db.query(queryString1)
-        .then(data => {
-          for (const resource of data.rows) {
-            resource.upvote = false;
-            resource.downvote = false;
-            resource.add_to_my_resources = false;
-          }
-          return res.json(data.rows);
-        })
-        .catch(err => console.log(err));
-    } else {
-      // select first ten resources and whether user has liked or not
-      const userID = req.session.user_id;
-      const queryString1 = getResources();
-
-      // returns the rows of the query
-      // send data into templatevars then render
-      db.query(queryString1)
-        .then(data => {
-          const resources = data.rows;
-          const queryString2 = getCommentsByUser(userID);
-          db.query(queryString2[0], queryString2[1]).then(data => {
-            const comments = data.rows;
-            for (const resource of resources) {
-              resource.upvote = false;
-              resource.downvote = false;
-              resource.add_to_my_resources = false;
-              for (const comment of comments) {
-                if (resource.id === comment.resource_id) {
-                  resource.upvote = comment.upvote;
-                  resource.downvote = comment.downvote;
-                  resource.add_to_my_resources = comment.add_to_my_resources;
-                }
-              }
-            }
-            return res.json(resources);
-          });
-        })
-        .catch(err => console.log(err));
+    let userID = false;
+    if (req.session.user_id !== undefined) {
+      userID = req.session.user_id;
     }
+    const resources = await returnResourcesWithVotes(db, userID);
+    res.json(resources);
   });
 
   return router;

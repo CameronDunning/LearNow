@@ -20,6 +20,15 @@ const upvote = id => {
   });
 };
 
+const downvote = id => {
+  console.log("downvote id:", id);
+  $.ajax({
+    url: "http://localhost:8080/api/downvote/" + id,
+    type: "POST",
+    dataType: "JSON"
+  });
+};
+
 //Initial loading of resources
 //loadResources makes get request to our API that queries the DB and returns a json object
 const loadResources = async () => {
@@ -34,7 +43,19 @@ const loadResources = async () => {
           // upvote function
           const classListArray = e.currentTarget.classList;
           const resourceID = classListArray[2];
-          upvote(resourceID);
+          const upvoted = classListArray[3];
+          if (!upvoted) {
+            upvote(resourceID);
+          }
+        });
+        $(".fa-arrow-down").on("click", e => {
+          // upvote function
+          const classListArray = e.currentTarget.classList;
+          const resourceID = classListArray[2];
+          const downvoted = classListArray[3];
+          if (!downvoted) {
+            upvote(resourceID);
+          }
         });
       }
     });
@@ -82,8 +103,10 @@ const createResourceElement = resourceData => {
       <form>
         <div class="arrows">
           <i class="fas fa-plus" id="add-to-my-resources"></i>
-          <i class="fas fa-arrow-up ${resourceData.id}" id="up-vote"></i>
-          <i class="fas fa-arrow-down " id="down-vote"></i>
+          <i class="fas fa-arrow-up ${resourceData.id}
+          ${resourceData.upvote}" id="up-vote"></i>
+          <i class="fas fa-arrow-down ${resourceData.id}
+          ${resourceData.downvote}" id="down-vote"></i>
         </div>
     </form>
   </div>
