@@ -35,7 +35,7 @@
   <body>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <% include ./partials/header %>
-    <main class="my-resources-container">
+    <section class="my-resources-buttons">
       <button
         class="my-resources-selection btn btn-primary"
         data-toggle="button"
@@ -44,8 +44,6 @@
       >
         My Resources
       </button>
-      <div class="card-columns"></div>
-      <!-- this portion is pushed in using jquery and ajax for resources owned by user -->
 
       <button
         class="liked-resources-selection btn btn-primary"
@@ -55,8 +53,9 @@
       >
         Liked Resources
       </button>
-      <!-- this portion is pushed in using jquery and ajax for resources liked by user -->
-    </main>
+    </section>
+    <div class="card-columns" id="my-resources-container"></div>
+
     <!-- <script type="text/javascript" src="/vendor/jquery-2.2.3.min.js"></script> -->
     <script type="text/javascript" src="/scripts/app.js"></script>
     <script type="text/javascript" src="/scripts/my_resources.js"></script>

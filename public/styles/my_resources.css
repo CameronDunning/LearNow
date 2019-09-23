@@ -1,3 +1,7 @@
-.my-resources-container {
+.my-resources-buttons {
   display: inline-flex;
+}
+
+#my-resources-container {
+  margin: 3em;
 }
