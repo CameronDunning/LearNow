@@ -43,7 +43,6 @@ const loadResources = async () => {
           const classListArray = e.currentTarget.classList;
           const resourceID = classListArray[2];
           const upvoted = classListArray[3];
-          console.log(upvoted);
           if (upvoted === "false") {
             console.log("upvoted:", resourceID);
             upvote(resourceID);
