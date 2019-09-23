@@ -90,6 +90,21 @@ module.exports = db => {
     });
   });
 
+  router.get("/c/:resourceid", (req, res) => {
+    let queryString = `
+      SELECT * FROM comments
+      WHERE id=$1
+      `;
+    let values = [req.params.resourceid];
+
+    //returns the rows of the query
+    //send data into templatevars then render
+
+    db.query(queryString, values)
+      .then(data => res.json(data.rows))
+      .catch(err => console.log(err));
+  });
+
   router.get("/:category", (req, res) => {
     const category = req.params.category.toLowerCase();
     //make query to show resources based on category

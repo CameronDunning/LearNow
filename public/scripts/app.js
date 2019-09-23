@@ -1,3 +1,4 @@
+let loadcomments = require("./postcomment");
 $(document).ready(() => {
   loadResources();
 });
@@ -30,7 +31,6 @@ async function loadResources() {
 $("form").on("submit", async function(event) {
   let formObject = await $(this).serializeObject();
   $("#resourcescontainer").append(createResourceElement(formObject));
-
   loadModal();
 });
 
@@ -109,3 +109,5 @@ function loadModal() {
     $("#modal-clicked-resource").modal();
   });
 }
+
+module.exports = { escape };
