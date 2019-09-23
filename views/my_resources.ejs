@@ -26,39 +26,53 @@
       rel="stylesheet"
     />
     <!--CSS-->
-    <link rel="stylesheet" type="text/css" href="styles/login.css" />
     <link rel="stylesheet" type="text/css" href="styles/header.css" />
     <link rel="stylesheet" type="text/css" href="styles/card.css" />
     <link rel="stylesheet" type="text/css" href="styles/modal.css" />
+    <link rel="stylesheet" type="text/css" href="styles/my_resources.css" />
   </head>
 
   <body>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <% include ./partials/header %> <% include ./partials/nav %>
+    <% include ./partials/header %>
     <main>
-      <div id="my-resources-container" class="card-columns">
-        <h5>My Resources</h5>
-        <% include ./partials/resourceModal %>
+      <div id="my-resources-container">
+        <button
+          class="my-resource-selection btn btn-primary"
+          data-toggle="button"
+          aria-pressed="false"
+          autocomplete="off"
+        >
+          My Resources
+        </button>
+        <div class="card-columns"></div>
         <!-- this portion is pushed in using jquery and ajax for resources owned by user -->
       </div>
 
-      <div id="liked-resources-container" class="card-columns">
-        <h5>Liked Resources</h5>
-        <% include ./partials/resourceModal %>
+      <div id="liked-resources-container">
+        <button
+          class="my-resource-selection btn btn-primary"
+          data-toggle="button"
+          aria-pressed="false"
+          autocomplete="off"
+        >
+          Liked Resources
+        </button>
+        <div class="card-columns"></div>
         <!-- this portion is pushed in using jquery and ajax for resources liked by user -->
       </div>
     </main>
+    <!-- <script type="text/javascript" src="/vendor/jquery-2.2.3.min.js"></script> -->
+    <script type="text/javascript" src="/scripts/app.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+      crossorigin="anonymous"
+    ></script>
   </body>
-  <!-- <script type="text/javascript" src="/vendor/jquery-2.2.3.min.js"></script> -->
-  <script type="text/javascript" src="/scripts/app.js"></script>
-  <script
-    src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-    crossorigin="anonymous"
-  ></script>
-  <script
-    src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-    crossorigin="anonymous"
-  ></script>
 </html>
