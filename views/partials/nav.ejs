@@ -1,30 +1,31 @@
-<!--
-- Search bar
-- My Resources
-- Categories
-  - Science
-  - ....
-
-
-  -->
-<nav>
+<nav class="sidebar">
   <ul>
-    <li data-toggle="modal" data-target="#modal-create-new">New Resource</li>
+    <i class="fas fa-plus fa-2x"
+      ><li
+        data-toggle="modal"
+        data-target="#modal-create-new"
+        class="hover-show"
+      >
+        New Resource
+      </li></i
+    >
 
     <% include ../new_resource %>
 
-    <li><a href="/my_resources">My Resources</a></li>
-    <li>
-      <form class="form-inline md-form form-sm active-cyan-2 mt-2">
-        <input
-          class="form-control form-control-sm mr-3 w-75"
-          type="text"
-          placeholder="Search"
-          aria-label="Search"
-        />
-        <i class="fas fa-search" aria-hidden="true"></i>
-      </form>
-    </li>
-    <li>Categories</li>
+    <i class="fas fa-book fa-2x"> <li class="hover-show">My Resources</li></i>
+
+    <i class="fas fa-search fa-2x" aria-hidden="true">
+      <li class="hover-show">
+        <form class="form-inline md-form form-sm active-cyan-2 mt-2">
+          <input
+            class="form-control form-control-sm mr-3 w-75"
+            type="text"
+            placeholder="Search"
+            aria-label="Search"
+          />
+        </form></li
+    ></i>
+
+    <i class="fas fa-list-ul fa-2x"> <li class="hover-show">Categories</li></i>
   </ul>
 </nav>
