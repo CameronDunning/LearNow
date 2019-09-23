@@ -9,11 +9,6 @@
     <!--External CSS-->
     <link
       rel="stylesheet"
-      type="text/css"
-      href="styles/material-components-web.css"
-    />
-    <link
-      rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
       integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
       crossorigin="anonymous"
@@ -34,21 +29,18 @@
     <link rel="stylesheet" type="text/css" href="styles/login.css" />
     <link rel="stylesheet" type="text/css" href="styles/header.css" />
     <link rel="stylesheet" type="text/css" href="styles/card.css" />
-    <link rel="stylesheet" type="text/css" href="styles/new_resource.css" />
+    <link rel="stylesheet" type="text/css" href="styles/modal.css" />
   </head>
 
   <body>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-
     <% include ./partials/header %> <% include ./partials/nav %>
-
     <div id="resourcescontainer" class="card-columns">
       <% include ./partials/resourceModal %>
       <!-- this portion is pushed in using jquery and ajax -->
     </div>
   </body>
   <!-- <script type="text/javascript" src="/vendor/jquery-2.2.3.min.js"></script> -->
-
   <script type="text/javascript" src="/scripts/app.js"></script>
   <script
     src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"

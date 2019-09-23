@@ -7,17 +7,17 @@
   /* column-count: 5; */
   padding: 1em 3em;
 }
-#resources {
+.resources {
   /* width: 20%;
   margin: auto; */
   margin: 1em 0;
-  box-shadow:  10px 10px 28px -16px rgba(0,0,0,0.79);
+  box-shadow: 10px 10px 28px -16px rgba(0, 0, 0, 0.79);
 }
-
 
 .resource-stats {
   display: flex;
   justify-content: space-between;
+  margin: 1em;
   padding-top: 1em;
   border-top: 1px solid black;
   font-size: 14px;
@@ -37,4 +37,3 @@
 .resources:hover {
   transform: scale(1.05);
 }
-

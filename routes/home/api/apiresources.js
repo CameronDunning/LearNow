@@ -73,20 +73,8 @@ module.exports = db => {
       if (data.rows[0] == undefined) {
         // return new category ID
         const queryString2 = createNewCategory(req.body.category);
-
-        db.query(queryString2[0], queryString2[1]).then(data => {
-          // Save the new category ID for joining with resource
-          const categoryID = data.rows[0].id;
-
-          createNewResourceJoinCategory(req.body, categoryID, db);
-        });
-      } else {
-        // Save the new category ID for joining with resource
-        const categoryID = data.rows[0].id;
-
-        createNewResourceJoinCategory(req.body, categoryID, db);
       }
-    });
+    })
   });
 
   router.get("/:category", (req, res) => {
