@@ -11,21 +11,36 @@ $.fn.serializeObject = function() {
   return o;
 };
 
+const upvote = id => {
+  console.log("upvote id:", id);
+  $.ajax({
+    url: "http://localhost:8080/api/upvote/" + id,
+    type: "POST",
+    dataType: "JSON"
+  });
+};
+
 //Initial loading of resources
 //loadResources makes get request to our API that queries the DB and returns a json object
-async function loadResources() {
+const loadResources = async () => {
   try {
     await $.ajax({
       url: "http://localhost:8080/api/",
       dataType: "JSON",
       success: data => {
         renderResources(data);
+        $(".fa-arrow-up").on("click", e => {
+          // upvote function
+          const classListArray = e.currentTarget.classList;
+          const resourceID = classListArray[2];
+          upvote(resourceID);
+        });
       }
     });
   } catch (err) {
     console.log(err);
   }
-}
+};
 
 $("form").on("submit", async function(event) {
   let formObject = await $(this).serializeObject();
@@ -46,7 +61,7 @@ function renderResources(resources) {
 //helper function that creates individual resource element
 // id= "resources" <-- kept in case this was used somewhere else
 let counter = 0;
-function createResourceElement(resourceData) {
+const createResourceElement = resourceData => {
   const resource = `
   <section class="resources card" id="${resourceData.id}">
     <div class="resourceImg">
@@ -63,7 +78,7 @@ function createResourceElement(resourceData) {
       <form>
         <div class="arrows">
           <i class="fas fa-plus" id="add-to-my-resources"></i>
-          <i class="fas fa-arrow-up " id="up-vote"></i>
+          <i class="fas fa-arrow-up ${resourceData.id}" id="up-vote"></i>
           <i class="fas fa-arrow-down " id="down-vote"></i>
         </div>
     </form>
@@ -71,7 +86,8 @@ function createResourceElement(resourceData) {
   </section>
   `;
   return $(resource);
-}
+};
+
 //escape function makes text safe and prevents injection
 function escape(str) {
   let div = document.createElement("div");

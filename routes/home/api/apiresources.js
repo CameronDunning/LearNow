@@ -35,7 +35,6 @@ const createNewResource = (values, userID) => {
     RETURNING id;
     `;
   const returnValues = [userID, values.title, values.link, values.description];
-  console.log(returnValues);
   return [queryString, returnValues];
 };
 
@@ -60,10 +59,38 @@ const createNewResourceJoinCategory = (body, userID, categoryID, db) => {
   });
 };
 
+const upvoteQuery = (userID, resourceID) => {
+  const queryString = `
+    SELECT upvote FROM comments
+    WHERE user_id=$1
+    AND resource_id=$2
+  `;
+  const values = [userID, resourceID];
+  return [queryString, values];
+};
+
+const upvoteResource = (db, userID, resourceID) => {
+  const queryString1 = upvoteQuery(userID, resourceID);
+  return db.query(queryString1[0], queryString1[1]).then(data => {
+    if (data.rows[0] !== undefined) {
+      return false;
+    } else {
+      const queryString = `
+        INSERT INTO comments
+          (user_id, resource_id, upvote, date_created)
+        VALUES
+          ($1, $2, true, NOW())
+        `;
+      const values = [userID, resourceID];
+      return db.query(queryString, values).then(() => {
+        return true;
+      });
+    }
+  });
+};
+
 module.exports = db => {
   router.post("/input", (req, res) => {
-    console.log(req.body);
-    console.log(req.session.user_id);
     const userID = req.session.user_id;
     // make query to show resources based on category
     // returns an OBJECT of all the categories that already exist
@@ -88,6 +115,17 @@ module.exports = db => {
         createNewResourceJoinCategory(req.body, userID, categoryID, db);
       }
     });
+  });
+
+  router.post("/upvote/:id", async (req, res) => {
+    const resourceID = req.params.id;
+    const userID = req.session.user_id;
+    const isValidVote = await upvoteResource(db, userID, resourceID);
+    if (isValidVote) {
+      res.sendStatus(201);
+    } else {
+      res.sendStatus(404);
+    }
   });
 
   router.get("/c/:resourceid", (req, res) => {

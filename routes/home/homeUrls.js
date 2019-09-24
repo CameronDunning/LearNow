@@ -23,7 +23,7 @@ module.exports = db => {
   router.post("/login", (req, res) => {
     let queryString = `
     SELECT * FROM users
-    WHERE email=$1; 
+    WHERE email=$1;
     `;
     values = [req.body.email];
     db.query(queryString, values)
@@ -91,7 +91,10 @@ module.exports = db => {
 
   //get request for the home page
   router.get("/", (req, res) => {
-    res.render("home");
+    const templateVars = {
+      user_id: req.session.user_id
+    };
+    res.render("home", templateVars);
   });
 
   return router;
