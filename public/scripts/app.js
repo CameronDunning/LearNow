@@ -75,25 +75,28 @@ $("#newresource").on("submit", async function(event) {
 
 $("#new-comment").on("submit", async function(event) {
   event.preventDefault();
+  let classes = $("#resource-id")
+    .attr("class")
+    .split(" ");
+  let resourceid = classes[classes.length - 1];
   let commentformObject = await $(this).serializeObject();
-  console.log(commentformObject);
-  $(".resource-comment-container").append(
+  commentformObject.user_name = "You just posted";
+
+  $(".resource-comment-container").prepend(
     createCommentElement(commentformObject)
   );
 
   try {
     await $.ajax({
-      url: "http://localhost:8080/api/",
+      url: "http://localhost:8080/api/c/" + resourceid,
       dataType: "JSON",
-      data: commentformObject,
-      success: data => { 
-      }     
-    })    
+      type: "POST",
+      data: commentformObject
+    });
   } catch (err) {
     console.log(err);
   }
-}
-
+});
 
 //Helper function for loadResources that renders the array of resources passed into it and appends it to the container
 function renderResources(resources) {
@@ -163,9 +166,12 @@ function loadModal() {
       .text();
 
     $("#modal-clicked-resource").on("show.bs.modal", function() {
+      let resourceID = e.currentTarget.children[1].id;
       $(".resource-modal-title").text(title);
 
       $(".modal-body").children($(".clicked-resource-img").attr("src", image));
+      $("#resource-id").removeClass();
+      $("#resource-id").addClass(resourceID);
       $(".modal-description").text(description);
 
       $("#resource-owner").text(e.currentTarget.children[0].id);

@@ -259,8 +259,8 @@ module.exports = db => {
   router.post("/c/:resourceid", (req, res) => {
     //if a comment doesn't exist already
     let queryString = `
-      INSERT INTO comments (user_id, resource_id, comment)
-      VALUES ($1, $2, $3)
+      INSERT INTO comments (user_id, resource_id, comment, date_created)
+      VALUES ($1, $2, $3, NOW())
       `;
     let values = [req.session.user_id, req.params.resourceid, req.body.comment];
 
