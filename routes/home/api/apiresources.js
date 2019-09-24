@@ -68,12 +68,19 @@ const getUserResources = userID => {
   return [queryString, values];
 };
 
-const getUserAddedResources = userID => {
+const saveResource = (userID, resourceID) => {
   const queryString = `
-    SELECT * FROM resources
-    JOIN comments ON resources.id=resource_id
-    WHERE upvote=TRUE
-    AND comments.user_id=$1
+  INSERT INTO comments(user_id, resource_id, add_to_my_resouces)
+  VALUES ($1, $2, TRUE)`;
+  const values = [userID, resourceID];
+  return [queryString, values];
+};
+
+const getUserAddResources = userID => {
+  const queryString = `
+  SELECT * FROM resources
+  JOIN comments ON resources.id = resource_id
+  WHERE add_to_my_resources = TRUE
   `;
   const values = [userID];
   return [queryString, values];
@@ -148,10 +155,14 @@ module.exports = db => {
 
   router.get("/my_liked_resources", (req, res) => {
     const userID = req.session.user_id;
-    // get resources that the user has added to their resources
-
-    const queryString1 = getUserAddedResources(userID);
-    db.query(queryString1[0], queryString1[0]);
+    router.get("/my_liked_resources", (req, res) => {
+      const userID = req.session.user_id;
+      const resourceID = req.session.resource_id; // get resources that the user has added to their resources
+      const queryString1 = getUserAddedResources(userID, resourceID);
+      db.query(queryString1[0], queryString1[1]).then(data =>
+        res.json(data.rows)
+      );
+    });
   });
 
   router.post("/upvote/:id", async (req, res) => {
@@ -202,7 +213,7 @@ module.exports = db => {
   router.get("/", (req, res) => {
     //make query to show resources based on category
     let queryString = `
-      SELECT resources.*, users.* FROM resources JOIN users ON
+      SELECT resources.*, users.id as user_resource_upload, users.name FROM resources JOIN users ON
       resources.user_id=users.id
       LIMIT 10;
       `;
