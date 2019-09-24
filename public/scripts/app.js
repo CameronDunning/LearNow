@@ -19,6 +19,15 @@ const upvote = id => {
   });
 };
 
+const downvote = id => {
+  console.log("downvote id:", id);
+  $.ajax({
+    url: "http://localhost:8080/api/downvote/" + id,
+    type: "POST",
+    dataType: "JSON"
+  });
+};
+
 const addResource = id => {
   $.ajax({
     url: `http://localhost:8080/api/my_liked_resources/` + id,
@@ -40,7 +49,22 @@ const loadResources = async () => {
           // upvote function
           const classListArray = e.currentTarget.classList;
           const resourceID = classListArray[2];
-          upvote(resourceID);
+          const upvoted = classListArray[3];
+          console.log(upvoted);
+          if (upvoted === "false") {
+            console.log("upvoted:", resourceID);
+            upvote(resourceID);
+          }
+        });
+        $(".fa-arrow-down").on("click", e => {
+          // upvote function
+          const classListArray = e.currentTarget.classList;
+          const resourceID = classListArray[2];
+          const downvoted = classListArray[3];
+          if (downvoted === "false") {
+            console.log("downvoted:", resourceID);
+            downvote(resourceID);
+          }
         });
         $("#resourcescontainer").on("click", ".add-to-my-resources", e => {
           const classListArray = e.currentTarget.classList;
@@ -64,11 +88,36 @@ const loadResources = async () => {
   }
 };
 
-$("form").on("submit", async function(event) {
+$("#newresource").on("submit", async function(event) {
   let formObject = await $(this).serializeObject();
   $("#resourcescontainer").append(createResourceElement(formObject));
   $("#modal-create-new").modal("hide");
   loadModal();
+});
+
+$("#new-comment").on("submit", async function(event) {
+  event.preventDefault();
+  let classes = $("#resource-id")
+    .attr("class")
+    .split(" ");
+  let resourceid = classes[classes.length - 1];
+  let commentformObject = await $(this).serializeObject();
+  commentformObject.user_name = "You just posted";
+
+  $(".resource-comment-container").prepend(
+    createCommentElement(commentformObject)
+  );
+
+  try {
+    await $.ajax({
+      url: "http://localhost:8080/api/c/" + resourceid,
+      dataType: "JSON",
+      type: "POST",
+      data: commentformObject
+    });
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 //Helper function for loadResources that renders the array of resources passed into it and appends it to the container
@@ -98,15 +147,18 @@ const createResourceElement = resourceData => {
       <p class = 'description'>${escape(resourceData.description)}</p>
     </div>
     <div class="resource-stats">
-      <p class="resource-timestamp">Date here </p>
+      <p class="resource-timestamp">${resourceData.date_created} </p>
       <form>
         <div class="arrows">
           <i class="fas fa-plus add-to-my-resources ${
             resourceData.id
           }" data-activity = ${resourceData["add_to_my_resources"]}
   ></i>
-          <i class="fas fa-arrow-up ${resourceData.id}" id="up-vote"></i>
-          <i class="fas fa-arrow-down " id="down-vote"></i>
+          <i class="fas fa-arrow-up ${resourceData.id} ${
+    resourceData.upvote
+  }" id="up-vote"></i>
+          <i class="fas fa-arrow-down ${resourceData.id}
+          ${resourceData.downvote} " id="down-vote"></i>
         </div>
     </form>
   </div>
@@ -140,9 +192,12 @@ function loadModal() {
       .text();
 
     $("#modal-clicked-resource").on("show.bs.modal", function() {
+      let resourceID = e.currentTarget.children[1].id;
       $(".resource-modal-title").text(title);
 
       $(".modal-body").children($(".clicked-resource-img").attr("src", image));
+      $("#resource-id").removeClass();
+      $("#resource-id").addClass(resourceID);
       $(".modal-description").text(description);
 
       $("#resource-owner").text(e.currentTarget.children[0].id);
