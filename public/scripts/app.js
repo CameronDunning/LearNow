@@ -50,6 +50,28 @@ $("#newresource").on("submit", async function(event) {
   loadModal();
 });
 
+$("#new-comment").on("submit", async function(event) {
+  event.preventDefault();
+  let commentformObject = await $(this).serializeObject();
+  console.log(commentformObject);
+  $(".resource-comment-container").append(
+    createCommentElement(commentformObject)
+  );
+
+  try {
+    await $.ajax({
+      url: "http://localhost:8080/api/",
+      dataType: "JSON",
+      data: commentformObject,
+      success: data => { 
+      }     
+    })    
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+
 //Helper function for loadResources that renders the array of resources passed into it and appends it to the container
 function renderResources(resources) {
   resources.forEach(resource =>
