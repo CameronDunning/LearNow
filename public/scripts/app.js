@@ -120,7 +120,7 @@ function loadModal() {
       $(".modal-description").text(description);
 
       $("#resource-owner").text(e.currentTarget.children[0].id);
-      console.log(e.currentTarget.children[0].id);
+
       $(".close-button").on("click", () => {
         $("#modal-clicked-resource").modal("hide");
       });
