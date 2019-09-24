@@ -169,7 +169,7 @@ module.exports = db => {
     let queryString = `
       SELECT comments.comment as comment, users.name as user_name FROM comments JOIN users ON
       users.id=user_id
-      WHERE resource_id=$1
+      WHERE resource_id=$1 and comment IS NOT NULL
       `;
     let values = [req.params.resourceid];
 
@@ -202,7 +202,8 @@ module.exports = db => {
   router.get("/", (req, res) => {
     //make query to show resources based on category
     let queryString = `
-      SELECT * FROM resources
+      SELECT resources.*, users.* FROM resources JOIN users ON
+      resources.user_id=users.id
       LIMIT 10;
       `;
 

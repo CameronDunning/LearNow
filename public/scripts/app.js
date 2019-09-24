@@ -63,6 +63,7 @@ function renderResources(resources) {
 function createResourceElement(resourceData) {
   const resource = `
   <section class="resources card" id="${resourceData.id}">
+    <div id="${resourceData.name}"></div>
     <div class="resourceImg">
       <img src="${escape(
         resourceData.cover_photo_url ? resourceData.cover_photo_url : ""
@@ -116,6 +117,8 @@ function loadModal() {
 
       $(".modal-body").children($(".clicked-resource-img").attr("src", image));
       $(".modal-description").text(description);
+
+      $("#resource-owner").text(e.currentTarget.children[0].id);
 
       $(".close-button").on("click", () => {
         $("#modal-clicked-resource").modal("hide");
