@@ -1,5 +1,8 @@
+header {
+  grid-area: 1/1/2/3;
+}
 .sidebar {
-  grid-area: 1/1/3/2;
+  grid-area: 2/1/3/2;
   width: 60px;
   height: auto;
   background-color: teal;
@@ -24,10 +27,10 @@
 }
 
 .sidebar:hover {
-  font-size: 8px;
   width: 200px;
 }
 
 .sidebar:hover .hover-show {
+  font-size: 14px;
   display: inline;
 }
