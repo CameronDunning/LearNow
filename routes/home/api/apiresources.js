@@ -198,21 +198,6 @@ module.exports = db => {
   });
 
   router.get("/", (req, res) => {
-<<<<<<< HEAD
-    //make query to show resources based on category
-    let queryString = `
-      SELECT resources.*, users.name FROM resources JOIN users ON
-      resources.user_id=users.id
-      ORDER BY resources.id
-      LIMIT 10;
-      `;
-
-    //returns the rows of the query
-    //send data into templatevars then render
-    db.query(queryString)
-      .then(data => res.json(data.rows))
-      .catch(err => console.log(err));
-=======
     // make query to show resources based on category
     // if user is signed in, also send upvote, downvote and add_to_resources
     console.log(req.session.user_id);
@@ -261,7 +246,6 @@ module.exports = db => {
         })
         .catch(err => console.log(err));
     }
->>>>>>> e80248bedccf82f0f0acb94c1b5da6b9b3ae61eb
   });
 
   return router;
