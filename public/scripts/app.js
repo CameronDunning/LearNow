@@ -43,7 +43,7 @@ const loadResources = async () => {
   }
 };
 
-$("form").on("submit", async function(event) {
+$("#newresource").on("submit", async function(event) {
   let formObject = await $(this).serializeObject();
   $("#resourcescontainer").append(createResourceElement(formObject));
   $("#modal-create-new").modal("hide");
@@ -63,7 +63,6 @@ function renderResources(resources) {
 // id= "resources" <-- kept in case this was used somewhere else
 let counter = 0;
 const createResourceElement = resourceData => {
-  console.log(resourceData);
   const resource = `
   <section class="resources card" id="${counter++}">
     <div id="${resourceData.name}"></div>
@@ -78,7 +77,7 @@ const createResourceElement = resourceData => {
       <p class = 'description'>${escape(resourceData.description)}</p>
     </div>
     <div class="resource-stats">
-      <p class="resource-timestamp">Date here </p>
+      <p class="resource-timestamp">${resourceData.date_created} </p>
       <form>
         <div class="arrows">
           <i class="fas fa-plus" id="add-to-my-resources"></i>

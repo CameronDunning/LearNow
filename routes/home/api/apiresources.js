@@ -164,20 +164,16 @@ module.exports = db => {
       .catch(err => console.log(err));
   });
 
+  //inserts a new comment to a resource
   router.post("/c/:resourceid", (req, res) => {
+    //if a comment doesn't exist already
     let queryString = `
-      SELECT comments.comment as comment, users.name as user_name FROM comments JOIN users ON
-      users.id=user_id
-      WHERE resource_id=$1 and comment IS NOT NULL
+      INSERT INTO comments (user_id, resource_id, comment)
+      VALUES ($1, $2, $3)
       `;
-    let values = [req.params.resourceid];
+    let values = [req.session.user_id, req.params.resourceid, req.body.comment];
 
-    //returns the rows of the query
-    //send data into templatevars then render
-
-    db.query(queryString, values)
-      .then(data => res.json(data.rows))
-      .catch(err => console.log(err));
+    db.query(queryString, values).catch(err => console.log(err));
   });
 
   router.get("/:category", (req, res) => {
