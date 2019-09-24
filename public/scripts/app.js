@@ -25,10 +25,7 @@ const addResource = id => {
   $.ajax({
     url: `http://localhost:8080/api/my_liked_resources/` + id,
     dataType: "JSON",
-    type: "POST",
-    success: data => {
-      console.log(data);
-    }
+    type: "POST"
   });
 };
 

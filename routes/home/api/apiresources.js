@@ -78,9 +78,10 @@ const saveResource = (db, userID, resourceID) => {
 
 const getLikedResources = userID => {
   const queryString = `
-  SELECT * from resources
+  SELECT DISTINCT comments.resource_id as id, resources.* from resources
   JOIN comments ON resources.id = resource_id
-  WHERE user_id = $1 AND add_to_my_resources = TRUE`;
+  WHERE comments.user_id = $1 AND add_to_my_resources = TRUE
+  GROUP BY resources.id, comments.resource_id;`;
   const values = [userID];
   return [queryString, values];
 };
@@ -173,12 +174,12 @@ module.exports = db => {
   });
 
   router.get("/my_liked_resources", (req, res) => {
-    // const userID = req.session.user_id;
-    // const resourceID = req.session.resource_id; // get resources that the user has added to their resources
-    // const queryString1 = getLikedResources(userID, resourceID);
-    // db.query(queryString1[0], queryString1[1]).then(data =>
-    //   res.json(data.rows)
-    // );
+    const userID = req.session.user_id;
+    const queryString1 = getLikedResources(userID);
+    db.query(queryString1[0], queryString1[1]).then(data => {
+      console.log("this is data from query", data);
+      res.json(data.rows);
+    });
   });
 
   router.post("/my_liked_resources/:id", async (req, res) => {

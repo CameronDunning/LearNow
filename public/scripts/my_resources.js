@@ -1,4 +1,8 @@
 //MY RESOURCES LOAD
+
+$(document).ready(() => {
+  loadMyResources();
+});
 $(".my-resources-button").on("click", function() {
   loadMyResources();
 });
@@ -69,17 +73,19 @@ function createMyResourceElement(resourceData) {
 }
 
 //Load LIKED resources
-$(".liked-resources-button").on("click", function(data) {
+$(".liked-resources-button").on("click", function() {
   loadLikedResources();
 });
 
 async function loadLikedResources() {
   try {
     await $.ajax({
-      url: "http://localhost:8080/api/my_resources",
+      url: "http://localhost:8080/api/my_liked_resources/",
       dataType: "JSON",
       success: data => {
         console.log(data);
+        $("#my-resources-container").empty();
+        renderMyResources(data);
       }
     });
   } catch (err) {
