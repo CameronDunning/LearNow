@@ -63,9 +63,11 @@ function renderResources(resources) {
 // id= "resources" <-- kept in case this was used somewhere else
 let counter = 0;
 const createResourceElement = resourceData => {
+  console.log(resourceData);
   const resource = `
-  <section class="resources card" id="${resourceData.id}">
+  <section class="resources card" id="${counter++}">
     <div id="${resourceData.name}"></div>
+    <div id="${resourceData.id}"></div>
     <div class="resourceImg">
       <img src="${escape(
         resourceData.cover_photo_url ? resourceData.cover_photo_url : ""
@@ -127,7 +129,7 @@ function loadModal() {
       });
     });
     $("#modal-clicked-resource").modal();
-    let resourceID = e.currentTarget.id;
+    let resourceID = e.currentTarget.children[1].id;
     loadComments(resourceID);
   });
 }
