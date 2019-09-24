@@ -80,6 +80,8 @@ module.exports = db => {
 
   router.get("/my_resources", (req, res) => {
     res.render("my_resources");
+  });
+
   //logout
   router.get("/logout", (req, res) => {
     req.session = null;
