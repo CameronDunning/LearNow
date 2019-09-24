@@ -86,6 +86,11 @@ module.exports = db => {
       .catch(err => console.log(err));
   });
 
+  router.get("/my_resources", (req, res) => {
+    templateVars = { user_id: req.session.user_id };
+    res.render("my_resources", templateVars);
+  });
+
   //logout
   router.get("/logout", (req, res) => {
     req.session = null;
@@ -98,6 +103,7 @@ module.exports = db => {
     templateVars.user_id = req.session.user_id;
     res.render("update_profile"), templateVars;
   });
+  //Get and post requests for the update profile page
 
   //get request for the home page
   router.get("/", (req, res) => {

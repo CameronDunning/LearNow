@@ -59,11 +59,38 @@ const createNewResourceJoinCategory = (body, userID, categoryID, db) => {
   });
 };
 
+const getUserResources = userID => {
+  const queryString = `
+    SELECT * FROM resources
+    WHERE user_id = $1
+    `;
+  const values = [userID];
+  return [queryString, values];
+};
+
+const saveResource = (db, userID, resourceID) => {
+  const queryString = `
+    INSERT INTO comments (user_id, resource_id, add_to_my_resources, date_created)
+    VALUES ($1, $2, TRUE, NOW())`;
+  const values = [userID, resourceID];
+  db.query(queryString, values);
+};
+
+const getLikedResources = userID => {
+  const queryString = `
+  SELECT DISTINCT comments.resource_id as id, resources.* from resources
+  JOIN comments ON resources.id = resource_id
+  WHERE comments.user_id = $1 AND add_to_my_resources = TRUE
+  GROUP BY resources.id, comments.resource_id;`;
+  const values = [userID];
+  return [queryString, values];
+};
+
 const upvoteQuery = (userID, resourceID) => {
   const queryString = `
-    SELECT upvote FROM comments
-    WHERE user_id=$1
-    AND resource_id=$2
+  SELECT upvote FROM comments
+  WHERE user_id=$1
+  AND resource_id=$2
   `;
   const values = [userID, resourceID];
   return [queryString, values];
@@ -216,6 +243,36 @@ module.exports = db => {
     });
   });
 
+  router.get("/my_resources", (req, res) => {
+    const userID = req.session.user_id;
+    // get resources that the user has uploaded
+    const queryString1 = getUserResources(userID);
+    db.query(queryString1[0], queryString1[1]).then(data =>
+      res.json(data.rows)
+    );
+  });
+
+  router.get("/my_liked_resources", (req, res) => {
+    const userID = req.session.user_id;
+    const queryString1 = getLikedResources(userID);
+    db.query(queryString1[0], queryString1[1]).then(data => {
+      console.log("this is data from query", data);
+      res.json(data.rows);
+    });
+  });
+
+  router.post("/my_liked_resources/:id", async (req, res) => {
+    const resourceID = req.params.id;
+    const userID = req.session.user_id;
+    console.log("im here");
+    const isValid = await saveResource(db, userID, resourceID);
+    if (isValid) {
+      res.sendStatus(201);
+    } else {
+      res.sendStatus(408);
+    }
+  });
+
   router.post("/upvote/:id", async (req, res) => {
     const resourceID = req.params.id;
     const userID = req.session.user_id;
@@ -271,8 +328,8 @@ module.exports = db => {
     const category = req.params.category.toLowerCase();
     //make query to show resources based on category
     let queryString = `
-      SELECT * FROM resources
-      WHERE tag LIKE $1
+      SELECT resources.*, users.id as user_resource_upload, users.name FROM resources JOIN users ON
+      resources.user_id=users.id
       LIMIT 10;
       `;
     let values = [`%${category}%`];

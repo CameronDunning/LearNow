@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>LearNow</title>
+
+    <!--External CSS-->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+      integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Black+Han+Sans&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://use.fontawesome.com/releases/v5.0.1/css/all.css"
+      rel="stylesheet"
+    />
+    <!--CSS-->
+    <link rel="stylesheet" type="text/css" href="styles/login.css" />
+    <link rel="stylesheet" type="text/css" href="styles/header.css" />
+    <link rel="stylesheet" type="text/css" href="styles/card.css" />
+    <link rel="stylesheet" type="text/css" href="styles/new_resource.css" />
+    <link rel="stylesheet" type="text/css" href="styles/home.css" />
+    <link rel="stylesheet" type="text/css" href="styles/nav.css" />
+    <link rel="stylesheet" type="text/css" href="styles/modal.css" />
+    <link rel="stylesheet" type="text/css" href="styles/my_resources.css" />
+  </head>
+
+  <body>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <div class="resource-container">
+      <% include ./partials/header %> <% include ./partials/nav %>
+      <section class="my-resources-buttons">
+        <button
+          class="my-resources-button btn btn-primary"
+          data-toggle="button"
+          aria-pressed="false"
+          autocomplete="off"
+        >
+          My Resources
+        </button>
+
+        <button
+          class="liked-resources-button btn btn-primary"
+          data-toggle="button"
+          aria-pressed="false"
+          autocomplete="off"
+        >
+          Liked Resources
+        </button>
+      </section>
+      <main class="my-resource-content">
+        <div class="card-columns" id="my-resources-container"></div>
+        <div class="card-columns" id="liked-resources-container"></div>
+        <% include ./partials/resourceModal %>
+      </main>
+    </div>
+    <!-- <script type="text/javascript" src="/vendor/jquery-2.2.3.min.js"></script> -->
+    <script type="text/javascript" src="/scripts/app.js"></script>
+    <script type="text/javascript" src="/scripts/my_resources.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
