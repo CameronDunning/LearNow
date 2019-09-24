@@ -30,7 +30,6 @@ async function loadResources() {
 $("form").on("submit", async function(event) {
   let formObject = await $(this).serializeObject();
   $("#resourcescontainer").append(createResourceElement(formObject));
-
   loadModal();
 });
 
@@ -48,7 +47,7 @@ function renderResources(resources) {
 let counter = 0;
 function createResourceElement(resourceData) {
   const resource = `
-  <section class="resources card" id="${counter++}">
+  <section class="resources card" id="${resourceData.id}">
     <div class="resourceImg">
       <img src="${escape(
         resourceData.cover_photo_url ? resourceData.cover_photo_url : ""
@@ -80,7 +79,7 @@ function escape(str) {
 }
 
 function loadModal() {
-  $(".resources").on("click", function() {
+  $(".resources").on("click", function(e) {
     let title = $(this)
       .children(".card-body")
       .children(".card-title")
@@ -107,5 +106,38 @@ function loadModal() {
       });
     });
     $("#modal-clicked-resource").modal();
+    let resourceID = e.currentTarget.id;
+    loadComments(resourceID);
   });
+}
+
+async function loadComments(resourceid) {
+  try {
+    await $.ajax({
+      url: `http://localhost:8080/api/c/${resourceid}`,
+      dataType: "JSON",
+      success: data => {
+        $(".resource-comment-container").empty();
+        renderComments(data);
+      }
+    });
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+function renderComments(comments) {
+  comments.forEach(comment => {
+    $(".resource-comment-container").append(createCommentElement(comment));
+  });
+}
+
+function createCommentElement(commentData) {
+  const comment = `
+    <section class="comment">
+      <p class="commenter">${escape(commentData.user_id)}</p>
+      <p>${escape(commentData.comment)}</p>
+    </section>
+  `;
+  return $(comment);
 }
