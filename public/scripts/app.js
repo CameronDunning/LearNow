@@ -1,4 +1,3 @@
-//let loadcomments = require("./postcomment");
 $(document).ready(() => {
   loadResources();
 });
@@ -107,7 +106,6 @@ function loadModal() {
       });
     });
     $("#modal-clicked-resource").modal();
-    $(".resource-comment-container").empty();
     let resourceID = e.currentTarget.id;
     loadComments(resourceID);
   });
@@ -119,7 +117,7 @@ async function loadComments(resourceid) {
       url: `http://localhost:8080/api/c/${resourceid}`,
       dataType: "JSON",
       success: data => {
-        //console.log(data);
+        $(".resource-comment-container").empty();
         renderComments(data);
       }
     });

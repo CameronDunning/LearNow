@@ -1,11 +1,10 @@
-loadComments();
-
-async function loadComments() {
+async function loadComments(resourceid) {
   try {
     await $.ajax({
       url: `http://localhost:8080/api/c/${resourceid}`,
       dataType: "JSON",
       success: data => {
+        //console.log(data);
         renderComments(data);
       }
     });
@@ -15,16 +14,16 @@ async function loadComments() {
 }
 
 function renderComments(comments) {
-  resources.forEach(comment =>
-    $("resource-comment-container").append(createCommentElement(comment))
-  );
+  comments.forEach(comment => {
+    $(".resource-comment-container").append(createCommentElement(comment));
+  });
 }
 
 function createCommentElement(commentData) {
-  const resource = `
+  const comment = `
     <section class="comment">
       <p class="commenter">${escape(commentData.user_id)}</p>
-      <p>${escape(commentData.text)}</p>
+      <p>${escape(commentData.comment)}</p>
     </section>
   `;
   return $(comment);
