@@ -20,6 +20,18 @@ const upvote = id => {
   });
 };
 
+const addResource = id => {
+  console.log("added id:", id);
+  $.ajax({
+    url: `http://localhost:8080/api/my_liked_resources/` + id,
+    dataType: "JSON",
+    type: "POST",
+    success: data => {
+      console.log(data);
+    }
+  });
+};
+
 //Initial loading of resources
 //loadResources makes get request to our API that queries the DB and returns a json object
 const loadResources = async () => {
@@ -35,8 +47,17 @@ const loadResources = async () => {
           const resourceID = classListArray[2];
           upvote(resourceID);
         });
-        $(".fa-plus").on("click", () => {
-          console.log("clicked");
+        $(".add-to-my-resources").on("click", e => {
+          const classListArray = e.currentTarget.classList;
+          const resourceID = classListArray[3];
+          const $addedToResource = classListArray[4];
+          console.log($addedToResource);
+          if ($addedToResource === "false") {
+            addResource(resourceID);
+            // $item = $($(".arrows").children()[0]);
+            // $item.removeClass("false");
+            // $item.addClass("true");
+          }
         });
       }
     });
@@ -65,7 +86,6 @@ function renderResources(resources) {
 // id= "resources" <-- kept in case this was used somewhere else
 let counter = 0;
 const createResourceElement = resourceData => {
-  console.log(resourceData);
   const resource = `
   <section class="resources card" id="${counter++}">
     <div id="${resourceData.name}"></div>
@@ -83,9 +103,9 @@ const createResourceElement = resourceData => {
       <p class="resource-timestamp">Date here </p>
       <form>
         <div class="arrows">
-          <i class="fas fa-plus ${
-            resourceData.id
-          }" id="add-to-my-resources"></i>
+          <i class="fas fa-plus add-to-my-resources ${resourceData.id} ${
+    resourceData["add_to_my_resources"]
+  }"></i>
           <i class="fas fa-arrow-up ${resourceData.id}" id="up-vote"></i>
           <i class="fas fa-arrow-down " id="down-vote"></i>
         </div>

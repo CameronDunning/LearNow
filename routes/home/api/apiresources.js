@@ -68,29 +68,28 @@ const getUserResources = userID => {
   return [queryString, values];
 };
 
-const saveResource = (userID, resourceID) => {
+const saveResource = (db, userID, resourceID) => {
   const queryString = `
-  INSERT INTO comments(user_id, resource_id, add_to_my_resouces)
-  VALUES ($1, $2, TRUE)`;
+    INSERT INTO comments (user_id, resource_id, add_to_my_resources, date_created)
+    VALUES ($1, $2, TRUE, NOW())`;
   const values = [userID, resourceID];
-  return [queryString, values];
+  db.query(queryString, values);
 };
 
-const getUserAddResources = userID => {
+const getLikedResources = userID => {
   const queryString = `
-  SELECT * FROM resources
+  SELECT * from resources
   JOIN comments ON resources.id = resource_id
-  WHERE add_to_my_resources = TRUE
-  `;
+  WHERE user_id = $1 AND add_to_my_resources = TRUE`;
   const values = [userID];
   return [queryString, values];
 };
 
 const upvoteQuery = (userID, resourceID) => {
   const queryString = `
-    SELECT upvote FROM comments
-    WHERE user_id=$1
-    AND resource_id=$2
+  SELECT upvote FROM comments
+  WHERE user_id=$1
+  AND resource_id=$2
   `;
   const values = [userID, resourceID];
   return [queryString, values];
@@ -174,12 +173,24 @@ module.exports = db => {
   });
 
   router.get("/my_liked_resources", (req, res) => {
+    // const userID = req.session.user_id;
+    // const resourceID = req.session.resource_id; // get resources that the user has added to their resources
+    // const queryString1 = getLikedResources(userID, resourceID);
+    // db.query(queryString1[0], queryString1[1]).then(data =>
+    //   res.json(data.rows)
+    // );
+  });
+
+  router.post("/my_liked_resources/:id", async (req, res) => {
+    const resourceID = req.params.id;
     const userID = req.session.user_id;
-    const resourceID = req.session.resource_id; // get resources that the user has added to their resources
-    const queryString1 = getUserAddedResources(userID, resourceID);
-    db.query(queryString1[0], queryString1[1]).then(data =>
-      res.json(data.rows)
-    );
+    console.log("im here");
+    const isValid = await saveResource(db, userID, resourceID);
+    if (isValid) {
+      res.sendStatus(201);
+    } else {
+      res.sendStatus(408);
+    }
   });
 
   router.post("/upvote/:id", async (req, res) => {
