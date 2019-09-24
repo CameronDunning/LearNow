@@ -59,12 +59,7 @@ function renderResources(resources) {
 //! THIS NEEDS TO BE STYLED AND FORMATTED ACCORDING TO UI FRAMEWORK
 //helper function that creates individual resource element
 // id= "resources" <-- kept in case this was used somewhere else
-<<<<<<< HEAD
 function createResourceElement(resourceData) {
-=======
-let counter = 0;
-const createResourceElement = resourceData => {
->>>>>>> 7197808e42b6e93f187d480d9fcec19ef3f968aa
   const resource = `
   <section class="resources card" id="${resourceData.id}">
     <div class="resourceImg">
@@ -89,7 +84,7 @@ const createResourceElement = resourceData => {
   </section>
   `;
   return $(resource);
-};
+}
 
 //escape function makes text safe and prevents injection
 function escape(str) {

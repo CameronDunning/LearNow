@@ -1,3 +1,4 @@
+//MY RESOURCES LOAD
 $(".my-resources-button").on("click", function() {
   loadMyResources();
 });
@@ -65,4 +66,23 @@ function createMyResourceElement(resourceData) {
 </section>
 `;
   return $(resource);
+}
+
+//Load LIKED resources
+$(".liked-resources-button").on("click", function(data) {
+  loadLikedResources();
+});
+
+async function loadLikedResources() {
+  try {
+    await $.ajax({
+      url: "http://localhost:8080/api/my_resources",
+      dataType: "JSON",
+      success: data => {
+        console.log(data);
+      }
+    });
+  } catch (err) {
+    console.log(err);
+  }
 }

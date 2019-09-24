@@ -38,29 +38,30 @@
 
   <body>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <div class="container">
+    <div class="resource-container">
       <% include ./partials/header %> <% include ./partials/nav %>
-      <main class="resources-container">
-        <section class="my-resources-buttons">
-          <button
-            class="my-resources-button btn btn-primary"
-            data-toggle="button"
-            aria-pressed="false"
-            autocomplete="off"
-          >
-            My Resources
-          </button>
+      <section class="my-resources-buttons">
+        <button
+          class="my-resources-button btn btn-primary"
+          data-toggle="button"
+          aria-pressed="false"
+          autocomplete="off"
+        >
+          My Resources
+        </button>
 
-          <button
-            class="liked-resources-button btn btn-primary"
-            data-toggle="button"
-            aria-pressed="false"
-            autocomplete="off"
-          >
-            Liked Resources
-          </button>
-        </section>
+        <button
+          class="liked-resources-button btn btn-primary"
+          data-toggle="button"
+          aria-pressed="false"
+          autocomplete="off"
+        >
+          Liked Resources
+        </button>
+      </section>
+      <main class="my-resource-content">
         <div class="card-columns" id="my-resources-container"></div>
+        <div class="card-columns" id="liked-resources-container"></div>
         <% include ./partials/resourceModal %>
       </main>
     </div>
