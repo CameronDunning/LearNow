@@ -152,7 +152,7 @@ function renderComments(comments) {
 function createCommentElement(commentData) {
   const comment = `
     <section class="comment">
-      <p class="commenter">${escape(commentData.user_id)}</p>
+      <p class="commenter">${escape(commentData.user_name)}</p>
       <p>${escape(commentData.comment)}</p>
     </section>
   `;

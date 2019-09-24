@@ -130,8 +130,9 @@ module.exports = db => {
 
   router.get("/c/:resourceid", (req, res) => {
     let queryString = `
-      SELECT * FROM comments
-      WHERE id=$1
+      SELECT comments.comment as comment, users.name as user_name FROM comments JOIN users ON
+      users.id=user_id
+      WHERE resource_id=$1
       `;
     let values = [req.params.resourceid];
 
