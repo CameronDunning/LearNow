@@ -144,6 +144,22 @@ module.exports = db => {
       .catch(err => console.log(err));
   });
 
+  router.post("/c/:resourceid", (req, res) => {
+    let queryString = `
+      SELECT comments.comment as comment, users.name as user_name FROM comments JOIN users ON
+      users.id=user_id
+      WHERE resource_id=$1 and comment IS NOT NULL
+      `;
+    let values = [req.params.resourceid];
+
+    //returns the rows of the query
+    //send data into templatevars then render
+
+    db.query(queryString, values)
+      .then(data => res.json(data.rows))
+      .catch(err => console.log(err));
+  });
+
   router.get("/:category", (req, res) => {
     const category = req.params.category.toLowerCase();
     //make query to show resources based on category
@@ -165,8 +181,9 @@ module.exports = db => {
   router.get("/", (req, res) => {
     //make query to show resources based on category
     let queryString = `
-      SELECT resources.*, users.* FROM resources JOIN users ON
+      SELECT resources.*, users.name FROM resources JOIN users ON
       resources.user_id=users.id
+      ORDER BY resources.id
       LIMIT 10;
       `;
 
