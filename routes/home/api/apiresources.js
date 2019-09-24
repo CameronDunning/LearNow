@@ -165,7 +165,8 @@ module.exports = db => {
   router.get("/", (req, res) => {
     //make query to show resources based on category
     let queryString = `
-      SELECT * FROM resources
+      SELECT resources.*, users.* FROM resources JOIN users ON
+      resources.user_id=users.id
       LIMIT 10;
       `;
 
