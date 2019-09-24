@@ -47,13 +47,16 @@ const loadResources = async () => {
           const resourceID = classListArray[2];
           upvote(resourceID);
         });
-        $(".add-to-my-resources").on("click", e => {
+        $("#resourcescontainer").on("click", ".add-to-my-resources", e => {
           const classListArray = e.currentTarget.classList;
           const resourceID = classListArray[3];
-          const $addedToResource = classListArray[4];
-          console.log($addedToResource);
-          if ($addedToResource === "false") {
+          const addedToResource = $(e.currentTarget).attr("data-activity");
+          if (addedToResource === "false") {
             addResource(resourceID);
+            $(`.add-to-my-resources.${resourceID}`).attr(
+              "data-activity",
+              "true"
+            );
             // $item = $($(".arrows").children()[0]);
             // $item.removeClass("false");
             // $item.addClass("true");
@@ -103,9 +106,10 @@ const createResourceElement = resourceData => {
       <p class="resource-timestamp">Date here </p>
       <form>
         <div class="arrows">
-          <i class="fas fa-plus add-to-my-resources ${resourceData.id} ${
-    resourceData["add_to_my_resources"]
-  }"></i>
+          <i class="fas fa-plus add-to-my-resources ${
+            resourceData.id
+          }" data-activity = ${resourceData["add_to_my_resources"]}
+  ></i>
           <i class="fas fa-arrow-up ${resourceData.id}" id="up-vote"></i>
           <i class="fas fa-arrow-down " id="down-vote"></i>
         </div>
