@@ -83,7 +83,6 @@ async function loadLikedResources() {
       url: "http://localhost:8080/api/my_liked_resources/",
       dataType: "JSON",
       success: data => {
-        console.log(data);
         $("#my-resources-container").empty();
         renderMyResources(data);
       }

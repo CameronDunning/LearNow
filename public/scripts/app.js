@@ -12,7 +12,6 @@ $.fn.serializeObject = function() {
 };
 
 const upvote = id => {
-  console.log("upvote id:", id);
   $.ajax({
     url: "http://localhost:8080/api/upvote/" + id,
     type: "POST",
@@ -21,7 +20,6 @@ const upvote = id => {
 };
 
 const addResource = id => {
-  console.log("added id:", id);
   $.ajax({
     url: `http://localhost:8080/api/my_liked_resources/` + id,
     dataType: "JSON",
