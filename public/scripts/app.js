@@ -29,6 +29,7 @@ const loadResources = async () => {
       dataType: "JSON",
       success: data => {
         renderResources(data);
+        console.log(data);
         $(".fa-arrow-up").on("click", e => {
           // upvote function
           const classListArray = e.currentTarget.classList;
@@ -60,10 +61,13 @@ function renderResources(resources) {
 //! THIS NEEDS TO BE STYLED AND FORMATTED ACCORDING TO UI FRAMEWORK
 //helper function that creates individual resource element
 // id= "resources" <-- kept in case this was used somewhere else
-function createResourceElement(resourceData) {
+let counter = 0;
+const createResourceElement = resourceData => {
+  console.log(resourceData);
   const resource = `
-  <section class="resources card" id="${resourceData.id}">
+  <section class="resources card" id="${counter++}">
     <div id="${resourceData.name}"></div>
+    <div id="${resourceData.id}"></div>
     <div class="resourceImg">
       <img src="${escape(
         resourceData.cover_photo_url ? resourceData.cover_photo_url : ""
@@ -86,7 +90,7 @@ function createResourceElement(resourceData) {
   </section>
   `;
   return $(resource);
-}
+};
 
 //escape function makes text safe and prevents injection
 function escape(str) {
@@ -125,7 +129,7 @@ function loadModal() {
       });
     });
     $("#modal-clicked-resource").modal();
-    let resourceID = e.currentTarget.id;
+    let resourceID = e.currentTarget.children[1].id;
     loadComments(resourceID);
   });
 }

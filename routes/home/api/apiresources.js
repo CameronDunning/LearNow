@@ -116,6 +116,26 @@ const upvoteResource = (db, userID, resourceID) => {
   });
 };
 
+const getResources = () => {
+  const queryString = `
+  SELECT resources.*, users.name FROM resources JOIN users ON
+  resources.user_id=users.id
+  ORDER BY resources.id
+  LIMIT 10;
+  `;
+  return queryString;
+};
+
+const getCommentsByUser = userID => {
+  const queryString = `
+  SELECT *
+  FROM comments
+  WHERE user_id=$1
+  `;
+  const values = [userID];
+  return [queryString, values];
+};
+
 module.exports = db => {
   router.post("/input", (req, res) => {
     const userID = req.session.user_id;
@@ -192,12 +212,28 @@ module.exports = db => {
       .catch(err => console.log(err));
   });
 
+  router.post("/c/:resourceid", (req, res) => {
+    let queryString = `
+      SELECT comments.comment as comment, users.name as user_name FROM comments JOIN users ON
+      users.id=user_id
+      WHERE resource_id=$1 and comment IS NOT NULL
+      `;
+    let values = [req.params.resourceid];
+
+    //returns the rows of the query
+    //send data into templatevars then render
+
+    db.query(queryString, values)
+      .then(data => res.json(data.rows))
+      .catch(err => console.log(err));
+  });
+
   router.get("/:category", (req, res) => {
     const category = req.params.category.toLowerCase();
     //make query to show resources based on category
     let queryString = `
-      SELECT * FROM resources
-      WHERE category LIKE $1
+      SELECT resources.*, users.id as user_resource_upload, users.name FROM resources JOIN users ON
+      resources.user_id=users.id
       LIMIT 10;
       `;
     let values = [`%${category}%`];
@@ -211,18 +247,55 @@ module.exports = db => {
   });
 
   router.get("/", (req, res) => {
-    //make query to show resources based on category
-    let queryString = `
-      SELECT resources.*, users.id as user_resource_upload, users.name FROM resources JOIN users ON
-      resources.user_id=users.id
-      LIMIT 10;
-      `;
+    // make query to show resources based on category
+    // if user is signed in, also send upvote, downvote and add_to_resources
+    console.log(req.session.user_id);
+    if (req.session.user_id === undefined) {
+      // select first ten resources
+      // returns the rows of the query
+      // send data into templatevars then render
+      const queryString1 = getResources();
+      db.query(queryString1)
+        .then(data => {
+          for (const resource of data.rows) {
+            resource.upvote = false;
+            resource.downvote = false;
+            resource.add_to_my_resources = false;
+          }
+          return res.json(data.rows);
+        })
+        .catch(err => console.log(err));
+    } else {
+      // select first ten resources and whether user has liked or not
+      const userID = req.session.user_id;
+      const queryString1 = getResources();
 
-    //returns the rows of the query
-    //send data into templatevars then render
-    db.query(queryString)
-      .then(data => res.json(data.rows))
-      .catch(err => console.log(err));
+      // returns the rows of the query
+      // send data into templatevars then render
+      db.query(queryString1)
+        .then(data => {
+          const resources = data.rows;
+          const queryString2 = getCommentsByUser(userID);
+          db.query(queryString2[0], queryString2[1]).then(data => {
+            const comments = data.rows;
+            for (const resource of resources) {
+              resource.upvote = false;
+              resource.downvote = false;
+              resource.add_to_my_resources = false;
+              for (const comment of comments) {
+                if (resource.id === comment.resource_id) {
+                  resource.upvote = comment.upvote;
+                  resource.downvote = comment.downvote;
+                  resource.add_to_my_resources = comment.add_to_my_resources;
+                }
+              }
+            }
+            return res.json(resources);
+          });
+        })
+        .catch(err => console.log(err));
+    }
   });
+
   return router;
 };

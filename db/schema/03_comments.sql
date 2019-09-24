@@ -12,6 +12,7 @@ CREATE TABLE comments
   comment TEXT,
   upvote BOOLEAN NOT NULL DEFAULT false,
   downvote BOOLEAN NOT NULL DEFAULT false,
+  add_to_my_resources BOOLEAN NOT NULL DEFAULT false,
   date_created TIMESTAMP NOT NULL
 );
 
