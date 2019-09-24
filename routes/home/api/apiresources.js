@@ -175,14 +175,11 @@ module.exports = db => {
 
   router.get("/my_liked_resources", (req, res) => {
     const userID = req.session.user_id;
-    router.get("/my_liked_resources", (req, res) => {
-      const userID = req.session.user_id;
-      const resourceID = req.session.resource_id; // get resources that the user has added to their resources
-      const queryString1 = getUserAddedResources(userID, resourceID);
-      db.query(queryString1[0], queryString1[1]).then(data =>
-        res.json(data.rows)
-      );
-    });
+    const resourceID = req.session.resource_id; // get resources that the user has added to their resources
+    const queryString1 = getUserAddedResources(userID, resourceID);
+    db.query(queryString1[0], queryString1[1]).then(data =>
+      res.json(data.rows)
+    );
   });
 
   router.post("/upvote/:id", async (req, res) => {

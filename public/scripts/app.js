@@ -29,12 +29,14 @@ const loadResources = async () => {
       dataType: "JSON",
       success: data => {
         renderResources(data);
-        console.log(data);
         $(".fa-arrow-up").on("click", e => {
           // upvote function
           const classListArray = e.currentTarget.classList;
           const resourceID = classListArray[2];
           upvote(resourceID);
+        });
+        $(".fa-plus").on("click", () => {
+          console.log("clicked");
         });
       }
     });
@@ -81,7 +83,9 @@ const createResourceElement = resourceData => {
       <p class="resource-timestamp">Date here </p>
       <form>
         <div class="arrows">
-          <i class="fas fa-plus" id="add-to-my-resources"></i>
+          <i class="fas fa-plus ${
+            resourceData.id
+          }" id="add-to-my-resources"></i>
           <i class="fas fa-arrow-up ${resourceData.id}" id="up-vote"></i>
           <i class="fas fa-arrow-down " id="down-vote"></i>
         </div>
