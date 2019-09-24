@@ -24,10 +24,10 @@
 }
 
 .sidebar:hover {
-  font-size: 8px;
   width: 200px;
 }
 
 .sidebar:hover .hover-show {
+  font-size: 14px;
   display: inline;
 }

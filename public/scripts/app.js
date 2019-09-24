@@ -45,10 +45,9 @@ function renderResources(resources) {
 //! THIS NEEDS TO BE STYLED AND FORMATTED ACCORDING TO UI FRAMEWORK
 //helper function that creates individual resource element
 // id= "resources" <-- kept in case this was used somewhere else
-let counter = 0;
 function createResourceElement(resourceData) {
   const resource = `
-  <section class="resources card" id="${counter++}">
+  <section class="resources card" id="${resourceData.id}">
     <div class="resourceImg">
       <img src="${escape(
         resourceData.cover_photo_url ? resourceData.cover_photo_url : ""
@@ -80,7 +79,7 @@ function escape(str) {
 }
 
 function loadModal() {
-  $(".resources").on("click", function() {
+  $(".resources").on("click", function(e) {
     let title = $(this)
       .children(".card-body")
       .children(".card-title")

@@ -33,34 +33,39 @@
     <link rel="stylesheet" type="text/css" href="styles/home.css" />
     <link rel="stylesheet" type="text/css" href="styles/nav.css" />
     <link rel="stylesheet" type="text/css" href="styles/modal.css" />
+    <link rel="stylesheet" type="text/css" href="styles/my_resources.css" />
   </head>
 
   <body>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <% include ./partials/header %> <% include ./partials/nav %>
-    <section class="my-resources-buttons">
-      <button
-        class="my-resources-button btn btn-primary"
-        data-toggle="button"
-        aria-pressed="false"
-        autocomplete="off"
-      >
-        My Resources
-      </button>
+    <div class="container">
+      <% include ./partials/header %> <% include ./partials/nav %>
+      <main class="resources-container">
+        <section class="my-resources-buttons">
+          <button
+            class="my-resources-button btn btn-primary"
+            data-toggle="button"
+            aria-pressed="false"
+            autocomplete="off"
+          >
+            My Resources
+          </button>
 
-      <button
-        class="liked-resources-button btn btn-primary"
-        data-toggle="button"
-        aria-pressed="false"
-        autocomplete="off"
-      >
-        Liked Resources
-      </button>
-    </section>
-    <div class="card-columns" id="my-resources-container"></div>
-    <% include ./partials/resourceModal %>
-
+          <button
+            class="liked-resources-button btn btn-primary"
+            data-toggle="button"
+            aria-pressed="false"
+            autocomplete="off"
+          >
+            Liked Resources
+          </button>
+        </section>
+        <div class="card-columns" id="my-resources-container"></div>
+        <% include ./partials/resourceModal %>
+      </main>
+    </div>
     <!-- <script type="text/javascript" src="/vendor/jquery-2.2.3.min.js"></script> -->
+    <script type="text/javascript" src="/scripts/app.js"></script>
     <script type="text/javascript" src="/scripts/my_resources.js"></script>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
