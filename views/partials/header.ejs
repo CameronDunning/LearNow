@@ -1,18 +1,35 @@
 <header>
   <div class="header-container">
-    <h2 class='logo'>LearNow</h2>
+    <h2 class="logo">LearNow</h2>
 
-    <div class="btn-group">
-        <button type="button" class="btn btn-secondary dropdown-toggle" id="user-settings" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <form method="POST" action="#">
-                <!-- <p class="d-inline">Logged in as:</p> -->
-              </form>
-              User Name
-        </button>
-        <div class="dropdown-menu">
-          <button class="dropdown-item" type="button">Profile</button>
-          <button class="dropdown-item" type="button">Logout</button>
-        </div>
-      </div>
+    <div>
+      <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+          <a
+            class="nav-link"
+            href="#"
+            id="navbarDropdownMenuLink"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+          <!-- false should be user_id, but it's not loading properly -->
+            <% if (false) { %> <%=user_id %>
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a class="dropdown-item" href="#">Profile</a>
+            <a class="dropdown-item" href="#">Log out</a>
+          </div>
+          <% } else { %>
+            Action
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a class="dropdown-item" href="/login">Login</a>
+            <a class="dropdown-item" href="/register">Register</a>
+          </div>
+          <% } %>
+        </li>
+      </ul>
+    </div>
   </div>
 </header>

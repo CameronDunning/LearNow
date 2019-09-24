@@ -45,6 +45,7 @@ const loadResources = async () => {
 $("form").on("submit", async function(event) {
   let formObject = await $(this).serializeObject();
   $("#resourcescontainer").append(createResourceElement(formObject));
+  $("#modal-create-new").modal("hide");
   loadModal();
 });
 
