@@ -92,7 +92,8 @@ module.exports = db => {
   //get request for the home page
   router.get("/", (req, res) => {
     const templateVars = {
-      user_id: req.session.user_id
+      user_id: req.session.user_id,
+      user_name: req.session.user_name
     };
     res.render("home", templateVars);
   });
