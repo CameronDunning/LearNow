@@ -20,7 +20,6 @@ const upvote = id => {
 };
 
 const downvote = id => {
-  console.log("downvote id:", id);
   $.ajax({
     url: "http://localhost:8080/api/downvote/" + id,
     type: "POST",
@@ -46,24 +45,25 @@ const loadResources = async () => {
       success: data => {
         renderResources(data);
         $(".fa-arrow-up").on("click", e => {
-          // upvote function
           const classListArray = e.currentTarget.classList;
-          const resourceID = classListArray[2];
-          const upvoted = classListArray[3];
-          console.log(upvoted);
+          const resourceID = classListArray[3];
+          const upvoted = $(e.currentTarget).attr("data-upvote");
           if (upvoted === "false") {
             console.log("upvoted:", resourceID);
             upvote(resourceID);
+            $(`.upvote.${resourceID}`).attr("data-upvote", "true");
+            $(`.downvote.${resourceID}`).attr("data-downvote", "false");
           }
         });
         $(".fa-arrow-down").on("click", e => {
-          // upvote function
           const classListArray = e.currentTarget.classList;
-          const resourceID = classListArray[2];
-          const downvoted = classListArray[3];
+          const resourceID = classListArray[3];
+          const downvoted = $(e.currentTarget).attr("data-downvote");
           if (downvoted === "false") {
             console.log("downvoted:", resourceID);
             downvote(resourceID);
+            $(`.downvote.${resourceID}`).attr("data-downvote", "true");
+            $(`.upvote.${resourceID}`).attr("data-upvote", "false");
           }
         });
         $("#resourcescontainer").on("click", ".add-to-my-resources", e => {
@@ -71,6 +71,7 @@ const loadResources = async () => {
           const resourceID = classListArray[3];
           const addedToResource = $(e.currentTarget).attr("data-activity");
           if (addedToResource === "false") {
+            console.log("added to resources: ", resourceID);
             addResource(resourceID);
             $(`.add-to-my-resources.${resourceID}`).attr(
               "data-activity",
@@ -147,15 +148,12 @@ const createResourceElement = resourceData => {
       <p class="resource-timestamp">${resourceData.date_created} </p>
       <form>
         <div class="arrows">
-          <i class="fas fa-plus add-to-my-resources ${
-            resourceData.id
-          }" data-activity = ${resourceData["add_to_my_resources"]}
-  ></i>
-          <i class="fas fa-arrow-up ${resourceData.id} ${
-    resourceData.upvote
-  }" id="up-vote"></i>
-          <i class="fas fa-arrow-down ${resourceData.id}
-          ${resourceData.downvote} " id="down-vote"></i>
+          <i class="fas fa-plus add-to-my-resources ${resourceData.i}"
+          data-activity = ${resourceData["add_to_my_resources"]}></i>
+          <i class="fas fa-arrow-up upvote ${resourceData.id}"
+          data-upvote = ${resourceData.upvote} id="up-vote"></i>
+          <i class="fas fa-arrow-down downvote ${resourceData.id}"
+          data-downvote = ${resourceData.downvote} id="down-vote"></i>
         </div>
     </form>
   </div>

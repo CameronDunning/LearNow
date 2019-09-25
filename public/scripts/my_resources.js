@@ -23,6 +23,7 @@ async function loadMyResources() {
       dataType: "JSON",
       success: data => {
         $("#my-resources-container").empty();
+        console.log(data);
         renderMyResources(data);
       }
     });

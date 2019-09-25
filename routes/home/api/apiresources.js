@@ -61,7 +61,8 @@ const createNewResourceJoinCategory = (body, userID, categoryID, db) => {
 
 const getUserResources = userID => {
   const queryString = `
-    SELECT * FROM resources
+    SELECT *, users.name FROM resources
+    JOIN users ON resources.user_id=users.id
     WHERE user_id = $1
     `;
   const values = [userID];
@@ -87,19 +88,9 @@ const getLikedResources = userID => {
   return [queryString, values];
 };
 
-const upvoteQuery = (userID, resourceID) => {
+const voteQuery = (userID, resourceID) => {
   const queryString = `
-  SELECT upvote FROM comments
-  WHERE user_id=$1
-  AND resource_id=$2
-  `;
-  const values = [userID, resourceID];
-  return [queryString, values];
-};
-
-const downvoteQuery = (userID, resourceID) => {
-  const queryString = `
-    SELECT downvote FROM comments
+    SELECT upvote, downvote FROM comments
     WHERE user_id=$1
     AND resource_id=$2
   `;
@@ -107,37 +98,31 @@ const downvoteQuery = (userID, resourceID) => {
   return [queryString, values];
 };
 
-const upvoteResource = (db, userID, resourceID) => {
-  const queryString1 = upvoteQuery(userID, resourceID);
+const voteResource = (db, userID, resourceID, vote) => {
+  const queryString1 = voteQuery(userID, resourceID);
   return db.query(queryString1[0], queryString1[1]).then(data => {
     if (data.rows[0] !== undefined) {
-      return false;
-    } else {
+      let oppositeVote = "";
+      if (vote === "upvote") {
+        oppositeVote = "downvote";
+      } else {
+        oppositeVote = "upvote";
+      }
       const queryString = `
-        INSERT INTO comments
-          (user_id, resource_id, upvote, date_created)
-        VALUES
-          ($1, $2, true, NOW())
-        `;
+        UPDATE comments
+        SET ${vote}=true,
+            ${oppositeVote}=false
+        WHERE user_id=$1
+        AND resource_id=$2;
+      `;
       const values = [userID, resourceID];
-      return db.query(queryString, values).then(() => {
-        return true;
-      });
-    }
-  });
-};
-
-const downvoteResource = (db, userID, resourceID) => {
-  const queryString1 = downvoteQuery(userID, resourceID);
-  return db.query(queryString1[0], queryString1[1]).then(data => {
-    if (data.rows[0] !== undefined) {
-      return false;
+      return db.query(queryString, values);
     } else {
       const queryString = `
         INSERT INTO comments
-          (user_id, resource_id, downvote, date_created)
+          (user_id, resource_id, ${vote}, date_created)
         VALUES
-          ($1, $2, true, NOW())
+          ($1, $2, true, NOW());
         `;
       const values = [userID, resourceID];
       return db.query(queryString, values).then(() => {
@@ -242,6 +227,7 @@ module.exports = db => {
         createNewResourceJoinCategory(req.body, userID, categoryID, db);
       }
     });
+    res.sendStatus(201);
   });
 
   router.get("/my_resources", (req, res) => {
@@ -273,9 +259,9 @@ module.exports = db => {
   });
 
   router.post("/upvote/:id", async (req, res) => {
-    const resourceID = req.params.id;
+    const resourceID = parseInt(req.params.id);
     const userID = req.session.user_id;
-    const isValidVote = await upvoteResource(db, userID, resourceID);
+    const isValidVote = await voteResource(db, userID, resourceID, "upvote");
     if (isValidVote) {
       res.sendStatus(201);
     } else {
@@ -284,10 +270,9 @@ module.exports = db => {
   });
 
   router.post("/downvote/:id", async (req, res) => {
-    const resourceID = req.params.id;
+    const resourceID = parseInt(req.params.id);
     const userID = req.session.user_id;
-    const isValidVote = await downvoteResource(db, userID, resourceID);
-    console.log("isValidVote:", isValidVote);
+    const isValidVote = await voteResource(db, userID, resourceID, "downvote");
     if (isValidVote) {
       res.sendStatus(201);
     } else {
