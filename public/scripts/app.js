@@ -36,7 +36,6 @@ const addResource = id => {
   });
 };
 
-<<<<<<< HEAD
 const loadCategories = () => {
   try {
     $.ajax({
@@ -51,7 +50,6 @@ const loadCategories = () => {
     console.log(err);
   }
 };
-=======
 const removeResource = id => {
   $.ajax({
     url: `/api/my_liked_resources/` + id,
@@ -60,7 +58,6 @@ const removeResource = id => {
   });
 };
 
->>>>>>> e9bfa4c8b43c8da1c6c4ebf0e5ad20ae4dbc2a95
 //Initial loading of resources
 //loadResources makes get request to our API that queries the DB and returns a json object
 const loadResources = async url => {
