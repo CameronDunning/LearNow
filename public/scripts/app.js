@@ -49,7 +49,6 @@ const loadResources = async url => {
           const resourceID = classListArray[3];
           const upvoted = $(e.currentTarget).attr("data-upvote");
           if (upvoted === "false") {
-            console.log("upvoted:", resourceID);
             upvote(resourceID);
             $(`.upvote.${resourceID}`).attr("data-upvote", "true");
             $(`.downvote.${resourceID}`).attr("data-downvote", "false");
@@ -60,18 +59,17 @@ const loadResources = async url => {
           const resourceID = classListArray[3];
           const downvoted = $(e.currentTarget).attr("data-downvote");
           if (downvoted === "false") {
-            console.log("downvoted:", resourceID);
             downvote(resourceID);
             $(`.downvote.${resourceID}`).attr("data-downvote", "true");
             $(`.upvote.${resourceID}`).attr("data-upvote", "false");
           }
         });
-        $("#resourcescontainer").on("click", ".add-to-my-resources", e => {
+        $(".fa-plus").on("click", e => {
           const classListArray = e.currentTarget.classList;
           const resourceID = classListArray[3];
+          console.log(resourceID);
           const addedToResource = $(e.currentTarget).attr("data-activity");
           if (addedToResource === "false") {
-            console.log("added to resources: ", resourceID);
             addResource(resourceID);
             $(`.add-to-my-resources.${resourceID}`).attr(
               "data-activity",
@@ -158,11 +156,14 @@ const createResourceElement = resourceData => {
       <p class="resource-timestamp">${resourceData.date_created} </p>
       <form>
         <div class="arrows">
-          <i class="fas fa-plus add-to-my-resources ${resourceData.i}"
-          data-activity = ${resourceData["add_to_my_resources"]}></i>
-          <i class="fas fa-arrow-up upvote ${resourceData.id}"
+          <i class="fas fa-plus add-to-my-resources ${resourceData.id}
+          add-to-my-resources-${resourceData.add_to_my_resources}"
+          data-activity = ${resourceData.add_to_my_resources}></i>
+          <i class="fas fa-arrow-up upvote ${resourceData.id}
+          upvote-${resourceData.upvote}"
           data-upvote = ${resourceData.upvote} id="up-vote"></i>
-          <i class="fas fa-arrow-down downvote ${resourceData.id}"
+          <i class="fas fa-arrow-down downvote ${resourceData.id}
+          downvote-${resourceData.downvote}"
           data-downvote = ${resourceData.downvote} id="down-vote"></i>
         </div>
     </form>
@@ -198,7 +199,6 @@ function loadModal() {
 
     $("#modal-clicked-resource").on("show.bs.modal", function() {
       let resourceID = e.currentTarget.children[1].id;
-      console.log(resourceID);
       $(".resource-modal-title").text(title);
 
       $(".modal-body").children($(".clicked-resource-img").attr("src", image));

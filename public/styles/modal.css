@@ -8,6 +8,7 @@
   max-height: 40%;
   left: 100px;
   padding: 1em;
+  justify-content: space-between;
 }
 
 /*NEW RESOURCES */
@@ -15,8 +16,13 @@
   margin-top: 2em;
 }
 
+#modal-create-new .modal-backdrop {
+  z-index: 1;
+}
+
 #modal-create-new .new-resource-container {
   margin: 1em 0;
+  z-index: 2;
 }
 
 .close-button:active {

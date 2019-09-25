@@ -1,23 +1,39 @@
 .sidebar {
   margin-top: 8vh;
-  grid-area: 1/1/2/2;
   width: 60px;
-  height: 100vh;
-  background-color: teal;
+  height: 100%;
+  background-color: #212121;
+  z-index: 1;
+  opacity: 0.6;
+  position: fixed;
+  left: 0;
 }
 
 .sidebar ul {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
 }
 
 .sidebar li {
   cursor: pointer;
+  color: white;
+}
+
+.sidebar a {
+  color: white;
+  text-decoration: none;
+}
+
+.sidebar ul:first-child {
+  margin-top: 2em;
 }
 
 .sidebar i {
-  margin: 1em 10px;
+  margin: 0.5em;
+  color: white;
+  text-shadow: 0px 0px 9px #212121;
 }
 
 .hover-show {
@@ -26,9 +42,18 @@
 
 .sidebar:hover {
   width: 200px;
+  transition: 0.5s ease;
+  opacity: 100;
 }
 
+.sidebar:hover i {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-left: 60px;
+}
 .sidebar:hover .hover-show {
-  font-size: 14px;
+  font-size: 12px;
   display: inline;
+  margin-left: 10px;
 }
