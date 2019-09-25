@@ -61,28 +61,28 @@ async function loadLikedResources() {
       success: data => {
         $("#my-resources-container").empty();
         renderMyResources(data);
-        // $(".fa-arrow-up").on("click", e => {
-        //   e.stopPropagation();
-        //   const classListArray = e.currentTarget.classList;
-        //   const resourceID = classListArray[3];
-        //   const upvoted = $(e.currentTarget).attr("data-upvote");
-        //   if (upvoted === "false") {
-        //     upvote(resourceID);
-        //     $(`.upvote.${resourceID}`).attr("data-upvote", "true");
-        //     $(`.downvote.${resourceID}`).attr("data-downvote", "false");
-        //   }
-        // });
-        // $(".fa-arrow-down").on("click", e => {
-        //   e.stopPropagation();
-        //   const classListArray = e.currentTarget.classList;
-        //   const resourceID = classListArray[3];
-        //   const downvoted = $(e.currentTarget).attr("data-downvote");
-        //   if (downvoted === "false") {
-        //     downvote(resourceID);
-        //     $(`.downvote.${resourceID}`).attr("data-downvote", "true");
-        //     $(`.upvote.${resourceID}`).attr("data-upvote", "false");
-        //   }
-        // });
+        $(".fa-arrow-up").on("click", e => {
+          e.stopPropagation();
+          const classListArray = e.currentTarget.classList;
+          const resourceID = classListArray[3];
+          const upvoted = $(e.currentTarget).attr("data-upvote");
+          if (upvoted === "false") {
+            upvote(resourceID);
+            $(`.upvote.${resourceID}`).attr("data-upvote", "true");
+            $(`.downvote.${resourceID}`).attr("data-downvote", "false");
+          }
+        });
+        $(".fa-arrow-down").on("click", e => {
+          e.stopPropagation();
+          const classListArray = e.currentTarget.classList;
+          const resourceID = classListArray[3];
+          const downvoted = $(e.currentTarget).attr("data-downvote");
+          if (downvoted === "false") {
+            downvote(resourceID);
+            $(`.downvote.${resourceID}`).attr("data-downvote", "true");
+            $(`.upvote.${resourceID}`).attr("data-upvote", "false");
+          }
+        });
         $(".add-to-my-resources").on("click", e => {
           e.stopPropagation();
           const classListArray = e.currentTarget.classList;

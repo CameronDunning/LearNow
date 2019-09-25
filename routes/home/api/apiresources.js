@@ -72,7 +72,8 @@ const getUserResources = userID => {
 const saveResource = (db, userID, resourceID) => {
   const queryString = `
     INSERT INTO comments (user_id, resource_id, add_to_my_resources, date_created)
-    VALUES ($1, $2, TRUE, NOW())`;
+    VALUES ($1, $2, TRUE, NOW())
+    `;
   const values = [userID, resourceID];
   db.query(queryString, values);
 };
