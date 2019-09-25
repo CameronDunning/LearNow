@@ -205,6 +205,10 @@ const returnResourcesWithVotes = (db, userID) => {
 module.exports = db => {
   router.post("/input", (req, res) => {
     const userID = req.session.user_id;
+    const link = req.body.link;
+    console.log(link);
+    const bitlyLink = "test";
+
     // make query to show resources based on category
     // returns an OBJECT of all the categories that already exist
     const queryString1 = categoriesThatAlreadyExist(req.body.category);
@@ -252,7 +256,7 @@ module.exports = db => {
     const userID = req.session.user_id;
     const queryString = `
     DELETE FROM comments
-     WHERE user_id = $1 AND resource_id = $2;`;
+    WHERE user_id = $1 AND resource_id = $2;`;
     const values = [userID, resourceID];
     db.query(queryString, values).then(res.redirect("/my_resources"));
   });

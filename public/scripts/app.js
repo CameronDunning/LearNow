@@ -125,7 +125,22 @@ $("#search-category").on("submit", async function(event) {
 });
 
 $("#newresource").on("submit", async function(event) {
+  event.preventDefault();
   let formObject = await $(this).serializeObject();
+  console.log(formObject.link);
+  try {
+    $.ajax({
+      url: `http://localhost:3000/api/urls`,
+      dataType: "JSON",
+      data: { longURL: formObject.link },
+      success: data => {
+        console.log(data);
+      }
+    });
+  } catch (err) {
+    console.log(err);
+  }
+
   formObject.name = "You";
   formObject.date_created = "Just now";
   $("#resourcescontainer").append(createResourceElement(formObject));
