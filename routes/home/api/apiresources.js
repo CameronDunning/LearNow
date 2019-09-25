@@ -78,10 +78,11 @@ const saveResource = (db, userID, resourceID) => {
 
 const getLikedResources = userID => {
   const queryString = `
-  SELECT DISTINCT comments.resource_id as id, resources.* from resources
+  SELECT DISTINCT comments.resource_id as id, users.name, resources.* from resources
   JOIN comments ON resources.id = resource_id
+  JOIN users ON resources.user_id = users.id
   WHERE comments.user_id = $1 AND add_to_my_resources = TRUE
-  GROUP BY resources.id, comments.resource_id;`;
+  GROUP BY resources.id, comments.resource_id, users.name;`;
   const values = [userID];
   return [queryString, values];
 };

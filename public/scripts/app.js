@@ -190,6 +190,7 @@ function loadModal() {
 
     $("#modal-clicked-resource").on("show.bs.modal", function() {
       let resourceID = e.currentTarget.children[1].id;
+      console.log(resourceID);
       $(".resource-modal-title").text(title);
 
       $(".modal-body").children($(".clicked-resource-img").attr("src", image));
