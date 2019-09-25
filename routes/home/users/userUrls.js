@@ -6,9 +6,11 @@ module.exports = db => {
   //goes to user profile page
   router.get("/:user/", (req, res) => {
     let user = req.params.user;
-    templateVars = {
+    console.log("user_id: ", req.session.user_id);
+    const templateVars = {
       userid: user,
-      user_id: req.session.user_id
+      user_id: req.session.user_id,
+      user_name: req.session.user_name
     };
     res.render("update_profile", templateVars);
   });

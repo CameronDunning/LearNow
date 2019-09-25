@@ -137,7 +137,7 @@ const getResources = () => {
   SELECT resources.*, users.name FROM resources JOIN users ON
   resources.user_id=users.id
   ORDER BY resources.id
-  LIMIT 10;
+  LIMIT 30;
   `;
   return queryString;
 };
@@ -227,7 +227,6 @@ module.exports = db => {
         createNewResourceJoinCategory(req.body, userID, categoryID, db);
       }
     });
-    res.sendStatus(201);
   });
 
   router.get("/my_resources", (req, res) => {
@@ -324,7 +323,7 @@ module.exports = db => {
     let queryString = `
       SELECT resources.*, users.id as user_resource_upload, users.name FROM resources JOIN users ON
       resources.user_id=users.id
-      LIMIT 10;
+      LIMIT 20;
       `;
     let values = [`%${category}%`];
 

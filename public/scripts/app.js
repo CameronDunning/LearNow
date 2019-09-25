@@ -1,5 +1,5 @@
 $(document).ready(() => {
-  loadResources();
+  loadResources("http://localhost:8080/api/");
 });
 
 //serialize object is a helper function for jquery to convert .serialize to a useable object
@@ -45,10 +45,10 @@ const removeResource = id => {
 
 //Initial loading of resources
 //loadResources makes get request to our API that queries the DB and returns a json object
-const loadResources = async () => {
+const loadResources = async url => {
   try {
     await $.ajax({
-      url: "http://localhost:8080/api/",
+      url: url,
       dataType: "JSON",
       success: data => {
         renderResources(data);
@@ -72,9 +72,10 @@ const loadResources = async () => {
             $(`.upvote.${resourceID}`).attr("data-upvote", "false");
           }
         });
-        $("#resourcescontainer").on("click", ".add-to-my-resources", e => {
+        $(".fa-plus").on("click", e => {
           const classListArray = e.currentTarget.classList;
           const resourceID = classListArray[3];
+          console.log(resourceID);
           const addedToResource = $(e.currentTarget).attr("data-activity");
           if (addedToResource === "false") {
             addResource(resourceID);
@@ -98,8 +99,18 @@ const loadResources = async () => {
   }
 };
 
+$("#search-category").on("submit", async function(event) {
+  event.preventDefault();
+
+  let formObject = await $(this).serializeObject();
+  console.log(formObject);
+  loadResources("http://localhost:8080/r/" + formObject.categories);
+});
+
 $("#newresource").on("submit", async function(event) {
   let formObject = await $(this).serializeObject();
+  formObject.name = "You";
+  formObject.date_created = "Just now";
   $("#resourcescontainer").append(createResourceElement(formObject));
   $("#modal-create-new").modal("hide");
   loadModal();
@@ -132,6 +143,7 @@ $("#new-comment").on("submit", async function(event) {
 
 //Helper function for loadResources that renders the array of resources passed into it and appends it to the container
 function renderResources(resources) {
+  $("#resourcescontainer").empty();
   resources.forEach(resource =>
     $("#resourcescontainer").append(createResourceElement(resource))
   );
@@ -161,7 +173,7 @@ const createResourceElement = resourceData => {
       <form>
         <div class="arrows">
           <i class="fas fa-plus add-to-my-resources ${resourceData.id}"
-          data-activity = ${resourceData["add_to_my_resources"]}></i>
+          data-activity = ${resourceData.add_to_my_resources}></i>
           <i class="fas fa-arrow-up upvote ${resourceData.id}"
           data-upvote = ${resourceData.upvote} id="up-vote"></i>
           <i class="fas fa-arrow-down downvote ${resourceData.id}"

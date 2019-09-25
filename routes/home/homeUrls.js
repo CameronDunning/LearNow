@@ -87,7 +87,10 @@ module.exports = db => {
   });
 
   router.get("/my_resources", (req, res) => {
-    templateVars = { user_id: req.session.user_id };
+    templateVars = {
+      user_id: req.session.user_id,
+      user_name: req.session.user_name
+    };
     res.render("my_resources", templateVars);
   });
 

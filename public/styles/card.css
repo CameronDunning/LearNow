@@ -28,6 +28,18 @@
   display: inline-flex;
 }
 
+.arrows [data-activity="true"] {
+  color: green;
+}
+
+.arrows [data-upvote="true"] {
+  color: green;
+}
+
+.arrows [data-downvote="true"] {
+  color: red;
+}
+
 .arrows:hover {
   cursor: pointer;
 }
