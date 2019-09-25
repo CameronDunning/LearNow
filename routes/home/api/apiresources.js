@@ -191,7 +191,6 @@ const returnResourcesWithVotes = (db, userID) => {
 
         const queryString2 = getAllComments();
         return db.query(queryString2).then(data => {
-          console.log(data.rows);
           for (const resource of resources) {
             resource.upvote = false;
             resource.downvote = false;
@@ -244,9 +243,6 @@ const returnResourcesWithVotes = (db, userID) => {
           const queryString3 = getAllComments();
           return db.query(queryString3).then(data => {
             for (const resource of resources) {
-              resource.upvote = false;
-              resource.downvote = false;
-              resource.add_to_my_resources = false;
               let totalUpvotes = 0;
               let totalDownvotes = 0;
               for (const comment of data.rows) {
@@ -262,6 +258,7 @@ const returnResourcesWithVotes = (db, userID) => {
               resource.total_upvotes = totalUpvotes;
               resource.total_downvotes = totalDownvotes;
             }
+            console.log(resources);
             return resources;
           });
         });
@@ -352,6 +349,7 @@ module.exports = db => {
   });
 
   router.post("/upvote/:id", async (req, res) => {
+    console.log("upvoting");
     const resourceID = parseInt(req.params.id);
     const userID = req.session.user_id;
     const isValidVote = await voteResource(db, userID, resourceID, "upvote");
@@ -363,6 +361,7 @@ module.exports = db => {
   });
 
   router.post("/downvote/:id", async (req, res) => {
+    console.log("downvoting");
     const resourceID = parseInt(req.params.id);
     const userID = req.session.user_id;
     const isValidVote = await voteResource(db, userID, resourceID, "downvote");
