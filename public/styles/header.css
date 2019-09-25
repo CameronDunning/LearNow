@@ -22,6 +22,10 @@ header .logo {
   margin-left: 20px;
 }
 
+header .logo:hover {
+  text-decoration: none;
+}
+
 .navbar-nav {
   margin-right: 20px;
 }
