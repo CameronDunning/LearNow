@@ -31,9 +31,9 @@ const createNewCategory = category => {
 const createNewResource = (values, userID, metadata) => {
   const queryString = `
     INSERT INTO resources
-      (user_id, title, link, description, date_created, url_title, url_author, url_description, cover_photo_url)  )
+      (user_id, title, link, description, date_created, url_title, url_author, url_description, cover_photo_url)
     VALUES
-      ($1, $2, $3, $4, Now())
+      ($1, $2, $3, $4, Now(), $5, $6, $7, $8)
     RETURNING id;
     `;
   const returnValues = [
