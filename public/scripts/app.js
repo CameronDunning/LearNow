@@ -127,15 +127,26 @@ $("#search-category").on("submit", async function(event) {
 $("#newresource").on("submit", async function(event) {
   event.preventDefault();
   let formObject = await $(this).serializeObject();
-  console.log(formObject.link);
   try {
     $.ajax({
       url: `http://localhost:3000/api/urls`,
-      dataType: "JSON",
-      data: { longURL: formObject.link },
-      success: data => {
-        console.log(data);
-      }
+      type: "POST",
+      data: { longURL: formObject.link }
+    }).then(data => {
+      formObject.bitly_link = data;
+      console.log(formObject);
+      $.ajax({
+        url: `http://localhost:8080/api/input/`,
+        dataType: "JSON",
+        type: "POST",
+        data: {
+          link: formObject.link,
+          title: formObject.title,
+          description: formObject.description,
+          bitly_link: formObject.bitly_link,
+          category: formObject.category
+        }
+      });
     });
   } catch (err) {
     console.log(err);
