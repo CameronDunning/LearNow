@@ -150,6 +150,17 @@ $("#newresource").on("submit", async function(event) {
     });
   } catch (err) {
     console.log(err);
+    $.ajax({
+      url: `http://localhost:8080/api/input/`,
+      dataType: "JSON",
+      type: "POST",
+      data: {
+        link: formObject.link,
+        title: formObject.title,
+        description: formObject.description,
+        category: formObject.category
+      }
+    });
   }
 
   formObject.name = "You";
