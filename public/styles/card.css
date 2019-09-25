@@ -41,3 +41,7 @@
   transition: 0.3s ease;
   box-shadow: 0px 0px 12px 3px rgba(92, 64, 64, 0.2);
 }
+
+.add-to-my-resources .liked {
+  color: red;
+}

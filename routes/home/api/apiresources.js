@@ -77,20 +77,13 @@ const saveResource = (db, userID, resourceID) => {
   db.query(queryString, values);
 };
 
-const removeSavedResource = (db, userID, resourceID) => {
-  const queryString = `
-   DELETE FROM comments
-    WHERE user_id = $1 AND resource_id = $2;`;
-  const values = [userID, resourceID];
-  return [queryString, values];
-};
 const getLikedResources = userID => {
   const queryString = `
-  SELECT DISTINCT comments.resource_id as id, users.name, resources.* from resources
+  SELECT DISTINCT comments.resource_id as id, users.name, comments.add_to_my_resources, resources.* from resources
   JOIN comments ON resources.id = resource_id
   JOIN users ON resources.user_id = users.id
   WHERE comments.user_id = $1 AND add_to_my_resources = TRUE
-  GROUP BY resources.id, comments.resource_id, users.name;`;
+  GROUP BY resources.id, comments.resource_id, users.name, comments.add_to_my_resources;`;
   const values = [userID];
   return [queryString, values];
 };
@@ -253,13 +246,15 @@ module.exports = db => {
       res.json(data.rows);
     });
   });
-  //TODO: remove saved posts, not going through this request...
-  router.post("/my_liked_resources/remove/:id", async (req, res) => {
-    console.log("got em");
+  //Remove saved post (unsave a post)
+  router.delete("/my_liked_resources/:id", async (req, res) => {
     const resourceID = req.params.id;
     const userID = req.session.user_id;
-    const queryString1 = removeSavedResource(userID, resourceID);
-    return db.query(queryString1[0], queryString1[1]);
+    const queryString = `
+    DELETE FROM comments
+     WHERE user_id = $1 AND resource_id = $2;`;
+    const values = [userID, resourceID];
+    db.query(queryString, values).then(res.redirect("/my_liked_resources/:id"));
   });
 
   router.post("/my_liked_resources/:id", async (req, res) => {

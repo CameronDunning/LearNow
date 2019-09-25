@@ -37,9 +37,9 @@ const addResource = id => {
 
 const removeResource = id => {
   $.ajax({
-    url: `/api/my_liked_resources/remove/` + id,
+    url: `/api/my_liked_resources/` + id,
     dataType: "JSON",
-    type: "POST"
+    type: "DELETE"
   });
 };
 
@@ -78,6 +78,7 @@ const loadResources = async () => {
           const addedToResource = $(e.currentTarget).attr("data-activity");
           if (addedToResource === "false") {
             addResource(resourceID);
+            $(`.add-to-my-resources.${resourceID}`).addClass("liked");
             $(`.add-to-my-resources.${resourceID}`).attr(
               "data-activity",
               "true"
