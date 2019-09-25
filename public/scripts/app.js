@@ -67,6 +67,7 @@ const loadResources = async url => {
       dataType: "JSON",
       success: data => {
         renderResources(data);
+        console.log(data);
         $(".fa-arrow-up").on("click", e => {
           e.stopPropagation();
           const classListArray = e.currentTarget.classList;

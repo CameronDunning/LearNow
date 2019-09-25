@@ -17,10 +17,7 @@ CREATE TABLE resources
 
   url_title TEXT,
   url_author TEXT,
-  url_description TEXT,
-
-  total_upvotes INTEGER NOT NULL DEFAULT 0,
-  total_downvotes INTEGER NOT NULL DEFAULT 0
+  url_description TEXT
 );
 
 GRANT ALL PRIVILEGES ON TABLE resources TO labber;
