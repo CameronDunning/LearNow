@@ -183,13 +183,20 @@ function renderCategories(resources) {
 let counter = 0;
 const createResourceElement = resourceData => {
   const resource = `
-  <section class="resources card" id="${counter++}">
-    <div id="${resourceData.name}"></div>
-    <div id="${resourceData.id}"></div>
+  <section class="resources card" id="c${counter++}">
+    <div id="${escape(resourceData.name)}"></div>
+    <div id="${escape(resourceData.id)}"></div>
     <div class="resourceImg">
-      <img src="${escape(
-        resourceData.cover_photo_url ? resourceData.cover_photo_url : ""
-      )}" class = "card-img-top resource-img"></img>
+    <img src="${escape(
+      resourceData.cover_photo_url ? resourceData.cover_photo_url : ""
+    )}" class = "card-img-top resource-img"></img>
+      <div class="urlinfo hide" id="u${counter++}">
+        <p class= "url-title">${escape(resourceData["url_title"])}</p>
+        <p class = "url-description">${escape(
+          resourceData["url_description"]
+        )}</p>
+        <p class = "url-link">${escape(resourceData.link)}"</p>
+      </div>
     </div>
     <div class='textbody card-body'>
       <h5 class = 'card-title'>${escape(resourceData.title)}</h5>
@@ -237,6 +244,25 @@ function loadModal() {
       .children(".description")
       .text();
 
+    let urlTitle = $(this)
+      .children(".resourceImg")
+      .children(".urlinfo")
+      .children(".url-title")
+      .text();
+
+    let urlDescription = $(this)
+      .children(".resourceImg")
+      .children(".urlinfo")
+      .children(".url-description")
+      .text();
+
+    let urlLink = $(this)
+      .children(".resourceImg")
+      .children(".urlinfo")
+      .children(".url-link")
+      .text();
+
+    console.log(urlLink);
     $("#modal-clicked-resource").on("show.bs.modal", function() {
       let resourceID = e.currentTarget.children[1].id;
       $(".resource-modal-title").text(title);
@@ -245,9 +271,8 @@ function loadModal() {
       $("#resource-id").removeClass();
       $("#resource-id").addClass(resourceID);
       $(".modal-description").text(description);
-
       $("#resource-owner").text(e.currentTarget.children[0].id);
-
+      console.log($(".modal-body").children($(".clicked-url-link")));
       $(".close-button").on("click", () => {
         $("#modal-clicked-resource").modal("hide");
       });
@@ -257,6 +282,14 @@ function loadModal() {
     loadComments(resourceID);
   });
 }
+
+const urlPreview = (urlTitle, urlDescription) => {
+  return (urlcontent = `
+  <div class = "url-preview-container">
+  <h5 class= "url-preview-title>${escape(urlTitle)}</h5>
+  <p class= "url-preview-description>${escape(urlDescription)}</p>
+  </div>`);
+};
 
 async function loadComments(resourceid) {
   try {
