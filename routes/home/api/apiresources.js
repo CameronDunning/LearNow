@@ -221,9 +221,10 @@ const returnResourcesWithVotes = (db, userID) => {
 
 module.exports = db => {
   router.post("/input", async (req, res) => {
+    console.log("received request");
     const userID = req.session.user_id;
     const scrapeData = await getMetaData(req.body.link);
-
+    console.log("received after scrape");
     // make query to show resources based on category
     // returns an OBJECT of all the categories that already exist
     const queryString1 = categoriesThatAlreadyExist(req.body.category);
