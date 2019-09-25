@@ -76,9 +76,6 @@ const loadResources = async () => {
               "data-activity",
               "true"
             );
-            // $item = $($(".arrows").children()[0]);
-            // $item.removeClass("false");
-            // $item.addClass("true");
           }
         });
       }
