@@ -36,6 +36,7 @@ const addResource = id => {
   });
 };
 
+<<<<<<< HEAD
 const loadCategories = () => {
   try {
     $.ajax({
@@ -50,6 +51,16 @@ const loadCategories = () => {
     console.log(err);
   }
 };
+=======
+const removeResource = id => {
+  $.ajax({
+    url: `/api/my_liked_resources/` + id,
+    dataType: "JSON",
+    type: "DELETE"
+  });
+};
+
+>>>>>>> e9bfa4c8b43c8da1c6c4ebf0e5ad20ae4dbc2a95
 //Initial loading of resources
 //loadResources makes get request to our API that queries the DB and returns a json object
 const loadResources = async url => {
@@ -60,6 +71,7 @@ const loadResources = async url => {
       success: data => {
         renderResources(data);
         $(".fa-arrow-up").on("click", e => {
+          e.stopPropagation();
           const classListArray = e.currentTarget.classList;
           const resourceID = classListArray[3];
           const upvoted = $(e.currentTarget).attr("data-upvote");
@@ -70,6 +82,7 @@ const loadResources = async url => {
           }
         });
         $(".fa-arrow-down").on("click", e => {
+          e.stopPropagation();
           const classListArray = e.currentTarget.classList;
           const resourceID = classListArray[3];
           const downvoted = $(e.currentTarget).attr("data-downvote");
@@ -79,7 +92,8 @@ const loadResources = async url => {
             $(`.upvote.${resourceID}`).attr("data-upvote", "false");
           }
         });
-        $(".fa-plus").on("click", e => {
+        $(".add-to-my-resources").on("click", e => {
+          e.stopPropagation();
           const classListArray = e.currentTarget.classList;
           const resourceID = classListArray[3];
           console.log(resourceID);
@@ -89,6 +103,12 @@ const loadResources = async url => {
             $(`.add-to-my-resources.${resourceID}`).attr(
               "data-activity",
               "true"
+            );
+          } else if (addedToResource === "true") {
+            removeResource(resourceID);
+            $(`.add-to-my-resources.${resourceID}`).attr(
+              "data-activity",
+              "false"
             );
           }
         });

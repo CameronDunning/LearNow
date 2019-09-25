@@ -1,6 +1,6 @@
 <header>
   <div class="header-container">
-     <a class="logo" href="/"> <h2 class="logo">LearNow </h2></a>
+    <a class="logo" href="/"> <h2 class="logo">LearNow</h2></a>
 
     <div>
       <ul class="navbar-nav">
@@ -13,20 +13,17 @@
             aria-haspopup="true"
             aria-expanded="false"
           >
-          <!-- false should be user_id, but it's not loading properly -->
-            <% if (user_id) { %>
-              Action
+            <!-- false should be user_id, but it's not loading properly -->
+            <% if (user_id) { %> <%=user_name %>
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
             <a class="dropdown-item" href="/u/<%=user_id%>">Profile</a>
             <a class="dropdown-item" href="/logout">Log out</a>
           </div>
           <% } else { %>
-            Action
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <a class="dropdown-item" href="/login">Login</a>
-            <a class="dropdown-item" href="/register">Register</a>
+          <div class="login-links">
+            <a href="/login">Login</a>
+            <a href="/register">Register</a>
           </div>
           <% } %>
         </li>

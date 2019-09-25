@@ -61,7 +61,7 @@ const createNewResourceJoinCategory = (body, userID, categoryID, db) => {
 
 const getUserResources = userID => {
   const queryString = `
-    SELECT *, users.name FROM resources
+    SELECT resources.*, users.name FROM resources
     JOIN users ON resources.user_id=users.id
     WHERE user_id = $1
     `;
@@ -72,18 +72,19 @@ const getUserResources = userID => {
 const saveResource = (db, userID, resourceID) => {
   const queryString = `
     INSERT INTO comments (user_id, resource_id, add_to_my_resources, date_created)
-    VALUES ($1, $2, TRUE, NOW())`;
+    VALUES ($1, $2, TRUE, NOW())
+    `;
   const values = [userID, resourceID];
   db.query(queryString, values);
 };
 
 const getLikedResources = userID => {
   const queryString = `
-  SELECT DISTINCT comments.resource_id as id, users.name, resources.* from resources
+  SELECT DISTINCT comments.resource_id as id, users.name, comments.add_to_my_resources, comments.upvote, comments.downvote, resources.* from resources
   JOIN comments ON resources.id = resource_id
   JOIN users ON resources.user_id = users.id
   WHERE comments.user_id = $1 AND add_to_my_resources = TRUE
-  GROUP BY resources.id, comments.resource_id, users.name;`;
+  GROUP BY resources.id, comments.resource_id, users.name, comments.add_to_my_resources, comments.upvote, comments.downvote;`;
   const values = [userID];
   return [queryString, values];
 };
@@ -245,6 +246,16 @@ module.exports = db => {
       res.json(data.rows);
     });
   });
+  //Remove saved post (unsave a post)
+  router.delete("/my_liked_resources/:id", async (req, res) => {
+    const resourceID = req.params.id;
+    const userID = req.session.user_id;
+    const queryString = `
+    DELETE FROM comments
+     WHERE user_id = $1 AND resource_id = $2;`;
+    const values = [userID, resourceID];
+    db.query(queryString, values).then(res.redirect("/my_resources"));
+  });
 
   router.post("/my_liked_resources/:id", async (req, res) => {
     const resourceID = req.params.id;
@@ -256,6 +267,7 @@ module.exports = db => {
       res.sendStatus(408);
     }
   });
+
   router.post("/upvote/:id", async (req, res) => {
     const resourceID = parseInt(req.params.id);
     const userID = req.session.user_id;
