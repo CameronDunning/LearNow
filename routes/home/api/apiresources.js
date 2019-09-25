@@ -61,7 +61,7 @@ const createNewResourceJoinCategory = (body, userID, categoryID, db) => {
 
 const getUserResources = userID => {
   const queryString = `
-    SELECT *, users.name FROM resources
+    SELECT resources.*, users.name FROM resources
     JOIN users ON resources.user_id=users.id
     WHERE user_id = $1
     `;
