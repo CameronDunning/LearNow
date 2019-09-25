@@ -146,14 +146,11 @@ const createResourceElement = resourceData => {
       <p class="resource-timestamp">${resourceData.date_created} </p>
       <form>
         <div class="arrows">
-          <i class="fas fa-plus add-to-my-resources ${resourceData.id}
-          add-to-my-resources-${resourceData.add_to_my_resources}"
+          <i class="fas fa-plus add-to-my-resources ${resourceData.id}"
           data-activity = ${resourceData.add_to_my_resources}></i>
-          <i class="fas fa-arrow-up upvote ${resourceData.id}
-          upvote-${resourceData.upvote}"
+          <i class="fas fa-arrow-up upvote ${resourceData.id}"
           data-upvote = ${resourceData.upvote} id="up-vote"></i>
-          <i class="fas fa-arrow-down downvote ${resourceData.id}
-          downvote-${resourceData.downvote}"
+          <i class="fas fa-arrow-down downvote ${resourceData.id}"
           data-downvote = ${resourceData.downvote} id="down-vote"></i>
         </div>
     </form>
