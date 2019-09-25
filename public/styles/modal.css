@@ -8,15 +8,16 @@
   max-height: 40%;
   left: 100px;
   padding: 1em;
-}
-
-.modal-backdrop {
-  z-index: -1;
+  justify-content: space-between;
 }
 
 /*NEW RESOURCES */
 #modal-create-new {
   margin-top: 2em;
+}
+
+#modal-create-new .modal-backdrop {
+  z-index: 1;
 }
 
 #modal-create-new .new-resource-container {
