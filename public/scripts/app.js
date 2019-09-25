@@ -80,6 +80,7 @@ const loadResources = async url => {
           const resourceID = classListArray[3];
           console.log(resourceID);
           const addedToResource = $(e.currentTarget).attr("data-activity");
+
           if (addedToResource === "false") {
             addResource(resourceID);
             $(`.add-to-my-resources.${resourceID}`).attr(

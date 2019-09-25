@@ -3,6 +3,8 @@ const router = express.Router();
 const bodyParser = require("body-parser");
 router.use(bodyParser.urlencoded({ extended: true }));
 
+const getMetaData = require("./metadata");
+
 // Functions
 // New Resource Functions
 
@@ -26,15 +28,24 @@ const createNewCategory = category => {
   return [queryString, [category]];
 };
 
-const createNewResource = (values, userID) => {
+const createNewResource = (values, userID, metadata) => {
   const queryString = `
     INSERT INTO resources
-      (user_id, title, link, description, date_created)
+      (user_id, title, link, description, date_created, url_title, url_author, url_description, cover_photo_url)  )
     VALUES
       ($1, $2, $3, $4, Now())
     RETURNING id;
     `;
-  const returnValues = [userID, values.title, values.link, values.description];
+  const returnValues = [
+    userID,
+    values.title,
+    values.link,
+    values.description,
+    metadata.title,
+    metadata.author,
+    metadata.description,
+    metadata.image
+  ];
   return [queryString, returnValues];
 };
 
@@ -49,9 +60,15 @@ const joinResourceCategory = (resourceID, categoryID) => {
   return [queryString, values];
 };
 
-const createNewResourceJoinCategory = (body, userID, categoryID, db) => {
+const createNewResourceJoinCategory = (
+  body,
+  userID,
+  categoryID,
+  scrapeData,
+  db
+) => {
   // returns new resource ID
-  const queryString3 = createNewResource(body, userID);
+  const queryString3 = createNewResource(body, userID, scrapeData);
   db.query(queryString3[0], queryString3[1]).then(data => {
     // join the category to the resource in the category_resource table
     const queryString4 = joinResourceCategory(data.rows[0].id, categoryID);
@@ -203,8 +220,10 @@ const returnResourcesWithVotes = (db, userID) => {
 };
 
 module.exports = db => {
-  router.post("/input", (req, res) => {
+  router.post("/input", async (req, res) => {
     const userID = req.session.user_id;
+    const scrapeData = await getMetaData(req.body.link);
+
     // make query to show resources based on category
     // returns an OBJECT of all the categories that already exist
     const queryString1 = categoriesThatAlreadyExist(req.body.category);
@@ -219,13 +238,25 @@ module.exports = db => {
           // Save the new category ID for joining with resource
           const categoryID = data.rows[0].id;
 
-          createNewResourceJoinCategory(req.body, userID, categoryID, db);
+          createNewResourceJoinCategory(
+            req.body,
+            userID,
+            categoryID,
+            scrapeData,
+            db
+          );
         });
       } else {
         // Save the new category ID for joining with resource
         const categoryID = data.rows[0].id;
 
-        createNewResourceJoinCategory(req.body, userID, categoryID, db);
+        createNewResourceJoinCategory(
+          req.body,
+          userID,
+          categoryID,
+          scrapeData,
+          db
+        );
       }
     });
   });
@@ -349,3 +380,5 @@ module.exports = db => {
 
   return router;
 };
+
+//grabbing metadata
