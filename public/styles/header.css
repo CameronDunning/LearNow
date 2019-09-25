@@ -39,6 +39,16 @@ header .logo:hover {
   color: maroon;
 }
 
+.login-links {
+  padding-bottom: 3vh;
+}
+
+.login-links a {
+  margin-left: 10px;
+  margin-right: 10px;
+  color: maroon;
+}
+
 #user-settings {
   background-color: white;
   color: black;
