@@ -306,20 +306,25 @@ module.exports = db => {
     db.query(queryString, values).catch(err => console.log(err));
   });
 
-  router.get("/:category", (req, res) => {
-    const category = req.params.category.toLowerCase();
+  router.get("/categories", (req, res) => {
+    //const category = req.params.category.toLowerCase();
     //make query to show resources based on category
+    // let queryString = `
+    //   SELECT resources.*, users.id as user_resource_upload, users.name FROM resources JOIN users ON
+    //   resources.user_id=users.id
+    //   LIMIT 20;
+    //   `;
+
     let queryString = `
-      SELECT resources.*, users.id as user_resource_upload, users.name FROM resources JOIN users ON
-      resources.user_id=users.id
+      SELECT * FROM categories
       LIMIT 20;
       `;
-    let values = [`%${category}%`];
+    //let values = [`%${category}%`];
 
     //returns the rows of the query
     //send data into templatevars then render
 
-    db.query(queryString, values)
+    db.query(queryString)
       .then(data => res.json(data.rows))
       .catch(err => console.log(err));
   });

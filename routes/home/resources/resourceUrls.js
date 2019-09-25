@@ -13,13 +13,13 @@ const getCommentsByUser = userID => {
 
 const returnResourcesWithVotes = (db, userID, category) => {
   const queryString = `
-  SELECT resources.*, users.name, categories.name as category FROM resources JOIN users ON
+  SELECT DISTINCT resources.*, users.name, categories.name as category FROM resources JOIN users ON
   resources.user_id=users.id
   JOIN category_resource ON 
   category_resource.resource_id=resources.id
   JOIN categories ON
   category_resource.category_id=categories.id
-  WHERE categories.name like $1
+  WHERE categories.name like $1 or resources.title like $1
   ORDER BY resources.id
   LIMIT 10;
   `;
