@@ -257,7 +257,6 @@ module.exports = db => {
       res.sendStatus(408);
     }
   });
-
   router.post("/upvote/:id", async (req, res) => {
     const resourceID = parseInt(req.params.id);
     const userID = req.session.user_id;
