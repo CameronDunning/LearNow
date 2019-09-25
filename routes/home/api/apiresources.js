@@ -79,11 +79,11 @@ const saveResource = (db, userID, resourceID) => {
 
 const getLikedResources = userID => {
   const queryString = `
-  SELECT DISTINCT comments.resource_id as id, users.name, comments.add_to_my_resources, resources.* from resources
+  SELECT DISTINCT comments.resource_id as id, users.name, comments.add_to_my_resources, comments.upvote, comments.downvote, resources.* from resources
   JOIN comments ON resources.id = resource_id
   JOIN users ON resources.user_id = users.id
   WHERE comments.user_id = $1 AND add_to_my_resources = TRUE
-  GROUP BY resources.id, comments.resource_id, users.name, comments.add_to_my_resources;`;
+  GROUP BY resources.id, comments.resource_id, users.name, comments.add_to_my_resources, comments.upvote, comments.downvote;`;
   const values = [userID];
   return [queryString, values];
 };
@@ -253,7 +253,7 @@ module.exports = db => {
     DELETE FROM comments
      WHERE user_id = $1 AND resource_id = $2;`;
     const values = [userID, resourceID];
-    db.query(queryString, values).then(res.redirect("/my_liked_resources/:id"));
+    db.query(queryString, values).then(res.redirect("/my_resources"));
   });
 
   router.post("/my_liked_resources/:id", async (req, res) => {

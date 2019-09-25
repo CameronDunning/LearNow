@@ -53,6 +53,7 @@ const loadResources = async url => {
       success: data => {
         renderResources(data);
         $(".fa-arrow-up").on("click", e => {
+          e.stopPropagation();
           const classListArray = e.currentTarget.classList;
           const resourceID = classListArray[3];
           const upvoted = $(e.currentTarget).attr("data-upvote");
@@ -63,6 +64,7 @@ const loadResources = async url => {
           }
         });
         $(".fa-arrow-down").on("click", e => {
+          e.stopPropagation();
           const classListArray = e.currentTarget.classList;
           const resourceID = classListArray[3];
           const downvoted = $(e.currentTarget).attr("data-downvote");
@@ -72,14 +74,14 @@ const loadResources = async url => {
             $(`.upvote.${resourceID}`).attr("data-upvote", "false");
           }
         });
-        $(".fa-plus").on("click", e => {
+        $(".add-to-my-resources").on("click", e => {
+          e.stopPropagation();
           const classListArray = e.currentTarget.classList;
           const resourceID = classListArray[3];
           console.log(resourceID);
           const addedToResource = $(e.currentTarget).attr("data-activity");
           if (addedToResource === "false") {
             addResource(resourceID);
-            $(`.add-to-my-resources.${resourceID}`).addClass("liked");
             $(`.add-to-my-resources.${resourceID}`).attr(
               "data-activity",
               "true"
