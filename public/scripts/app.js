@@ -1,9 +1,5 @@
 $(document).ready(() => {
   loadResources("http://localhost:8080/api/");
-  setTimeout(() => {
-    console.log("hello");
-    loadResources("http://localhost:8080/r/math");
-  }, 3000);
 });
 
 //serialize object is a helper function for jquery to convert .serialize to a useable object
@@ -89,6 +85,14 @@ const loadResources = async url => {
     console.log(err);
   }
 };
+
+$("#search-category").on("submit", async function(event) {
+  event.preventDefault();
+
+  let formObject = await $(this).serializeObject();
+  console.log(formObject);
+  loadResources("http://localhost:8080/r/" + formObject.categories);
+});
 
 $("#newresource").on("submit", async function(event) {
   let formObject = await $(this).serializeObject();
