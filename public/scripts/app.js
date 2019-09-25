@@ -195,7 +195,7 @@ const createResourceElement = resourceData => {
         <p class = "url-description">${escape(
           resourceData["url_description"]
         )}</p>
-        <p class = "url-link">${escape(resourceData.link)}"</p>
+        <p class = "url-link">${escape(resourceData.link)}</p>
       </div>
     </div>
     <div class='textbody card-body'>
@@ -272,7 +272,15 @@ function loadModal() {
       $("#resource-id").addClass(resourceID);
       $(".modal-description").text(description);
       $("#resource-owner").text(e.currentTarget.children[0].id);
-      console.log($(".modal-body").children($(".clicked-url-link")));
+      $(".modal-body").children(
+        $(".resource-content")
+          .children($(".clicked-url-link"))
+          .attr("href", urlLink)
+      );
+
+      $(".modal-url-title").text(urlTitle);
+      $(".modal-url-description").text(urlDescription);
+
       $(".close-button").on("click", () => {
         $("#modal-clicked-resource").modal("hide");
       });
