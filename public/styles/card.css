@@ -30,15 +30,15 @@
   display: inline-flex;
 }
 
-.arrows .add-to-my-resources-true {
+.arrows [data-activity="true"] {
   color: green;
 }
 
-.arrows .upvote-true {
+.arrows [data-upvote="true"] {
   color: green;
 }
 
-.arrows .downvote-true {
+.arrows [data-downvote="true"] {
   color: red;
 }
 
