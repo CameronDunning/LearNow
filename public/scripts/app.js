@@ -1,5 +1,6 @@
 $(document).ready(() => {
   loadResources("http://localhost:8080/api/");
+  loadCategories();
 });
 
 //serialize object is a helper function for jquery to convert .serialize to a useable object
@@ -35,6 +36,20 @@ const addResource = id => {
   });
 };
 
+const loadCategories = () => {
+  try {
+    $.ajax({
+      url: `http://localhost:8080/api/categories/`,
+      dataType: "JSON",
+      success: data => {
+        $("#pageSubmenu").empty();
+        renderCategories(data);
+      }
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
 const removeResource = id => {
   $.ajax({
     url: `/api/my_liked_resources/` + id,
@@ -152,7 +167,16 @@ function renderResources(resources) {
   );
   loadModal();
 }
-
+function renderCategories(resources) {
+  $("#pageSubmenu").empty();
+  resources.forEach(resource =>
+    $("#pageSubmenu").append(createCategoryElement(resource))
+  );
+  $(".categoryname").on("click", e => {
+    let category = e.currentTarget.innerHTML;
+    loadResources(`http://localhost:8080/r/${category}`);
+  });
+}
 //! THIS NEEDS TO BE STYLED AND FORMATTED ACCORDING TO UI FRAMEWORK
 //helper function that creates individual resource element
 // id= "resources" <-- kept in case this was used somewhere else
@@ -263,4 +287,13 @@ function createCommentElement(commentData) {
     </section>
   `;
   return $(comment);
+}
+
+function createCategoryElement(categoryData) {
+  const category = `
+  <li >
+    <button class="categoryname" >${categoryData.name}</button>
+  </li>
+  `;
+  return $(category);
 }
