@@ -35,6 +35,14 @@ const addResource = id => {
   });
 };
 
+const removeResource = id => {
+  $.ajax({
+    url: `/api/my_liked_resources/remove/` + id,
+    dataType: "JSON",
+    type: "POST"
+  });
+};
+
 //Initial loading of resources
 //loadResources makes get request to our API that queries the DB and returns a json object
 const loadResources = async () => {
@@ -73,6 +81,12 @@ const loadResources = async () => {
             $(`.add-to-my-resources.${resourceID}`).attr(
               "data-activity",
               "true"
+            );
+          } else if (addedToResource === "true") {
+            removeResource(resourceID);
+            $(`.add-to-my-resources.${resourceID}`).attr(
+              "data-activity",
+              "false"
             );
           }
         });

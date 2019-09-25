@@ -1,5 +1,6 @@
 //MY RESOURCES LOAD
 
+//defaults to my resources
 $(document).ready(() => {
   loadMyResources();
 });
@@ -23,7 +24,6 @@ async function loadMyResources() {
       dataType: "JSON",
       success: data => {
         $("#my-resources-container").empty();
-        console.log(data);
         renderMyResources(data);
       }
     });
@@ -48,6 +48,7 @@ function renderMyResources(resources) {
 }
 
 //Load LIKED resources
+
 $(".liked-resources-button").on("click", function() {
   loadLikedResources();
 });

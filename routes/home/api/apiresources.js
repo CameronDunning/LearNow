@@ -77,6 +77,13 @@ const saveResource = (db, userID, resourceID) => {
   db.query(queryString, values);
 };
 
+const removeSavedResource = (db, userID, resourceID) => {
+  const queryString = `
+   DELETE FROM comments
+    WHERE user_id = $1 AND resource_id = $2;`;
+  const values = [userID, resourceID];
+  return [queryString, values];
+};
 const getLikedResources = userID => {
   const queryString = `
   SELECT DISTINCT comments.resource_id as id, users.name, resources.* from resources
@@ -246,6 +253,14 @@ module.exports = db => {
       res.json(data.rows);
     });
   });
+  //TODO: remove saved posts, not going through this request...
+  router.post("/my_liked_resources/remove/:id", async (req, res) => {
+    console.log("got em");
+    const resourceID = req.params.id;
+    const userID = req.session.user_id;
+    const queryString1 = removeSavedResource(userID, resourceID);
+    return db.query(queryString1[0], queryString1[1]);
+  });
 
   router.post("/my_liked_resources/:id", async (req, res) => {
     const resourceID = req.params.id;
@@ -257,6 +272,7 @@ module.exports = db => {
       res.sendStatus(408);
     }
   });
+
   router.post("/upvote/:id", async (req, res) => {
     const resourceID = parseInt(req.params.id);
     const userID = req.session.user_id;
