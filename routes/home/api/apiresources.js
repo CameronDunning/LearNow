@@ -234,9 +234,9 @@ module.exports = db => {
     const userID = req.session.user_id;
     // get resources that the user has uploaded
     const queryString1 = getUserResources(userID);
-    db.query(queryString1[0], queryString1[1]).then(data =>
-      res.json(data.rows)
-    );
+    db.query(queryString1[0], queryString1[1]).then(data => {
+      res.json(data.rows);
+    });
   });
 
   router.get("/my_liked_resources", (req, res) => {
@@ -257,7 +257,6 @@ module.exports = db => {
       res.sendStatus(408);
     }
   });
-
   router.post("/upvote/:id", async (req, res) => {
     const resourceID = parseInt(req.params.id);
     const userID = req.session.user_id;

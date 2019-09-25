@@ -3,6 +3,7 @@
 $(document).ready(() => {
   loadMyResources();
 });
+
 $(".my-resources-button").on("click", function() {
   loadMyResources();
 });
@@ -31,10 +32,11 @@ async function loadMyResources() {
   }
 }
 
-$("form").on("submit", async function(event) {
+$("form").on("submit", async function() {
   let formObject = await $(this).serializeObject();
   $("#resourcescontainer").prepend(createResourceElement(formObject));
   $("#modal-create-new").modal("hide");
+  loadMyResources();
   loadModal();
 });
 

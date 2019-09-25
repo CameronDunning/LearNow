@@ -49,7 +49,6 @@ const loadResources = async () => {
           const resourceID = classListArray[3];
           const upvoted = $(e.currentTarget).attr("data-upvote");
           if (upvoted === "false") {
-            console.log("upvoted:", resourceID);
             upvote(resourceID);
             $(`.upvote.${resourceID}`).attr("data-upvote", "true");
             $(`.downvote.${resourceID}`).attr("data-downvote", "false");
@@ -60,7 +59,6 @@ const loadResources = async () => {
           const resourceID = classListArray[3];
           const downvoted = $(e.currentTarget).attr("data-downvote");
           if (downvoted === "false") {
-            console.log("downvoted:", resourceID);
             downvote(resourceID);
             $(`.downvote.${resourceID}`).attr("data-downvote", "true");
             $(`.upvote.${resourceID}`).attr("data-upvote", "false");
@@ -72,7 +70,6 @@ const loadResources = async () => {
           console.log(resourceID);
           const addedToResource = $(e.currentTarget).attr("data-activity");
           if (addedToResource === "false") {
-            console.log("added to resources: ", resourceID);
             addResource(resourceID);
             $(`.add-to-my-resources.${resourceID}`).attr(
               "data-activity",
@@ -151,7 +148,7 @@ const createResourceElement = resourceData => {
         <div class="arrows">
           <i class="fas fa-plus add-to-my-resources ${resourceData.id}
           add-to-my-resources-${resourceData.add_to_my_resources}"
-          data-activity = ${resourceData["add_to_my_resources"]}></i>
+          data-activity = ${resourceData.add_to_my_resources}></i>
           <i class="fas fa-arrow-up upvote ${resourceData.id}
           upvote-${resourceData.upvote}"
           data-upvote = ${resourceData.upvote} id="up-vote"></i>
@@ -192,7 +189,6 @@ function loadModal() {
 
     $("#modal-clicked-resource").on("show.bs.modal", function() {
       let resourceID = e.currentTarget.children[1].id;
-      console.log(resourceID);
       $(".resource-modal-title").text(title);
 
       $(".modal-body").children($(".clicked-resource-img").attr("src", image));
