@@ -1,5 +1,5 @@
 $(document).ready(() => {
-  loadResources();
+  loadResources("http://localhost:8080/api/");
 });
 
 //serialize object is a helper function for jquery to convert .serialize to a useable object
@@ -37,10 +37,10 @@ const addResource = id => {
 
 //Initial loading of resources
 //loadResources makes get request to our API that queries the DB and returns a json object
-const loadResources = async () => {
+const loadResources = async url => {
   try {
     await $.ajax({
-      url: "http://localhost:8080/api/",
+      url: url,
       dataType: "JSON",
       success: data => {
         renderResources(data);
@@ -86,6 +86,14 @@ const loadResources = async () => {
   }
 };
 
+$("#search-category").on("submit", async function(event) {
+  event.preventDefault();
+
+  let formObject = await $(this).serializeObject();
+  console.log(formObject);
+  loadResources("http://localhost:8080/r/" + formObject.categories);
+});
+
 $("#newresource").on("submit", async function(event) {
   let formObject = await $(this).serializeObject();
   formObject.name = "You";
@@ -121,6 +129,7 @@ $("#new-comment").on("submit", async function(event) {
 
 //Helper function for loadResources that renders the array of resources passed into it and appends it to the container
 function renderResources(resources) {
+  $("#resourcescontainer").empty();
   resources.forEach(resource =>
     $("#resourcescontainer").append(createResourceElement(resource))
   );
