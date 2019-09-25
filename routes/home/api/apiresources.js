@@ -248,16 +248,15 @@ module.exports = db => {
     const userID = req.session.user_id;
     // get resources that the user has uploaded
     const queryString1 = getUserResources(userID);
-    db.query(queryString1[0], queryString1[1]).then(data =>
-      res.json(data.rows)
-    );
+    db.query(queryString1[0], queryString1[1]).then(data => {
+      res.json(data.rows);
+    });
   });
 
   router.get("/my_liked_resources", (req, res) => {
     const userID = req.session.user_id;
     const queryString1 = getLikedResources(userID);
     db.query(queryString1[0], queryString1[1]).then(data => {
-      console.log("this is data from query", data);
       res.json(data.rows);
     });
   });
@@ -265,7 +264,6 @@ module.exports = db => {
   router.post("/my_liked_resources/:id", async (req, res) => {
     const resourceID = req.params.id;
     const userID = req.session.user_id;
-    console.log("im here");
     const isValid = await saveResource(db, userID, resourceID);
     if (isValid) {
       res.sendStatus(201);

@@ -7,15 +7,17 @@
 
 .resource-container .sidebar {
   grid-area: 1/1/4/2;
+  z-index: 1;
 }
 .my-resources-buttons {
   /* display: inline-flex; */
+  margin: 0 2em;
   grid-area: 2/2/3/3;
 }
-.resource-container .my-resource-container {
+.resource-container .my-resource-content {
   grid-area: 3/2/4/3;
 }
 
 #my-resources-container {
-  margin: 5em;
+  margin: 2em;
 }

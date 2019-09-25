@@ -10,6 +10,10 @@
   padding: 1em;
 }
 
+.modal-backdrop {
+  z-index: -1;
+}
+
 /*NEW RESOURCES */
 #modal-create-new {
   margin-top: 2em;
