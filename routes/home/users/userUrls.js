@@ -18,7 +18,10 @@ module.exports = db => {
   //edits users stuff
   router.put("/:user", (req, res) => {
     const { name, password } = req.body;
-    console.log("inside put req");
+    if (!name || !password) {
+      res.redirect("/u/" + req.params.user);
+    }
+    console.log1("inside put req");
     let updateQuery = `
     UPDATE users
     SET
