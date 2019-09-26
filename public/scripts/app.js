@@ -126,7 +126,10 @@ $("#search-category").on("submit", async function(event) {
 });
 
 $("#newresource").on("submit", async function(event) {
+  event.preventDefault();
+
   let formObject = await $(this).serializeObject();
+
   formObject.name = "You";
   formObject.date_created = "Just now";
   $("#resourcescontainer").append(createResourceElement(formObject));
