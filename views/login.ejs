@@ -4,9 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>LearNow - Register</title>
+    <title>Learn Now - Register</title>
 
     <!--External CSS-->
+
     <link
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
@@ -14,19 +15,36 @@
       crossorigin="anonymous"
     />
     <link
-      href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap"
+      href="https://fonts.googleapis.com/css?family=Roboto:100,400,700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Lobster&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://use.fontawesome.com/releases/v5.0.1/css/all.css"
       rel="stylesheet"
     />
     <!-- CSS -->
     <link rel="stylesheet" type="text/css" href="styles/login.css" />
-    <link rel="stylesheet" type="text/css" href="styles/header.css" />
+    <link rel="stylesheet" type="text/css" href="styles/register.css" />
   </head>
 
   <body>
-    <header>
-      <% include ./partials/header %>
-    </header>
-    <div class="container">
+    <div class="register-container">
+      <header class="login-header">
+        <h1 class="register-logo">
+          Learn Now
+        </h1>
+        <a class="btn btn-primary login" href="/register" role="button"
+          >Register</a
+        >
+      </header>
+      <div class="register-decor">
+        <span class="register-phrase">Welcome Back</span>
+        <img src="/assets/login.png" alt="login" width="400" height="400" />
+      </div>
       <div class="card login-form">
         <h1 class="login-title">Login</h1>
         <form method="POST" action="/login">
@@ -51,7 +69,12 @@
           <button type="submit" class="btn btn-primary login-button">
             Submit
           </button>
-          <p>New to LearNow? <a href="/register">Click here to register</a></p>
+          <% if (wrongLogin) { %>
+          <p class="error-msg">Check your email or password</p>
+          <% } %>
+          <p class="already">
+            Want to learn now? <a href="/register">Click here to register</a>
+          </p>
         </form>
       </div>
     </div>

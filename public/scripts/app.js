@@ -43,6 +43,7 @@ const loadCategories = () => {
       dataType: "JSON",
       success: data => {
         $("#pageSubmenu").empty();
+        data.unshift({ id: -1, name: "all" });
         renderCategories(data);
       }
     });
@@ -50,6 +51,7 @@ const loadCategories = () => {
     console.log(err);
   }
 };
+
 const removeResource = id => {
   $.ajax({
     url: `/api/my_liked_resources/` + id,
@@ -140,15 +142,13 @@ const loadResources = async url => {
       }
     });
   } catch (err) {
-    console.log(err);
+    console.log("Error:", err);
   }
 };
 
 $("#search-category").on("submit", async function(event) {
   event.preventDefault();
-
   let formObject = await $(this).serializeObject();
-  console.log(formObject);
   loadResources("http://localhost:8080/r/" + formObject.categories);
 });
 
@@ -187,23 +187,29 @@ $("#new-comment").on("submit", async function(event) {
 });
 
 //Helper function for loadResources that renders the array of resources passed into it and appends it to the container
-function renderResources(resources) {
+const renderResources = resources => {
   $("#resourcescontainer").empty();
   resources.forEach(resource =>
     $("#resourcescontainer").append(createResourceElement(resource))
   );
   loadModal();
-}
-function renderCategories(resources) {
+};
+
+const renderCategories = resources => {
   $("#pageSubmenu").empty();
   resources.forEach(resource =>
     $("#pageSubmenu").append(createCategoryElement(resource))
   );
   $(".categoryname").on("click", e => {
     let category = e.currentTarget.innerHTML;
-    loadResources(`http://localhost:8080/r/${category}`);
+    category.trim();
+    if (category.trim() == "all") {
+      loadResources(`http://localhost:8080/api`);
+    } else {
+      loadResources(`http://localhost:8080/r/${category}`);
+    }
   });
-}
+};
 //! THIS NEEDS TO BE STYLED AND FORMATTED ACCORDING TO UI FRAMEWORK
 //helper function that creates individual resource element
 // id= "resources" <-- kept in case this was used somewhere else

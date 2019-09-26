@@ -3,10 +3,12 @@
 //defaults to my resources
 $(document).ready(() => {
   loadMyResources();
+  loadCategories();
 });
 
 $(".my-resources-button").on("click", function() {
   loadMyResources();
+  loadCategories();
 });
 
 $.fn.serializeObject = function() {
@@ -51,6 +53,7 @@ function renderMyResources(resources) {
 
 $(".liked-resources-button").on("click", function() {
   loadLikedResources();
+  loadCategories();
 });
 
 const loadLikedResources = async () => {
