@@ -53,7 +53,7 @@ $(".liked-resources-button").on("click", function() {
   loadLikedResources();
 });
 
-async function loadLikedResources() {
+const loadLikedResources = () => {
   try {
     await $.ajax({
       url: "http://localhost:8080/api/my_liked_resources/",

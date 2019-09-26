@@ -209,6 +209,7 @@ const returnResourcesWithVotes = (db, userID) => {
             }
             resource.total_upvotes = totalUpvotes;
             resource.total_downvotes = totalDownvotes;
+            resource.net_votes = totalUpvotes - totalDownvotes;
           }
           return resources;
         });
@@ -257,6 +258,7 @@ const returnResourcesWithVotes = (db, userID) => {
               }
               resource.total_upvotes = totalUpvotes;
               resource.total_downvotes = totalDownvotes;
+              resource.net_votes = totalUpvotes - totalDownvotes;
             }
             console.log(resources);
             return resources;
