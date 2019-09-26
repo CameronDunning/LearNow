@@ -260,7 +260,6 @@ const returnResourcesWithVotes = (db, userID) => {
               resource.total_downvotes = totalDownvotes;
               resource.net_votes = totalUpvotes - totalDownvotes;
             }
-            console.log(resources);
             return resources;
           });
         });
@@ -317,6 +316,7 @@ module.exports = db => {
     // get resources that the user has uploaded
     const queryString1 = getUserResources(userID);
     db.query(queryString1[0], queryString1[1]).then(data => {
+      console.log(data.rows);
       res.json(data.rows);
     });
   });
