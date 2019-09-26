@@ -13,10 +13,11 @@ CREATE TABLE resources
   bitly_link VARCHAR(255),
   cover_photo_url VARCHAR(255),
   description TEXT,
-  date_created TIMESTAMP NOT NULL,
+  date_created TIMESTAMP NOT NULL DEFAULT Now(),
 
-  total_upvotes INTEGER NOT NULL DEFAULT 0,
-  total_downvotes INTEGER NOT NULL DEFAULT 0
+  url_title TEXT,
+  url_author TEXT,
+  url_description TEXT
 );
 
 GRANT ALL PRIVILEGES ON TABLE resources TO labber;

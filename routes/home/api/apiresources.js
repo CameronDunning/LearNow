@@ -3,6 +3,8 @@ const router = express.Router();
 const bodyParser = require("body-parser");
 router.use(bodyParser.urlencoded({ extended: true }));
 
+const getMetaData = require("./metadata");
+
 // Functions
 // New Resource Functions
 
@@ -26,15 +28,24 @@ const createNewCategory = category => {
   return [queryString, [category]];
 };
 
-const createNewResource = (values, userID) => {
+const createNewResource = (values, userID, metadata) => {
   const queryString = `
     INSERT INTO resources
-      (user_id, title, link, description, date_created)
+      (user_id, title, link, description, date_created, url_title, url_author, url_description, cover_photo_url)
     VALUES
-      ($1, $2, $3, $4, Now())
+      ($1, $2, $3, $4, Now(), $5, $6, $7, $8)
     RETURNING id;
     `;
-  const returnValues = [userID, values.title, values.link, values.description];
+  const returnValues = [
+    userID,
+    values.title,
+    values.link,
+    values.description,
+    metadata.title,
+    metadata.author,
+    metadata.description,
+    metadata.image
+  ];
   return [queryString, returnValues];
 };
 
@@ -49,9 +60,15 @@ const joinResourceCategory = (resourceID, categoryID) => {
   return [queryString, values];
 };
 
-const createNewResourceJoinCategory = (body, userID, categoryID, db) => {
+const createNewResourceJoinCategory = (
+  body,
+  userID,
+  categoryID,
+  scrapeData,
+  db
+) => {
   // returns new resource ID
-  const queryString3 = createNewResource(body, userID);
+  const queryString3 = createNewResource(body, userID, scrapeData);
   db.query(queryString3[0], queryString3[1]).then(data => {
     // join the category to the resource in the category_resource table
     const queryString4 = joinResourceCategory(data.rows[0].id, categoryID);
@@ -61,7 +78,7 @@ const createNewResourceJoinCategory = (body, userID, categoryID, db) => {
 
 const getUserResources = userID => {
   const queryString = `
-    SELECT *, users.name FROM resources
+    SELECT resources.*, users.name FROM resources
     JOIN users ON resources.user_id=users.id
     WHERE user_id = $1
     `;
@@ -72,18 +89,19 @@ const getUserResources = userID => {
 const saveResource = (db, userID, resourceID) => {
   const queryString = `
     INSERT INTO comments (user_id, resource_id, add_to_my_resources, date_created)
-    VALUES ($1, $2, TRUE, NOW())`;
+    VALUES ($1, $2, TRUE, NOW())
+    `;
   const values = [userID, resourceID];
   db.query(queryString, values);
 };
 
 const getLikedResources = userID => {
   const queryString = `
-  SELECT DISTINCT comments.resource_id as id, users.name, resources.* from resources
+  SELECT DISTINCT comments.resource_id as id, users.name, comments.add_to_my_resources, comments.upvote, comments.downvote, resources.* from resources
   JOIN comments ON resources.id = resource_id
   JOIN users ON resources.user_id = users.id
   WHERE comments.user_id = $1 AND add_to_my_resources = TRUE
-  GROUP BY resources.id, comments.resource_id, users.name;`;
+  GROUP BY resources.id, comments.resource_id, users.name, comments.add_to_my_resources, comments.upvote, comments.downvote;`;
   const values = [userID];
   return [queryString, values];
 };
@@ -137,7 +155,7 @@ const getResources = () => {
   SELECT resources.*, users.name FROM resources JOIN users ON
   resources.user_id=users.id
   ORDER BY resources.id
-  LIMIT 10;
+  LIMIT 30;
   `;
   return queryString;
 };
@@ -152,6 +170,14 @@ const getCommentsByUser = userID => {
   return [queryString, values];
 };
 
+const getAllComments = () => {
+  const queryString = `
+  SELECT *
+  FROM comments
+  `;
+  return queryString;
+};
+
 const returnResourcesWithVotes = (db, userID) => {
   if (!userID) {
     // select first ten resources
@@ -161,12 +187,32 @@ const returnResourcesWithVotes = (db, userID) => {
     return db
       .query(queryString1)
       .then(data => {
-        for (const resource of data.rows) {
-          resource.upvote = false;
-          resource.downvote = false;
-          resource.add_to_my_resources = false;
-        }
-        return data.rows;
+        let resources = data.rows;
+
+        const queryString2 = getAllComments();
+        return db.query(queryString2).then(data => {
+          for (const resource of resources) {
+            resource.upvote = false;
+            resource.downvote = false;
+            resource.add_to_my_resources = false;
+            let totalUpvotes = 0;
+            let totalDownvotes = 0;
+            for (const comment of data.rows) {
+              if (comment.resource_id === resource.id) {
+                if (comment.upvote) {
+                  totalUpvotes++;
+                }
+                if (comment.downvote) {
+                  totalDownvotes++;
+                }
+              }
+            }
+            resource.total_upvotes = totalUpvotes;
+            resource.total_downvotes = totalDownvotes;
+            resource.net_votes = totalUpvotes - totalDownvotes;
+          }
+          return resources;
+        });
       })
       .catch(err => console.log(err));
   } else {
@@ -194,7 +240,28 @@ const returnResourcesWithVotes = (db, userID) => {
               }
             }
           }
-          return resources;
+          // return resources;
+          const queryString3 = getAllComments();
+          return db.query(queryString3).then(data => {
+            for (const resource of resources) {
+              let totalUpvotes = 0;
+              let totalDownvotes = 0;
+              for (const comment of data.rows) {
+                if (comment.resource_id === resource.id) {
+                  if (comment.upvote) {
+                    totalUpvotes++;
+                  }
+                  if (comment.downvote) {
+                    totalDownvotes++;
+                  }
+                }
+              }
+              resource.total_upvotes = totalUpvotes;
+              resource.total_downvotes = totalDownvotes;
+              resource.net_votes = totalUpvotes - totalDownvotes;
+            }
+            return resources;
+          });
         });
       })
       .catch(err => console.log(err));
@@ -202,8 +269,11 @@ const returnResourcesWithVotes = (db, userID) => {
 };
 
 module.exports = db => {
-  router.post("/input", (req, res) => {
+  router.post("/input", async (req, res) => {
+    console.log("received request");
     const userID = req.session.user_id;
+    const scrapeData = await getMetaData(req.body.link);
+    console.log("received after scrape");
     // make query to show resources based on category
     // returns an OBJECT of all the categories that already exist
     const queryString1 = categoriesThatAlreadyExist(req.body.category);
@@ -218,16 +288,27 @@ module.exports = db => {
           // Save the new category ID for joining with resource
           const categoryID = data.rows[0].id;
 
-          createNewResourceJoinCategory(req.body, userID, categoryID, db);
+          createNewResourceJoinCategory(
+            req.body,
+            userID,
+            categoryID,
+            scrapeData,
+            db
+          );
         });
       } else {
         // Save the new category ID for joining with resource
         const categoryID = data.rows[0].id;
 
-        createNewResourceJoinCategory(req.body, userID, categoryID, db);
+        createNewResourceJoinCategory(
+          req.body,
+          userID,
+          categoryID,
+          scrapeData,
+          db
+        );
       }
     });
-    res.sendStatus(201);
   });
 
   router.get("/my_resources", (req, res) => {
@@ -235,7 +316,28 @@ module.exports = db => {
     // get resources that the user has uploaded
     const queryString1 = getUserResources(userID);
     db.query(queryString1[0], queryString1[1]).then(data => {
-      res.json(data.rows);
+      let resources = data.rows;
+      const queryString3 = getAllComments();
+      db.query(queryString3).then(data => {
+        for (const resource of resources) {
+          let totalUpvotes = 0;
+          let totalDownvotes = 0;
+          for (const comment of data.rows) {
+            if (comment.resource_id === resource.id) {
+              if (comment.upvote) {
+                totalUpvotes++;
+              }
+              if (comment.downvote) {
+                totalDownvotes++;
+              }
+            }
+          }
+          resource.total_upvotes = totalUpvotes;
+          resource.total_downvotes = totalDownvotes;
+          resource.net_votes = totalUpvotes - totalDownvotes;
+        }
+        res.json(resources);
+      });
     });
   });
 
@@ -243,8 +345,39 @@ module.exports = db => {
     const userID = req.session.user_id;
     const queryString1 = getLikedResources(userID);
     db.query(queryString1[0], queryString1[1]).then(data => {
-      res.json(data.rows);
+      let resources = data.rows;
+      const queryString3 = getAllComments();
+      db.query(queryString3).then(data => {
+        for (const resource of resources) {
+          let totalUpvotes = 0;
+          let totalDownvotes = 0;
+          for (const comment of data.rows) {
+            if (comment.resource_id === resource.id) {
+              if (comment.upvote) {
+                totalUpvotes++;
+              }
+              if (comment.downvote) {
+                totalDownvotes++;
+              }
+            }
+          }
+          resource.total_upvotes = totalUpvotes;
+          resource.total_downvotes = totalDownvotes;
+          resource.net_votes = totalUpvotes - totalDownvotes;
+        }
+        res.json(resources);
+      });
     });
+  });
+  //Remove saved post (unsave a post)
+  router.delete("/my_liked_resources/:id", async (req, res) => {
+    const resourceID = req.params.id;
+    const userID = req.session.user_id;
+    const queryString = `
+    DELETE FROM comments
+    WHERE user_id = $1 AND resource_id = $2;`;
+    const values = [userID, resourceID];
+    db.query(queryString, values).then(res.redirect("/my_resources"));
   });
 
   router.post("/my_liked_resources/:id", async (req, res) => {
@@ -257,7 +390,9 @@ module.exports = db => {
       res.sendStatus(408);
     }
   });
+
   router.post("/upvote/:id", async (req, res) => {
+    console.log("upvoting");
     const resourceID = parseInt(req.params.id);
     const userID = req.session.user_id;
     const isValidVote = await voteResource(db, userID, resourceID, "upvote");
@@ -269,6 +404,7 @@ module.exports = db => {
   });
 
   router.post("/downvote/:id", async (req, res) => {
+    console.log("downvoting");
     const resourceID = parseInt(req.params.id);
     const userID = req.session.user_id;
     const isValidVote = await voteResource(db, userID, resourceID, "downvote");
@@ -307,20 +443,25 @@ module.exports = db => {
     db.query(queryString, values).catch(err => console.log(err));
   });
 
-  router.get("/:category", (req, res) => {
-    const category = req.params.category.toLowerCase();
+  router.get("/categories", (req, res) => {
+    //const category = req.params.category.toLowerCase();
     //make query to show resources based on category
+    // let queryString = `
+    //   SELECT resources.*, users.id as user_resource_upload, users.name FROM resources JOIN users ON
+    //   resources.user_id=users.id
+    //   LIMIT 20;
+    //   `;
+
     let queryString = `
-      SELECT resources.*, users.id as user_resource_upload, users.name FROM resources JOIN users ON
-      resources.user_id=users.id
-      LIMIT 10;
+      SELECT * FROM categories
+      LIMIT 20;
       `;
-    let values = [`%${category}%`];
+    //let values = [`%${category}%`];
 
     //returns the rows of the query
     //send data into templatevars then render
 
-    db.query(queryString, values)
+    db.query(queryString)
       .then(data => res.json(data.rows))
       .catch(err => console.log(err));
   });
@@ -338,3 +479,5 @@ module.exports = db => {
 
   return router;
 };
+
+//grabbing metadata

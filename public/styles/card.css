@@ -24,8 +24,29 @@
 .resource-stats .resource-timestamp {
   font-style: italic;
 }
+
 .arrows {
   display: inline-flex;
+}
+
+.arrows [data-activity="true"] {
+  color: green;
+}
+
+.arrows [data-upvote="true"] {
+  color: green;
+}
+
+.arrows [data-downvote="true"] {
+  color: red;
+}
+
+.arrows [data-netVote="true"] {
+  color: green;
+}
+
+.arrows [data-netVote="false"] {
+  color: red;
 }
 
 .arrows:hover {
@@ -36,8 +57,16 @@
   padding: 0 10px;
 }
 
+.arrows p {
+  padding: 0 10px;
+}
+
 .resources:hover {
   transform: scale(1.02);
   transition: 0.3s ease;
   box-shadow: 0px 0px 12px 3px rgba(92, 64, 64, 0.2);
+}
+
+.hide {
+  display: none;
 }

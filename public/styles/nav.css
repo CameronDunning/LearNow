@@ -1,5 +1,4 @@
 .sidebar {
-  margin-top: 8vh;
   width: 60px;
   height: 100%;
   background-color: #212121;
@@ -7,6 +6,48 @@
   opacity: 0.6;
   position: fixed;
   left: 0;
+  transition: 0.4s ease;
+}
+
+/*LOGO*/
+.sidebar:hover .logo-container {
+  margin-left: 10px;
+}
+.sidebar .learn-container {
+  display: flex;
+  align-content: center;
+  padding: 0 10px;
+  margin-top: 1em;
+}
+
+.sidebar .now-container {
+  display: flex;
+  align-content: center;
+  padding: 0 20px;
+  margin-top: -15px;
+  transition: 0.4s ease-out;
+}
+
+.sidebar .logo-hover-show {
+  display: none;
+}
+.sidebar:hover .logo-hover-show {
+  display: block;
+  font-size: 40px;
+}
+
+.sidebar:hover .learn-container {
+  padding: 0 10px;
+  transition: 0.5s ease-in;
+}
+.sidebar:hover .now-container {
+  padding: 0 60px;
+  transition: 0.3s ease-in;
+}
+
+.sidebar h1 {
+  color: white;
+  font-family: "Lobster", sans-serif;
 }
 
 .sidebar ul {
@@ -27,7 +68,11 @@
 }
 
 .sidebar ul:first-child {
-  margin-top: 2em;
+  margin-top: 4em;
+}
+
+.sidebar ul:nth-child(2) {
+  padding-top: 2em;
 }
 
 .sidebar i {
@@ -52,8 +97,14 @@
   width: 100%;
   margin-left: 60px;
 }
+
+.sidebar:hover #search-category {
+  width: 80%;
+}
+
 .sidebar:hover .hover-show {
   font-size: 12px;
   display: inline;
   margin-left: 10px;
+  transition: 0.3s ease;
 }

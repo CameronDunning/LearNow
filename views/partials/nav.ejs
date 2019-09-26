@@ -1,4 +1,19 @@
 <nav class="sidebar">
+  <div class="logo-container"><a href="/">
+    <div class="learn-container">
+      <h1>
+        L
+        <h1 class="logo-hover-show">earn</h1>
+      </h1>
+    </div>
+    <div class="now-container">
+      <h1>
+        N
+        <h1 class="logo-hover-show">ow</h1>
+      </h1>
+    </div>
+  </div></a>
+
   <ul>
     <i class="fas fa-plus fa-2x"
       ><li
@@ -16,8 +31,12 @@
 
     <i class="fas fa-search fa-2x" aria-hidden="true">
       <li class="hover-show">
-        <form class="form-inline md-form form-sm active-cyan-2 mt-2">
+        <form
+          id="search-category"
+          class="form-inline md-form form-sm active-cyan-2 mt-2"
+        >
           <input
+            name="categories"
             class="form-control form-control-sm mr-3 w-75"
             type="text"
             placeholder="Search"
@@ -26,7 +45,19 @@
         </form></li
     ></i>
 
-    <i class="fas fa-list-ul fa-2x"> <li class="hover-show">Categories</li></i>
+    <i class="fas fa-list-ul fa-2x">
+      <li class="hover-show">
+        <a
+          href="#pageSubmenu"
+          data-toggle="collapse"
+          aria-expanded="false"
+          class="dropdown-toggle"
+          >Categories
+        </a>
+      </li>
+    </i>
+
+    <ul class="collapse list-unstyled" id="pageSubmenu"></ul>
   </ul>
 </nav>
 

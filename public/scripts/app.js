@@ -1,5 +1,6 @@
 $(document).ready(() => {
-  loadResources();
+  loadResources("http://localhost:8080/api/");
+  loadCategories();
 });
 
 //serialize object is a helper function for jquery to convert .serialize to a useable object
@@ -35,44 +36,104 @@ const addResource = id => {
   });
 };
 
+const loadCategories = () => {
+  try {
+    $.ajax({
+      url: `http://localhost:8080/api/categories/`,
+      dataType: "JSON",
+      success: data => {
+        $("#pageSubmenu").empty();
+        renderCategories(data);
+      }
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
+const removeResource = id => {
+  $.ajax({
+    url: `/api/my_liked_resources/` + id,
+    dataType: "JSON",
+    type: "DELETE"
+  });
+};
+
 //Initial loading of resources
 //loadResources makes get request to our API that queries the DB and returns a json object
-const loadResources = async () => {
+const loadResources = async url => {
   try {
     await $.ajax({
-      url: "http://localhost:8080/api/",
+      url: url,
       dataType: "JSON",
       success: data => {
         renderResources(data);
+        $(".net-vote").on("click", e => e.stopPropagation());
         $(".fa-arrow-up").on("click", e => {
+          e.stopPropagation();
           const classListArray = e.currentTarget.classList;
           const resourceID = classListArray[3];
           const upvoted = $(e.currentTarget).attr("data-upvote");
+          const downvoted = $(`.downvote.${resourceID}`).attr("data-downvote");
           if (upvoted === "false") {
             upvote(resourceID);
+            let netVotes = parseInt($(`#net-vote-${resourceID}`).text());
+            if (downvoted === "false") {
+              netVotes++;
+            } else {
+              netVotes += 2;
+            }
+            if (netVotes === 0) {
+              $(`#net-vote-${resourceID}`).attr("data-netVote", "0");
+            } else if (netVotes > 0) {
+              $(`#net-vote-${resourceID}`).attr("data-netVote", "true");
+            }
+            $(`#net-vote-${resourceID}`).text(netVotes);
             $(`.upvote.${resourceID}`).attr("data-upvote", "true");
             $(`.downvote.${resourceID}`).attr("data-downvote", "false");
           }
         });
         $(".fa-arrow-down").on("click", e => {
+          e.stopPropagation();
           const classListArray = e.currentTarget.classList;
           const resourceID = classListArray[3];
           const downvoted = $(e.currentTarget).attr("data-downvote");
+          const upvoted = $(`.upvote.${resourceID}`).attr("data-upvote");
           if (downvoted === "false") {
             downvote(resourceID);
+            let netVotes = parseInt($(`#net-vote-${resourceID}`).text());
+            if (upvoted === "false") {
+              netVotes--;
+            } else {
+              netVotes -= 2;
+            }
+            if (netVotes === 0) {
+              $(`#net-vote-${resourceID}`).attr("data-netVote", "0");
+            } else if (netVotes < 0) {
+              $(`#net-vote-${resourceID}`).attr("data-netVote", "false");
+            }
+            $(`#net-vote-${resourceID}`).text(netVotes);
             $(`.downvote.${resourceID}`).attr("data-downvote", "true");
             $(`.upvote.${resourceID}`).attr("data-upvote", "false");
           }
         });
-        $("#resourcescontainer").on("click", ".add-to-my-resources", e => {
+        $(".add-to-my-resources").on("click", e => {
+          e.stopPropagation();
           const classListArray = e.currentTarget.classList;
           const resourceID = classListArray[3];
+          console.log(resourceID);
           const addedToResource = $(e.currentTarget).attr("data-activity");
+
           if (addedToResource === "false") {
             addResource(resourceID);
             $(`.add-to-my-resources.${resourceID}`).attr(
               "data-activity",
               "true"
+            );
+          } else if (addedToResource === "true") {
+            removeResource(resourceID);
+            $(`.add-to-my-resources.${resourceID}`).attr(
+              "data-activity",
+              "false"
             );
           }
         });
@@ -83,8 +144,18 @@ const loadResources = async () => {
   }
 };
 
+$("#search-category").on("submit", async function(event) {
+  event.preventDefault();
+
+  let formObject = await $(this).serializeObject();
+  console.log(formObject);
+  loadResources("http://localhost:8080/r/" + formObject.categories);
+});
+
 $("#newresource").on("submit", async function(event) {
   let formObject = await $(this).serializeObject();
+  formObject.name = "You";
+  formObject.date_created = "Just now";
   $("#resourcescontainer").append(createResourceElement(formObject));
   $("#modal-create-new").modal("hide");
   loadModal();
@@ -117,25 +188,48 @@ $("#new-comment").on("submit", async function(event) {
 
 //Helper function for loadResources that renders the array of resources passed into it and appends it to the container
 function renderResources(resources) {
+  $("#resourcescontainer").empty();
   resources.forEach(resource =>
     $("#resourcescontainer").append(createResourceElement(resource))
   );
   loadModal();
 }
-
+function renderCategories(resources) {
+  $("#pageSubmenu").empty();
+  resources.forEach(resource =>
+    $("#pageSubmenu").append(createCategoryElement(resource))
+  );
+  $(".categoryname").on("click", e => {
+    let category = e.currentTarget.innerHTML;
+    loadResources(`http://localhost:8080/r/${category}`);
+  });
+}
 //! THIS NEEDS TO BE STYLED AND FORMATTED ACCORDING TO UI FRAMEWORK
 //helper function that creates individual resource element
 // id= "resources" <-- kept in case this was used somewhere else
 let counter = 0;
 const createResourceElement = resourceData => {
+  let netVote = 0;
+  if (resourceData.net_votes > 0) {
+    netVote = true;
+  } else if (resourceData.net_votes < 0) {
+    netVote = false;
+  }
   const resource = `
-  <section class="resources card" id="${counter++}">
-    <div id="${resourceData.name}"></div>
-    <div id="${resourceData.id}"></div>
+  <section class="resources card" id="c${counter++}">
+    <div id="${escape(resourceData.name)}"></div>
+    <div id="${escape(resourceData.id)}"></div>
     <div class="resourceImg">
-      <img src="${escape(
-        resourceData.cover_photo_url ? resourceData.cover_photo_url : ""
-      )}" class = "card-img-top resource-img"></img>
+    <img src="${escape(
+      resourceData.cover_photo_url ? resourceData.cover_photo_url : ""
+    )}" class = "card-img-top resource-img"></img>
+      <div class="urlinfo hide" id="u${counter++}">
+        <p class= "url-title">${escape(resourceData["url_title"])}</p>
+        <p class = "url-description">${escape(
+          resourceData["url_description"]
+        )}</p>
+        <p class = "url-link">${escape(resourceData.link)}</p>
+      </div>
     </div>
     <div class='textbody card-body'>
       <h5 class = 'card-title'>${escape(resourceData.title)}</h5>
@@ -143,16 +237,21 @@ const createResourceElement = resourceData => {
     </div>
     <div class="resource-stats">
       <p class="resource-timestamp">${resourceData.date_created} </p>
-      <form>
-        <div class="arrows">
-          <i class="fas fa-plus add-to-my-resources ${resourceData.id}"
-          data-activity = ${resourceData["add_to_my_resources"]}></i>
-          <i class="fas fa-arrow-up upvote ${resourceData.id}"
-          data-upvote = ${resourceData.upvote} id="up-vote"></i>
-          <i class="fas fa-arrow-down downvote ${resourceData.id}"
-          data-downvote = ${resourceData.downvote} id="down-vote"></i>
-        </div>
-    </form>
+      <div class="arrows">
+        <form>
+          <div >
+            <i class="fas fa-plus add-to-my-resources ${resourceData.id}"
+            data-activity = ${resourceData.add_to_my_resources}></i>
+            <i class="fas fa-arrow-up upvote ${resourceData.id}"
+            data-upvote = ${resourceData.upvote} id="up-vote"></i>
+            <i class="fas fa-arrow-down downvote ${resourceData.id}"
+            data-downvote = ${resourceData.downvote} id="down-vote"></i>
+          </div>
+        </form>
+        <p class="net-vote" id="net-vote-${resourceData.id}"
+        data-netVote = ${netVote}>${resourceData.net_votes}</p>
+      </div>
+    </div>
   </div>
   </section>
   `;
@@ -183,6 +282,25 @@ function loadModal() {
       .children(".description")
       .text();
 
+    let urlTitle = $(this)
+      .children(".resourceImg")
+      .children(".urlinfo")
+      .children(".url-title")
+      .text();
+
+    let urlDescription = $(this)
+      .children(".resourceImg")
+      .children(".urlinfo")
+      .children(".url-description")
+      .text();
+
+    let urlLink = $(this)
+      .children(".resourceImg")
+      .children(".urlinfo")
+      .children(".url-link")
+      .text();
+
+    console.log(urlLink);
     $("#modal-clicked-resource").on("show.bs.modal", function() {
       let resourceID = e.currentTarget.children[1].id;
       $(".resource-modal-title").text(title);
@@ -191,8 +309,15 @@ function loadModal() {
       $("#resource-id").removeClass();
       $("#resource-id").addClass(resourceID);
       $(".modal-description").text(description);
-
       $("#resource-owner").text(e.currentTarget.children[0].id);
+      $(".modal-body").children(
+        $(".resource-content")
+          .children($(".clicked-url-link"))
+          .attr("href", urlLink)
+      );
+
+      $(".modal-url-title").text(urlTitle);
+      $(".modal-url-description").text(urlDescription);
 
       $(".close-button").on("click", () => {
         $("#modal-clicked-resource").modal("hide");
@@ -203,6 +328,14 @@ function loadModal() {
     loadComments(resourceID);
   });
 }
+
+const urlPreview = (urlTitle, urlDescription) => {
+  return (urlcontent = `
+  <div class = "url-preview-container">
+  <h5 class= "url-preview-title>${escape(urlTitle)}</h5>
+  <p class= "url-preview-description>${escape(urlDescription)}</p>
+  </div>`);
+};
 
 async function loadComments(resourceid) {
   try {
@@ -233,4 +366,12 @@ function createCommentElement(commentData) {
     </section>
   `;
   return $(comment);
+}
+
+function createCategoryElement(categoryData) {
+  const category = `
+  <li class="categoryname hover-show">${categoryData.name}
+  </li>
+  `;
+  return $(category);
 }

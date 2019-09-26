@@ -1,25 +1,39 @@
-header {
+.header-container {
   height: 8vh;
-  position: fixed;
-  background-color: lightgreen;
   width: 100%;
-  display: flex;
-  align-items: center;
-  z-index: 1;
+  position: absolute;
 }
 
-.header-container {
-  align-items: center;
-  display: flex;
-  justify-content: space-between;
-  align-content: center;
-  width: 100%;
+.header-container .navbar-nav {
+  float: right;
+  margin: 1em 2em;
 }
+
+.header-container .dropdown {
+  display: flex;
+  align-items: center;
+}
+
+.header-container .nav-link {
+  margin-left: 5px;
+  cursor: pointer;
+}
+
+.header-container .login-links {
+  word-spacing: 15px;
+}
+
+/*
+
 
 header .logo {
   font-family: "Beth Ellen", cursive;
   color: maroon;
   margin-left: 20px;
+}
+
+header .logo:hover {
+  text-decoration: none;
 }
 
 .navbar-nav {
@@ -35,9 +49,22 @@ header .logo {
   color: maroon;
 }
 
+.login-links {
+  padding-bottom: 3vh;
+}
+
+.login-links a {
+  margin-left: 10px;
+  margin-right: 10px;
+  color: maroon;
+}
+
 #user-settings {
   background-color: white;
   color: black;
   border: none;
   margin-right: 1em;
+} */
+.header-container .navbar-nav {
+  right: 0;
 }
