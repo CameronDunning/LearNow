@@ -67,6 +67,7 @@ const loadResources = async url => {
       dataType: "JSON",
       success: data => {
         renderResources(data);
+        $(".net-vote").on("click", e => e.stopPropagation());
         $(".fa-arrow-up").on("click", e => {
           e.stopPropagation();
           const classListArray = e.currentTarget.classList;
@@ -247,8 +248,8 @@ const createResourceElement = resourceData => {
             data-downvote = ${resourceData.downvote} id="down-vote"></i>
           </div>
         </form>
-        <p id="net-vote-${resourceData.id}" data-netVote = ${netVote}>
-        ${resourceData.net_votes}</p>
+        <p class="net-vote" id="net-vote-${resourceData.id}"
+        data-netVote = ${netVote}>${resourceData.net_votes}</p>
       </div>
     </div>
   </div>

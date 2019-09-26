@@ -61,13 +61,27 @@ const loadLikedResources = async () => {
       success: data => {
         $("#my-resources-container").empty();
         renderMyResources(data);
+        $(".net-vote").on("click", e => e.stopPropagation());
         $(".fa-arrow-up").on("click", e => {
           e.stopPropagation();
           const classListArray = e.currentTarget.classList;
           const resourceID = classListArray[3];
           const upvoted = $(e.currentTarget).attr("data-upvote");
+          const downvoted = $(`.downvote.${resourceID}`).attr("data-downvote");
           if (upvoted === "false") {
             upvote(resourceID);
+            let netVotes = parseInt($(`#net-vote-${resourceID}`).text());
+            if (downvoted === "false") {
+              netVotes++;
+            } else {
+              netVotes += 2;
+            }
+            if (netVotes === 0) {
+              $(`#net-vote-${resourceID}`).attr("data-netVote", "0");
+            } else if (netVotes > 0) {
+              $(`#net-vote-${resourceID}`).attr("data-netVote", "true");
+            }
+            $(`#net-vote-${resourceID}`).text(netVotes);
             $(`.upvote.${resourceID}`).attr("data-upvote", "true");
             $(`.downvote.${resourceID}`).attr("data-downvote", "false");
           }
@@ -77,8 +91,21 @@ const loadLikedResources = async () => {
           const classListArray = e.currentTarget.classList;
           const resourceID = classListArray[3];
           const downvoted = $(e.currentTarget).attr("data-downvote");
+          const upvoted = $(`.upvote.${resourceID}`).attr("data-upvote");
           if (downvoted === "false") {
             downvote(resourceID);
+            let netVotes = parseInt($(`#net-vote-${resourceID}`).text());
+            if (upvoted === "false") {
+              netVotes--;
+            } else {
+              netVotes -= 2;
+            }
+            if (netVotes === 0) {
+              $(`#net-vote-${resourceID}`).attr("data-netVote", "0");
+            } else if (netVotes < 0) {
+              $(`#net-vote-${resourceID}`).attr("data-netVote", "false");
+            }
+            $(`#net-vote-${resourceID}`).text(netVotes);
             $(`.downvote.${resourceID}`).attr("data-downvote", "true");
             $(`.upvote.${resourceID}`).attr("data-upvote", "false");
           }
