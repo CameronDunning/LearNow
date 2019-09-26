@@ -224,9 +224,11 @@ const createResourceElement = resourceData => {
       resourceData.cover_photo_url ? resourceData.cover_photo_url : ""
     )}" class = "card-img-top resource-img"></img>
       <div class="urlinfo hide" id="u${counter++}">
-        <p class= "url-title">${escape(resourceData["url_title"])}</p>
+        <p class= "url-title">${escape(
+          resourceData["url_title"] ? resourceData["url_title"] : ""
+        )}</p>
         <p class = "url-description">${escape(
-          resourceData["url_description"]
+          resourceData["url_description"] ? resourceData["url_description"] : ""
         )}</p>
         <p class = "url-link">${escape(resourceData.link)}</p>
       </div>
@@ -308,7 +310,7 @@ function loadModal() {
       $(".modal-body").children($(".clicked-resource-img").attr("src", image));
       $("#resource-id").removeClass();
       $("#resource-id").addClass(resourceID);
-      $(".modal-description").text(description);
+      $(".modal-description").text(description ? description : "");
       $("#resource-owner").text(e.currentTarget.children[0].id);
       $(".modal-body").children(
         $(".resource-content")
@@ -316,8 +318,8 @@ function loadModal() {
           .attr("href", urlLink)
       );
 
-      $(".modal-url-title").text(urlTitle);
-      $(".modal-url-description").text(urlDescription);
+      $(".modal-url-title").text(urlTitle ? urlTitle : "");
+      $(".modal-url-description").text(urlDescription ? urlDescription : "");
 
       $(".close-button").on("click", () => {
         $("#modal-clicked-resource").modal("hide");
@@ -332,8 +334,10 @@ function loadModal() {
 const urlPreview = (urlTitle, urlDescription) => {
   return (urlcontent = `
   <div class = "url-preview-container">
-  <h5 class= "url-preview-title>${escape(urlTitle)}</h5>
-  <p class= "url-preview-description>${escape(urlDescription)}</p>
+  <h5 class= "url-preview-title>${escape(urlTitle ? urlTitle : "")}</h5>
+  <p class= "url-preview-description>${escape(
+    urlDescription ? urlDescription : ""
+  )}</p>
   </div>`);
 };
 

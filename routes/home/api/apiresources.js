@@ -33,7 +33,7 @@ const createNewResource = (values, userID, metadata) => {
     INSERT INTO resources
       (user_id, title, link, description, date_created, url_title, url_author, url_description, cover_photo_url)
     VALUES
-      ($1, $2, $3, $4, Now(), $5, $6, $7, $8)
+      ($1, $2, $3, $4, CURRENT_DATE, $5, $6, $7, $8)
     RETURNING id;
     `;
   const returnValues = [
@@ -89,7 +89,7 @@ const getUserResources = userID => {
 const saveResource = (db, userID, resourceID) => {
   const queryString = `
     INSERT INTO comments (user_id, resource_id, add_to_my_resources, date_created)
-    VALUES ($1, $2, TRUE, NOW())
+    VALUES ($1, $2, TRUE, CURRENT_DATE)
     `;
   const values = [userID, resourceID];
   db.query(queryString, values);
@@ -437,7 +437,7 @@ module.exports = db => {
     //if a comment doesn't exist already
     let queryString = `
       INSERT INTO comments (user_id, resource_id, comment, date_created)
-      VALUES ($1, $2, $3, NOW())
+      VALUES ($1, $2, $3, CURRENT_DATE)
       `;
     let values = [req.session.user_id, req.params.resourceid, req.body.comment];
 
