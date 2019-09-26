@@ -13,7 +13,7 @@
       crossorigin="anonymous"
     />
     <link
-      href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap"
+      href="https://fonts.googleapis.com/css?family=Roboto:100,400,700&display=swap"
       rel="stylesheet"
     />
     <link
@@ -27,57 +27,67 @@
     <!-- CSS -->
     <link rel="stylesheet" type="text/css" href="styles/login.css" />
     <link rel="stylesheet" type="text/css" href="styles/register.css" />
-    <link rel="stylesheet" type="text/css" href="styles/header.css" />
-    <link rel="stylesheet" type="text/css" href="styles/nav.css" />
   </head>
-
-  <body>
-    <% include ./partials/header %> <% include ./partials/nav %>
-
-    <div class="register-container">
-      <img src="/assets/register.jpg" alt="register" width="400" height="400" />
-      <span class="register-phrase"
-        >Become a part of the LearnNow community</span
-      >
-      <div class="card login-form">
-        <h1 class="login-title">Register</h1>
-        <form method="POST" action="/register">
-          <div class="form-group">
-            <label for="name">Name</label>
-            <input
-              name="name"
-              type="text"
-              class="form-control"
-              placeholder="Name"
-            />
-          </div>
-          <div class="form-group">
-            <label for="email">Email address</label>
-            <input
-              name="email"
-              type="email"
-              class="form-control"
-              placeholder="Enter email"
-            />
-          </div>
-          <div class="form-group">
-            <label for="password">Password</label>
-            <input
-              name="password"
-              type="password"
-              class="form-control"
-              placeholder="Password"
-            />
-          </div>
-          <button type="submit" class="btn btn-primary login-button">
-            Submit
-          </button>
-          <p>
-            Already have an account? <a href="/login">Click here to login</a>
-          </p>
-        </form>
+  <div class="register-container">
+    <header class="login-header">
+      <h1 class="register-logo">
+          Learn Now
+      </h1>
+      <a class="btn btn-primary login" href="/login" role="button">Login</a>
+    </header>
+      <div class="register-container">
+        <div class="register-decor">
+          <span class="register-phrase">Become a part of the community</span>
+          <img
+            src="/assets/register.jpg"
+            alt="register"
+            width="400"
+            height="400"
+          />
+        </div>
+        <div class="register-form-container">
+        <div class="card login-form">
+          <h1 class="login-title">Register</h1>
+          <form method="POST" action="/register">
+            <div class="form-group">
+              <label for="name">Name</label>
+              <input
+                name="name"
+                type="text"
+                class="form-control"
+                placeholder="Name"
+              />
+            </div>
+            <div class="form-group">
+              <label for="email">Email address</label>
+              <input
+                name="email"
+                type="email"
+                class="form-control"
+                placeholder="Enter email"
+              />
+            </div>
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input
+                name="password"
+                type="password"
+                class="form-control"
+                placeholder="Password"
+              />
+            </div>
+            <button type="submit" class="btn btn-primary login-button">
+              Submit
+            </button>
+            <p class="already">
+              Already have an account? <a href="/login">Click here to login</a>
+            </p>
+          </form>
+        </div>
+        </div>
       </div>
     </div>
+  </div>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
       integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
