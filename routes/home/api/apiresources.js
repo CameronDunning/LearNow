@@ -316,8 +316,28 @@ module.exports = db => {
     // get resources that the user has uploaded
     const queryString1 = getUserResources(userID);
     db.query(queryString1[0], queryString1[1]).then(data => {
-      console.log(data.rows);
-      res.json(data.rows);
+      let resources = data.rows;
+      const queryString3 = getAllComments();
+      db.query(queryString3).then(data => {
+        for (const resource of resources) {
+          let totalUpvotes = 0;
+          let totalDownvotes = 0;
+          for (const comment of data.rows) {
+            if (comment.resource_id === resource.id) {
+              if (comment.upvote) {
+                totalUpvotes++;
+              }
+              if (comment.downvote) {
+                totalDownvotes++;
+              }
+            }
+          }
+          resource.total_upvotes = totalUpvotes;
+          resource.total_downvotes = totalDownvotes;
+          resource.net_votes = totalUpvotes - totalDownvotes;
+        }
+        res.json(resources);
+      });
     });
   });
 
@@ -325,7 +345,28 @@ module.exports = db => {
     const userID = req.session.user_id;
     const queryString1 = getLikedResources(userID);
     db.query(queryString1[0], queryString1[1]).then(data => {
-      res.json(data.rows);
+      let resources = data.rows;
+      const queryString3 = getAllComments();
+      db.query(queryString3).then(data => {
+        for (const resource of resources) {
+          let totalUpvotes = 0;
+          let totalDownvotes = 0;
+          for (const comment of data.rows) {
+            if (comment.resource_id === resource.id) {
+              if (comment.upvote) {
+                totalUpvotes++;
+              }
+              if (comment.downvote) {
+                totalDownvotes++;
+              }
+            }
+          }
+          resource.total_upvotes = totalUpvotes;
+          resource.total_downvotes = totalDownvotes;
+          resource.net_votes = totalUpvotes - totalDownvotes;
+        }
+        res.json(resources);
+      });
     });
   });
   //Remove saved post (unsave a post)
