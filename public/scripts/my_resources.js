@@ -8,6 +8,7 @@ $(document).ready(() => {
 
 $(".my-resources-button").on("click", function() {
   loadMyResources();
+  loadCategories();
 });
 
 $(".categoryname").on("click", e => {
@@ -63,6 +64,7 @@ function renderMyResources(resources) {
 
 $(".liked-resources-button").on("click", function() {
   loadLikedResources();
+  loadCategories();
 });
 
 const loadLikedResources = async () => {
