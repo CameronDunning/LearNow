@@ -244,7 +244,10 @@ const createResourceElement = resourceData => {
       <p class = 'description'>${escape(resourceData.description)}</p>
     </div>
     <div class="resource-stats">
-      <p class="resource-timestamp">${resourceData.date_created} </p>
+      <p class="resource-timestamp">${resourceData.date_created.substr(
+        0,
+        10
+      )} </p>
       <div class="arrows">
         <form>
           <div >
