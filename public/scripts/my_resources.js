@@ -11,6 +11,17 @@ $(".my-resources-button").on("click", function() {
   loadCategories();
 });
 
+$(".categoryname").on("click", e => {
+  console.log("click category");
+  let category = e.currentTarget.innerHTML;
+  category.trim();
+  if (category.trim() == "all") {
+    loadResources(`http://localhost:8080/api`);
+  } else {
+    loadResources(`http://localhost:8080/r/${category}`);
+  }
+});
+
 $.fn.serializeObject = function() {
   var o = {};
   this.find("[name]").each(function() {

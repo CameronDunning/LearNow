@@ -11,11 +11,19 @@ const getCommentsByUser = userID => {
   return [queryString, values];
 };
 
+const getAllComments = () => {
+  const queryString = `
+  SELECT *
+  FROM comments
+  `;
+  return queryString;
+};
+
 const returnResourcesWithVotes = (db, userID, category) => {
   const queryString = `
   SELECT DISTINCT resources.*, users.name, categories.name as category FROM resources JOIN users ON
   resources.user_id=users.id
-  JOIN category_resource ON 
+  JOIN category_resource ON
   category_resource.resource_id=resources.id
   JOIN categories ON
   category_resource.category_id=categories.id
@@ -23,17 +31,36 @@ const returnResourcesWithVotes = (db, userID, category) => {
   ORDER BY resources.id
   LIMIT 10;
   `;
-  values = [`%${category}%`];
+  const values = [`%${category}%`];
   if (!userID) {
     return db
       .query(queryString, values)
       .then(data => {
-        for (const resource of data.rows) {
-          resource.upvote = false;
-          resource.downvote = false;
-          resource.add_to_my_resources = false;
-        }
-        return data.rows;
+        let resources = data.rows;
+        const queryString2 = getAllComments();
+        return db.query(queryString2).then(data => {
+          for (const resource of resources) {
+            resource.upvote = false;
+            resource.downvote = false;
+            resource.add_to_my_resources = false;
+            let totalUpvotes = 0;
+            let totalDownvotes = 0;
+            for (const comment of data.rows) {
+              if (comment.resource_id === resource.id) {
+                if (comment.upvote) {
+                  totalUpvotes++;
+                }
+                if (comment.downvote) {
+                  totalDownvotes++;
+                }
+              }
+            }
+            resource.total_upvotes = totalUpvotes;
+            resource.total_downvotes = totalDownvotes;
+            resource.net_votes = totalUpvotes - totalDownvotes;
+          }
+          return resources;
+        });
       })
       .catch(err => console.log(err));
   } else {
@@ -59,7 +86,27 @@ const returnResourcesWithVotes = (db, userID, category) => {
               }
             }
           }
-          return resources;
+          const queryString3 = getAllComments();
+          return db.query(queryString3).then(data => {
+            for (const resource of resources) {
+              let totalUpvotes = 0;
+              let totalDownvotes = 0;
+              for (const comment of data.rows) {
+                if (comment.resource_id === resource.id) {
+                  if (comment.upvote) {
+                    totalUpvotes++;
+                  }
+                  if (comment.downvote) {
+                    totalDownvotes++;
+                  }
+                }
+              }
+              resource.total_upvotes = totalUpvotes;
+              resource.total_downvotes = totalDownvotes;
+              resource.net_votes = totalUpvotes - totalDownvotes;
+            }
+            return resources;
+          });
         });
       })
       .catch(err => console.log(err));
