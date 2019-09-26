@@ -332,8 +332,7 @@ function createCommentElement(commentData) {
 
 function createCategoryElement(categoryData) {
   const category = `
-  <li >
-    <button class="categoryname" >${categoryData.name}</button>
+  <li class="categoryname hover-show">${categoryData.name}
   </li>
   `;
   return $(category);
