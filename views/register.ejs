@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>LearNow - Register</title>
+    <title>Learn Now - Register</title>
 
     <link
       rel="stylesheet"
@@ -35,7 +35,6 @@
       </h1>
       <a class="btn btn-primary login" href="/login" role="button">Login</a>
     </header>
-      <div class="register-container">
         <div class="register-decor">
           <span class="register-phrase">Become a part of the community</span>
           <img
@@ -79,12 +78,15 @@
             <button type="submit" class="btn btn-primary login-button">
               Submit
             </button>
+            <% if (alreadyExists) { %>
+            <p>Username already exists</p>
+          <% } %>
             <p class="already">
               Already have an account? <a href="/login">Click here to login</a>
             </p>
           </form>
         </div>
-        </div>
+
       </div>
     </div>
   </div>

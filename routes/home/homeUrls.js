@@ -18,6 +18,7 @@ module.exports = db => {
   router.get("/login", (req, res) => {
     let templateVars = {};
     templateVars.user_id = req.session.user_id ? req.session.user_id : "";
+    templateVars.wrongLogin = req.session.wrongLogin;
     res.render("login", templateVars);
   });
 
@@ -41,18 +42,21 @@ module.exports = db => {
           req.session.user_name = user.name;
           // req.session.user_first_letter = user.first_letter;
           return res.redirect("/");
-        } else {
-          req.session.wrongLogin = true;
-          res.redirect("/login");
         }
       })
-      .catch(err => console.log(err));
+      .catch(err => {
+        req.session.wrongLogin = true;
+        res.redirect("/login");
+      });
   });
 
   //Get and post requests for the register page
   router.get("/register", (req, res) => {
     let templateVars = {};
     templateVars.user_id = "";
+    templateVars.alreadyExists = req.session.already_exists
+      ? req.session.already_exists
+      : "";
     res.render("register", templateVars);
   });
   //registration post
@@ -83,7 +87,10 @@ module.exports = db => {
           res.redirect("/");
         }
       })
-      .catch(err => console.log(err));
+      .catch(err => {
+        req.session.already_exists = "alreadyExists";
+        return res.redirect("/register");
+      });
   });
 
   router.get("/my_resources", (req, res) => {

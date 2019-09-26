@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>LearNow - Register</title>
+    <title>Learn Now - Register</title>
 
     <!--External CSS-->
 
@@ -32,7 +32,7 @@
   </head>
 
   <body>
-    <div class="main-container">
+    <div class="register-container">
       <header class="login-header">
         <h1 class="register-logo">
           Learn Now
@@ -41,40 +41,41 @@
           >Register</a
         >
       </header>
-      <div class="register-container">
-        <div class="register-decor">
-          <span class="register-phrase">Welcome back</span>
-          <img src="/assets/login.png" alt="login" width="400" height="400" />
-        </div>
-        <div class="card login-form">
-          <h1 class="login-title">Login</h1>
-          <form method="POST" action="/login">
-            <div class="form-group">
-              <label for="email">Email address</label>
-              <input
-                name="email"
-                type="email"
-                class="form-control"
-                placeholder="Enter email"
-              />
-            </div>
-            <div class="form-group">
-              <label for="password">Password</label>
-              <input
-                name="password"
-                type="password"
-                class="form-control"
-                placeholder="Password"
-              />
-            </div>
-            <button type="submit" class="btn btn-primary login-button">
-              Submit
-            </button>
-            <p class="already">
-              Want to learn now? <a href="/register">Click here to register</a>
-            </p>
-          </form>
-        </div>
+      <div class="register-decor">
+        <span class="register-phrase">Welcome Back</span>
+        <img src="/assets/login.png" alt="login" width="400" height="400" />
+      </div>
+      <div class="card login-form">
+        <h1 class="login-title">Login</h1>
+        <form method="POST" action="/login">
+          <div class="form-group">
+            <label for="email">Email address</label>
+            <input
+              name="email"
+              type="email"
+              class="form-control"
+              placeholder="Enter email"
+            />
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input
+              name="password"
+              type="password"
+              class="form-control"
+              placeholder="Password"
+            />
+          </div>
+          <button type="submit" class="btn btn-primary login-button">
+            Submit
+          </button>
+          <% if (wrongLogin) { %>
+          <p class>Check your email or password</p>
+          <% } %>
+          <p class="already">
+            Want to learn now? <a href="/register">Click here to register</a>
+          </p>
+        </form>
       </div>
     </div>
   </body>
