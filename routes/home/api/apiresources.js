@@ -309,6 +309,7 @@ module.exports = db => {
         );
       }
     });
+    res.redirect("/");
   });
 
   router.get("/my_resources", (req, res) => {
