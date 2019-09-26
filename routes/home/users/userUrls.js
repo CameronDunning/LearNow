@@ -25,7 +25,13 @@ module.exports = db => {
       name = $1,
       password = $2
     WHERE id=$3;`;
+    req.session.user_name = name;
+    let templateVars = {
+      user_name: name,
+      user_id: req.session.user_id
+    };
 
+    console.log(templateVars);
     const hashedPassword = bcrypt.hashSync(password, 10);
     updateValues = [name, hashedPassword, req.params.user];
     db.query(updateQuery, updateValues).then(res.redirect("/"));
