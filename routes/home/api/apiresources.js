@@ -170,6 +170,14 @@ const getCommentsByUser = userID => {
   return [queryString, values];
 };
 
+const getAllComments = () => {
+  const queryString = `
+  SELECT *
+  FROM comments
+  `;
+  return queryString;
+};
+
 const returnResourcesWithVotes = (db, userID) => {
   if (!userID) {
     // select first ten resources
@@ -179,12 +187,32 @@ const returnResourcesWithVotes = (db, userID) => {
     return db
       .query(queryString1)
       .then(data => {
-        for (const resource of data.rows) {
-          resource.upvote = false;
-          resource.downvote = false;
-          resource.add_to_my_resources = false;
-        }
-        return data.rows;
+        let resources = data.rows;
+
+        const queryString2 = getAllComments();
+        return db.query(queryString2).then(data => {
+          for (const resource of resources) {
+            resource.upvote = false;
+            resource.downvote = false;
+            resource.add_to_my_resources = false;
+            let totalUpvotes = 0;
+            let totalDownvotes = 0;
+            for (const comment of data.rows) {
+              if (comment.resource_id === resource.id) {
+                if (comment.upvote) {
+                  totalUpvotes++;
+                }
+                if (comment.downvote) {
+                  totalDownvotes++;
+                }
+              }
+            }
+            resource.total_upvotes = totalUpvotes;
+            resource.total_downvotes = totalDownvotes;
+            resource.net_votes = totalUpvotes - totalDownvotes;
+          }
+          return resources;
+        });
       })
       .catch(err => console.log(err));
   } else {
@@ -212,7 +240,28 @@ const returnResourcesWithVotes = (db, userID) => {
               }
             }
           }
-          return resources;
+          // return resources;
+          const queryString3 = getAllComments();
+          return db.query(queryString3).then(data => {
+            for (const resource of resources) {
+              let totalUpvotes = 0;
+              let totalDownvotes = 0;
+              for (const comment of data.rows) {
+                if (comment.resource_id === resource.id) {
+                  if (comment.upvote) {
+                    totalUpvotes++;
+                  }
+                  if (comment.downvote) {
+                    totalDownvotes++;
+                  }
+                }
+              }
+              resource.total_upvotes = totalUpvotes;
+              resource.total_downvotes = totalDownvotes;
+              resource.net_votes = totalUpvotes - totalDownvotes;
+            }
+            return resources;
+          });
         });
       })
       .catch(err => console.log(err));
@@ -267,7 +316,28 @@ module.exports = db => {
     // get resources that the user has uploaded
     const queryString1 = getUserResources(userID);
     db.query(queryString1[0], queryString1[1]).then(data => {
-      res.json(data.rows);
+      let resources = data.rows;
+      const queryString3 = getAllComments();
+      db.query(queryString3).then(data => {
+        for (const resource of resources) {
+          let totalUpvotes = 0;
+          let totalDownvotes = 0;
+          for (const comment of data.rows) {
+            if (comment.resource_id === resource.id) {
+              if (comment.upvote) {
+                totalUpvotes++;
+              }
+              if (comment.downvote) {
+                totalDownvotes++;
+              }
+            }
+          }
+          resource.total_upvotes = totalUpvotes;
+          resource.total_downvotes = totalDownvotes;
+          resource.net_votes = totalUpvotes - totalDownvotes;
+        }
+        res.json(resources);
+      });
     });
   });
 
@@ -275,7 +345,28 @@ module.exports = db => {
     const userID = req.session.user_id;
     const queryString1 = getLikedResources(userID);
     db.query(queryString1[0], queryString1[1]).then(data => {
-      res.json(data.rows);
+      let resources = data.rows;
+      const queryString3 = getAllComments();
+      db.query(queryString3).then(data => {
+        for (const resource of resources) {
+          let totalUpvotes = 0;
+          let totalDownvotes = 0;
+          for (const comment of data.rows) {
+            if (comment.resource_id === resource.id) {
+              if (comment.upvote) {
+                totalUpvotes++;
+              }
+              if (comment.downvote) {
+                totalDownvotes++;
+              }
+            }
+          }
+          resource.total_upvotes = totalUpvotes;
+          resource.total_downvotes = totalDownvotes;
+          resource.net_votes = totalUpvotes - totalDownvotes;
+        }
+        res.json(resources);
+      });
     });
   });
   //Remove saved post (unsave a post)
@@ -284,7 +375,7 @@ module.exports = db => {
     const userID = req.session.user_id;
     const queryString = `
     DELETE FROM comments
-     WHERE user_id = $1 AND resource_id = $2;`;
+    WHERE user_id = $1 AND resource_id = $2;`;
     const values = [userID, resourceID];
     db.query(queryString, values).then(res.redirect("/my_resources"));
   });
@@ -301,6 +392,7 @@ module.exports = db => {
   });
 
   router.post("/upvote/:id", async (req, res) => {
+    console.log("upvoting");
     const resourceID = parseInt(req.params.id);
     const userID = req.session.user_id;
     const isValidVote = await voteResource(db, userID, resourceID, "upvote");
@@ -312,6 +404,7 @@ module.exports = db => {
   });
 
   router.post("/downvote/:id", async (req, res) => {
+    console.log("downvoting");
     const resourceID = parseInt(req.params.id);
     const userID = req.session.user_id;
     const isValidVote = await voteResource(db, userID, resourceID, "downvote");

@@ -24,6 +24,7 @@
 .resource-stats .resource-timestamp {
   font-style: italic;
 }
+
 .arrows {
   display: inline-flex;
 }
@@ -31,6 +32,7 @@
 .arrows [data-activity="true"] {
   color: green;
 }
+
 .arrows [data-upvote="true"] {
   color: green;
 }
@@ -39,11 +41,23 @@
   color: red;
 }
 
+.arrows [data-netVote="true"] {
+  color: green;
+}
+
+.arrows [data-netVote="false"] {
+  color: red;
+}
+
 .arrows:hover {
   cursor: pointer;
 }
 
 .arrows i {
+  padding: 0 10px;
+}
+
+.arrows p {
   padding: 0 10px;
 }
 

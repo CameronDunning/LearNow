@@ -67,13 +67,27 @@ const loadResources = async url => {
       dataType: "JSON",
       success: data => {
         renderResources(data);
+        $(".net-vote").on("click", e => e.stopPropagation());
         $(".fa-arrow-up").on("click", e => {
           e.stopPropagation();
           const classListArray = e.currentTarget.classList;
           const resourceID = classListArray[3];
           const upvoted = $(e.currentTarget).attr("data-upvote");
+          const downvoted = $(`.downvote.${resourceID}`).attr("data-downvote");
           if (upvoted === "false") {
             upvote(resourceID);
+            let netVotes = parseInt($(`#net-vote-${resourceID}`).text());
+            if (downvoted === "false") {
+              netVotes++;
+            } else {
+              netVotes += 2;
+            }
+            if (netVotes === 0) {
+              $(`#net-vote-${resourceID}`).attr("data-netVote", "0");
+            } else if (netVotes > 0) {
+              $(`#net-vote-${resourceID}`).attr("data-netVote", "true");
+            }
+            $(`#net-vote-${resourceID}`).text(netVotes);
             $(`.upvote.${resourceID}`).attr("data-upvote", "true");
             $(`.downvote.${resourceID}`).attr("data-downvote", "false");
           }
@@ -83,8 +97,21 @@ const loadResources = async url => {
           const classListArray = e.currentTarget.classList;
           const resourceID = classListArray[3];
           const downvoted = $(e.currentTarget).attr("data-downvote");
+          const upvoted = $(`.upvote.${resourceID}`).attr("data-upvote");
           if (downvoted === "false") {
             downvote(resourceID);
+            let netVotes = parseInt($(`#net-vote-${resourceID}`).text());
+            if (upvoted === "false") {
+              netVotes--;
+            } else {
+              netVotes -= 2;
+            }
+            if (netVotes === 0) {
+              $(`#net-vote-${resourceID}`).attr("data-netVote", "0");
+            } else if (netVotes < 0) {
+              $(`#net-vote-${resourceID}`).attr("data-netVote", "false");
+            }
+            $(`#net-vote-${resourceID}`).text(netVotes);
             $(`.downvote.${resourceID}`).attr("data-downvote", "true");
             $(`.upvote.${resourceID}`).attr("data-upvote", "false");
           }
@@ -182,6 +209,12 @@ function renderCategories(resources) {
 // id= "resources" <-- kept in case this was used somewhere else
 let counter = 0;
 const createResourceElement = resourceData => {
+  let netVote = 0;
+  if (resourceData.net_votes > 0) {
+    netVote = true;
+  } else if (resourceData.net_votes < 0) {
+    netVote = false;
+  }
   const resource = `
   <section class="resources card" id="c${counter++}">
     <div id="${escape(resourceData.name)}"></div>
@@ -204,16 +237,21 @@ const createResourceElement = resourceData => {
     </div>
     <div class="resource-stats">
       <p class="resource-timestamp">${resourceData.date_created} </p>
-      <form>
-        <div class="arrows">
-          <i class="fas fa-plus add-to-my-resources ${resourceData.id}"
-          data-activity = ${resourceData.add_to_my_resources}></i>
-          <i class="fas fa-arrow-up upvote ${resourceData.id}"
-          data-upvote = ${resourceData.upvote} id="up-vote"></i>
-          <i class="fas fa-arrow-down downvote ${resourceData.id}"
-          data-downvote = ${resourceData.downvote} id="down-vote"></i>
-        </div>
-    </form>
+      <div class="arrows">
+        <form>
+          <div >
+            <i class="fas fa-plus add-to-my-resources ${resourceData.id}"
+            data-activity = ${resourceData.add_to_my_resources}></i>
+            <i class="fas fa-arrow-up upvote ${resourceData.id}"
+            data-upvote = ${resourceData.upvote} id="up-vote"></i>
+            <i class="fas fa-arrow-down downvote ${resourceData.id}"
+            data-downvote = ${resourceData.downvote} id="down-vote"></i>
+          </div>
+        </form>
+        <p class="net-vote" id="net-vote-${resourceData.id}"
+        data-netVote = ${netVote}>${resourceData.net_votes}</p>
+      </div>
+    </div>
   </div>
   </section>
   `;
