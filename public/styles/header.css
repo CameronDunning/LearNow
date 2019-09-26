@@ -1,20 +1,30 @@
-header {
+.header-container {
   height: 8vh;
-  position: fixed;
-  background-color: lightgreen;
   width: 100%;
-  display: flex;
-  align-items: center;
-  z-index: 1;
+  position: absolute;
 }
 
-.header-container {
-  align-items: center;
-  display: flex;
-  justify-content: space-between;
-  align-content: center;
-  width: 100%;
+.header-container .navbar-nav {
+  float: right;
+  margin: 1em 2em;
 }
+
+.header-container .dropdown {
+  display: flex;
+  align-items: center;
+}
+
+.header-container .nav-link {
+  margin-left: 5px;
+  cursor: pointer;
+}
+
+.header-container .login-links {
+  word-spacing: 15px;
+}
+
+/*
+
 
 header .logo {
   font-family: "Beth Ellen", cursive;
@@ -54,4 +64,7 @@ header .logo:hover {
   color: black;
   border: none;
   margin-right: 1em;
+} */
+.header-container .navbar-nav {
+  right: 0;
 }
