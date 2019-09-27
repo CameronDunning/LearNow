@@ -325,11 +325,7 @@ function loadModal() {
       $("#resource-id").addClass(resourceID);
       $(".modal-description").text(description ? description : "");
       $("#resource-owner").text(e.currentTarget.children[0].id);
-      $(".modal-body").children(
-        $(".resource-content")
-          .children($(".clicked-url-link"))
-          .attr("href", urlLink)
-      );
+      $(".clicked-url-link").attr("href", urlLink);
 
       $(".modal-url-title").text(urlTitle ? urlTitle : "");
       $(".modal-url-description").text(urlDescription ? urlDescription : "");
