@@ -60,6 +60,22 @@
   border-bottom: 1px solid #ebebeb;
 }
 
+.comment-input {
+  padding-top: 2em;
+  padding-bottom: 5px;
+  width: 40%;
+  border: 0;
+  border-bottom: 1px solid #bfbfbf;
+}
+
+.comment-input:focus {
+  outline: none;
+  border-bottom: 2px solid #696564;
+  width: 60%;
+  transition: 0.3s ease 0s, left 0.3s ease 0s;
+  opacity: 0.9;
+}
+
 #modal-clicked-resource .resource-comment-container {
   color: #696564;
 }

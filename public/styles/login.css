@@ -35,5 +35,9 @@
 }
 
 .error-msg {
+  border: 1px solid red;
+  padding: 5px;
+  font-size: 12px;
+  text-align: center;
   color: red;
 }
