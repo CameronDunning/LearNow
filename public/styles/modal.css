@@ -40,11 +40,6 @@
 }
 
 #modal-clicked-resource .resource-content {
-<<<<<<< HEAD
-  text-align: center;
-  padding: 1em 0;
-  margin-bottom: 1em;
-=======
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -60,7 +55,6 @@
 #modal-clicked-resource .clicked-url-link {
   color: #696564;
   text-decoration: none;
->>>>>>> 15f8bf8489a39e6995043a639c324de267aec65a
 }
 
 #modal-clicked-resource .url-preview-info {
