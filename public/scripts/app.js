@@ -149,7 +149,11 @@ const loadResources = async url => {
 $("#search-category").on("submit", async function(event) {
   event.preventDefault();
   let formObject = await $(this).serializeObject();
-  loadResources("http://localhost:8080/r/" + formObject.categories);
+  if (formObject.categories === "") {
+    loadResources("http://localhost:8080/api/");
+  } else {
+    loadResources("http://localhost:8080/r/" + formObject.categories);
+  }
 });
 
 $("#newresource").on("submit", async function(event) {
