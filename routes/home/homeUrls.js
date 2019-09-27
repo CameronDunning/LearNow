@@ -16,6 +16,9 @@ router.use(
 module.exports = db => {
   //Get and post requests for the login page
   router.get("/login", (req, res) => {
+    if (req.session.user_id) {
+      return res.redirect("/");
+    }
     let templateVars = {};
     templateVars.user_id = req.session.user_id ? req.session.user_id : "";
     templateVars.wrongLogin = req.session.wrongLogin;

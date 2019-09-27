@@ -35,28 +35,66 @@
   margin: 1.5em 0;
 }
 
-#modal-clicked-resource .clicked-resource-img {
-  width: 40%;
-  height: auto;
-}
-
 #modal-clicked-resource .resource-modal-title {
   font-weight: bold;
 }
 
 #modal-clicked-resource .resource-content {
+<<<<<<< HEAD
   text-align: center;
   padding: 1em 0;
   margin-bottom: 1em;
+=======
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  box-shadow: 2px 2px 5px 2px rgba(220, 220, 222, 0.5);
+  border: 1px solid #ebebeb;
+  border-radius: 10px;
+  margin: 1em 2em;
+}
+#modal-clicked-resource .clicked-resource-img {
+  height: 40%;
+  max-width: 30%;
+}
+#modal-clicked-resource .clicked-url-link {
+  color: #696564;
+  text-decoration: none;
+>>>>>>> 15f8bf8489a39e6995043a639c324de267aec65a
 }
 
 #modal-clicked-resource .url-preview-info {
-  font-size: 12px;
+  align-self: center;
+  padding: 2em 1em;
 }
 
+#modal-clicked-resource .modal-url-title {
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+#modal-clicked-resource .modal-url-description {
+  font-size: 14px;
+}
 #modal-clicked-resource .resource-description-container {
   border-top: 1px solid #ebebeb;
   border-bottom: 1px solid #ebebeb;
+}
+
+.comment-input {
+  padding-top: 2em;
+  padding-bottom: 5px;
+  width: 40%;
+  border: 0;
+  border-bottom: 1px solid #bfbfbf;
+}
+
+.comment-input:focus {
+  width: 45%;
+  outline: none;
+  border-bottom: 2px solid #696564;
+  transition: 0.3s ease 0s, left 0.3s ease 0s;
+  opacity: 0.9;
 }
 
 #modal-clicked-resource .resource-comment-container {
@@ -80,4 +118,29 @@
   margin: 1.5em 0;
   border-radius: 5px;
   font-size: 14px;
+}
+
+.comment-button {
+  margin-left: 5px;
+}
+
+@media only screen and (max-width: 700px) {
+  #modal-clicked-resource .resource-content {
+    flex-direction: column;
+    text-align: center;
+  }
+  #modal-clicked-resource .clicked-resource-img {
+    height: auto;
+    min-width: 100%;
+    align-self: center;
+    /* margin-top: 20px; */
+  }
+  #modal-clicked-resource .modal-url-title {
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+
+  #modal-clicked-resource .modal-url-description {
+    font-size: 12px;
+  }
 }

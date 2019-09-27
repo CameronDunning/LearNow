@@ -8,24 +8,25 @@
 
       <div class="modal-body">
         <div id="resource-id"></div>
+        <a href="" class="clicked-url-link" target="_blank"
+        >
         <section class="resource-content">
-          <a href="" class="clicked-url-link" target="_blank"
-            ><img src="" class="card-img-top clicked-resource-img"
-          /></a>
+         <img src="" class="card-img-top clicked-resource-img"/>
           <div class="url-preview-info">
-          <p class= "modal-url-title"></p>
+          <h5 class= "modal-url-title"></h5>
           <p class="modal-url-description"></p>
         </div>
           <!--resource preview-->
         </section>
+      </a>
         <section class="resource-description-container">
           <h6 id="resource-owner" class="title">Posted by: Resource owner</h6>
           <p class="modal-description"></p>
         </section>
         <section class="resource-new-comment">
           <form id="new-comment">
-            <input name="comment" type="text" value="Type a response" />
-            <input type="submit" />
+            <input name="comment" class="comment-input" type="text" placeholder="Write a comment" onfocus="this.value=''" />
+            <button type="submit" class="btn btn-secondary comment-button">Submit</button>
           </form>
         </section>
         <section class="resource-comment-container">
