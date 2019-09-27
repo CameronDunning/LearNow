@@ -185,8 +185,7 @@ $("#new-comment").on("submit", async function(event) {
       console.log(err);
     }
   }
-  var frm = await document.getElementsByName("new-comment")[0];
-  frm.reset();
+  let frm = await document.getElementsByName("new-comment")[0];
   $(".commentinput input").val("");
 });
 
