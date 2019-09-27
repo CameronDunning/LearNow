@@ -14,59 +14,17 @@
   align-items: center;
 }
 
+.fa-sort-down:before {
+  margin-left: 2px;
+}
 .header-container .nav-link {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   margin-left: 5px;
   cursor: pointer;
 }
 
 .header-container .login-links {
   word-spacing: 15px;
-}
-
-/*
-
-
-header .logo {
-  font-family: "Beth Ellen", cursive;
-  color: maroon;
-  margin-left: 20px;
-}
-
-header .logo:hover {
-  text-decoration: none;
-}
-
-.navbar-nav {
-  margin-right: 20px;
-}
-
-.nav-link {
-  text-decoration: none;
-  color: maroon;
-}
-
-.nav-link:hover {
-  color: maroon;
-}
-
-.login-links {
-  padding-bottom: 3vh;
-}
-
-.login-links a {
-  margin-left: 10px;
-  margin-right: 10px;
-  color: maroon;
-}
-
-#user-settings {
-  background-color: white;
-  color: black;
-  border: none;
-  margin-right: 1em;
-} */
-.header-container .navbar-nav {
-  right: 0;
 }

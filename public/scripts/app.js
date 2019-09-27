@@ -70,7 +70,7 @@ const loadResources = async url => {
       success: data => {
         renderResources(data);
         $(".net-vote").on("click", e => e.stopPropagation());
-        $(".fa-arrow-up").on("click", e => {
+        $(".upvote").on("click", e => {
           e.stopPropagation();
           const classListArray = e.currentTarget.classList;
           const resourceID = classListArray[3];
@@ -94,7 +94,7 @@ const loadResources = async url => {
             $(`.downvote.${resourceID}`).attr("data-downvote", "false");
           }
         });
-        $(".fa-arrow-down").on("click", e => {
+        $(".downvote").on("click", e => {
           e.stopPropagation();
           const classListArray = e.currentTarget.classList;
           const resourceID = classListArray[3];
@@ -149,7 +149,11 @@ const loadResources = async url => {
 $("#search-category").on("submit", async function(event) {
   event.preventDefault();
   let formObject = await $(this).serializeObject();
-  loadResources("http://localhost:8080/r/" + formObject.categories);
+  if (formObject.categories === "") {
+    loadResources("http://localhost:8080/api/");
+  } else {
+    loadResources("http://localhost:8080/r/" + formObject.categories);
+  }
 });
 
 $("#newresource").on("submit", async function(event) {
@@ -253,17 +257,19 @@ const createResourceElement = resourceData => {
       )} </p>
       <div class="arrows">
         <form>
-          <div >
-            <i class="fas fa-plus add-to-my-resources ${resourceData.id}"
-            data-activity = ${resourceData.add_to_my_resources}></i>
-            <i class="fas fa-arrow-up upvote ${resourceData.id}"
+        <div class ="user-activity">
+        <i class="fas fa-plus add-to-my-resources ${resourceData.id} fa-lg "
+        data-activity = ${resourceData.add_to_my_resources}></i>
+            <div class="upvote-downvote">
+            <i class="fas fa-chevron-up upvote ${resourceData.id} fa-lg "
             data-upvote = ${resourceData.upvote} id="up-vote"></i>
-            <i class="fas fa-arrow-down downvote ${resourceData.id}"
+            <p class="net-vote" id="net-vote-${resourceData.id}"
+        data-netVote = ${netVote}>${resourceData.net_votes}</p>
+            <i class="fas fa-chevron-down downvote ${resourceData.id} fa-lg"
             data-downvote = ${resourceData.downvote} id="down-vote"></i>
+            </div>
           </div>
         </form>
-        <p class="net-vote" id="net-vote-${resourceData.id}"
-        data-netVote = ${netVote}>${resourceData.net_votes}</p>
       </div>
     </div>
   </div>
