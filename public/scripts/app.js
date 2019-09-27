@@ -163,26 +163,28 @@ $("#newresource").on("submit", async function(event) {
 
 $("#new-comment").on("submit", async function(event) {
   event.preventDefault();
+
   let classes = $("#resource-id")
     .attr("class")
     .split(" ");
   let resourceid = classes[classes.length - 1];
   let commentformObject = await $(this).serializeObject();
   commentformObject.user_name = "You just posted";
-
-  $(".resource-comment-container").prepend(
-    createCommentElement(commentformObject)
-  );
-
-  try {
-    await $.ajax({
-      url: "http://localhost:8080/api/c/" + resourceid,
-      dataType: "JSON",
-      type: "POST",
-      data: commentformObject
-    });
-  } catch (err) {
-    console.log(err);
+  console.log(commentformObject);
+  if (commentformObject.comment) {
+    $(".resource-comment-container").prepend(
+      createCommentElement(commentformObject)
+    );
+    try {
+      await $.ajax({
+        url: "http://localhost:8080/api/c/" + resourceid,
+        dataType: "JSON",
+        type: "POST",
+        data: commentformObject
+      });
+    } catch (err) {
+      console.log(err);
+    }
   }
 });
 
