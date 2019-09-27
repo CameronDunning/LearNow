@@ -32,14 +32,20 @@
   </head>
 
   <body>
-    <div id="fb-root"></div>
-    <script
-      async
-      defer
-      src="https://connect.facebook.net/en_US/sdk.js"
-    ></script>
-
     <script>
+      window.fbAsyncInit = function() {
+        FB.init({
+          appId: "799491550453732",
+          cookie: true,
+          xfbml: true,
+          version: "v4.0"
+        });
+
+        FB.getLoginStatus(function(response) {
+          statusChangeCallback(response);
+        });
+      };
+
       (function(d, s, id) {
         var js,
           fjs = d.getElementsByTagName(s)[0];
@@ -51,6 +57,21 @@
         js.src = "https://connect.facebook.net/en_US/sdk.js";
         fjs.parentNode.insertBefore(js, fjs);
       })(document, "script", "facebook-jssdk");
+
+      function statusChangeCallback(response) {
+        console.log(response);
+        if (response.status === "connected") {
+          console.log("logged in");
+        } else {
+          console.log("Not logged in");
+        }
+      }
+
+      function checkLoginState() {
+        FB.getLoginStatus(function(response) {
+          statusChangecallback(response);
+        });
+      }
     </script>
 
     <div class="register-container">
@@ -95,8 +116,8 @@
             data-width=""
             data-size="large"
             data-button-type="login_with"
-            data-auto-logout-link="false"
-            data-use-continue-as="false"
+            data-auto-logout-link="true"
+            data-use-continue-as="true"
           ></div>
           <% if (wrongLogin) { %>
           <p class="error-msg">Check your email or password</p>
@@ -108,5 +129,4 @@
       </div>
     </div>
   </body>
-  <script type="text/javascript" src="/scripts/facebook.js"></script>
 </html>
