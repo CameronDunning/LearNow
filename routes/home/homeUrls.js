@@ -52,7 +52,10 @@ module.exports = db => {
         res.redirect("/login");
       });
   });
-
+  router.get("/social", (req, res) => {
+    console.log("hello inside /social");
+    res.send("hello");
+  });
   //Get and post requests for the register page
   router.get("/register", (req, res) => {
     let templateVars = {};

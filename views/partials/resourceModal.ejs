@@ -26,7 +26,7 @@
         <section class="resource-new-comment">
           <form id="new-comment">
             <input name="comment" class="comment-input" type="text" placeholder="Write a comment" onfocus="this.value=''" />
-            <button type="submit" class="btn btn-secondary comment-button">Submit</button>
+            <button type="submit" class="btn btn-secondary comment-button" onclick="submitcomment()">Submit</button>
           </form>
         </section>
         <section class="resource-comment-container">
@@ -36,3 +36,10 @@
     </div>
   </div>
 </div>
+<script> function submitcomment(){
+
+  document.forms["new-comment"].submit(); //first submit
+  document.forms["new-comment"].reset(); //and then reset the form values
+
+ // document.getElementById("new-comment").reset();
+} </script>
