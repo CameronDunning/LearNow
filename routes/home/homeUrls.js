@@ -16,6 +16,9 @@ router.use(
 module.exports = db => {
   //Get and post requests for the login page
   router.get("/login", (req, res) => {
+    if (req.session.user_id) {
+      return res.redirect("/");
+    }
     let templateVars = {};
     templateVars.user_id = req.session.user_id ? req.session.user_id : "";
     templateVars.wrongLogin = req.session.wrongLogin;
@@ -28,7 +31,8 @@ module.exports = db => {
     SELECT * FROM users
     WHERE email=$1;
     `;
-    values = [req.body.email];
+    const values = [req.body.email];
+    console.log(queryString, values);
     db.query(queryString, values)
       .then(data => data.rows[0])
       .then(user => {
@@ -42,9 +46,13 @@ module.exports = db => {
           req.session.user_name = user.name;
           // req.session.user_first_letter = user.first_letter;
           return res.redirect("/");
+        } else {
+          req.session.wrongLogin = true;
+          res.redirect("/login");
         }
       })
       .catch(err => {
+        console.log("Error: ", err);
         req.session.wrongLogin = true;
         res.redirect("/login");
       });

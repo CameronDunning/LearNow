@@ -174,7 +174,6 @@ $("#new-comment").on("submit", async function(event) {
   let resourceid = classes[classes.length - 1];
   let commentformObject = await $(this).serializeObject();
   commentformObject.user_name = "You just posted";
-  console.log(commentformObject);
   if (commentformObject.comment) {
     $(".resource-comment-container").prepend(
       createCommentElement(commentformObject)
@@ -190,6 +189,9 @@ $("#new-comment").on("submit", async function(event) {
       console.log(err);
     }
   }
+  var frm = await document.getElementsByName("new-comment")[0];
+  frm.reset();
+  $(".commentinput input").val("");
 });
 
 //Helper function for loadResources that renders the array of resources passed into it and appends it to the container
