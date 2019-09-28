@@ -74,11 +74,15 @@
 
 .arrows [data-downvote="true"] {
   animation: pulse 0.5s;
-  color: #3984e6;
+  color: #b01b04;
 }
 
 .arrows [data-netVote="true"] {
   color: #3984e6;
+}
+
+.arrows [data-netVote="false"] {
+  color: #b01b04;
 }
 
 .arrows:hover {
