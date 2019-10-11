@@ -1,15 +1,21 @@
 # LearNow
 
-Resource wall for learning material
+Learn Now is a resource wall for learning material inspired by Pinterest and Reddit. This web application allows registered users to share, like, and save resources--making learning more easier than ever!
 
-## Trello
 
-https://trello.com/b/rTbAlE5Z/learnow
+## Getting Started
 
-## Figma
+- Install dependencies using the `npm install` command.
+- Start the web server using the `npm start` command. The app will be served at <http://localhost:8080/>.
 
-https://www.figma.com/files/project/4041893/Midterm
+## Built With
 
-## Draw.io
+- Node
+- Express
+- PostgreSQL
+- JQuery
+- HTML/CSS
 
-https://drive.google.com/file/d/1xgZP18gpY5YQsnWrDX3lDYTsOab7i1jV/view?usp=sharing
+## Contributors
+
+This app was made by Michael Choi, Cameron Dunning, and Cindy Halim.
