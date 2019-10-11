@@ -1,4 +1,4 @@
-# LearNow
+# Learn Now
 
 Learn Now is a resource wall for learning material inspired by Pinterest and Reddit. This web application allows registered users to share, like, and save resources--making learning more easier than ever!
 
