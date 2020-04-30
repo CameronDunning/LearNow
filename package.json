@@ -29,7 +29,7 @@
     "ejs": "^2.7.1",
     "express": "^4.17.1",
     "got": "^9.6.0",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "metascraper": "^5.7.5",
     "metascraper-author": "^5.7.5",
     "metascraper-description": "^5.7.5",
