@@ -28,7 +28,7 @@
     "dotenv": "^8.1.0",
     "ejs": "^2.7.1",
     "express": "^4.17.1",
-    "got": "^9.6.0",
+    "got": "^11.8.5",
     "jquery": "^3.4.1",
     "metascraper": "^5.7.5",
     "metascraper-author": "^5.7.5",
